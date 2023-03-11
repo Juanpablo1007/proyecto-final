@@ -2,6 +2,7 @@ package co.edu.uniquindio.proyecto.entidades;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -15,8 +16,11 @@ import java.io.Serializable;
 public class Moderador implements Serializable {
     @Id
     @EqualsAndHashCode.Include
+    @Column (length = 15)
+
     private String cedula;
 
+    @Column ( nullable = false)
     private String contraseña;
 
 }
