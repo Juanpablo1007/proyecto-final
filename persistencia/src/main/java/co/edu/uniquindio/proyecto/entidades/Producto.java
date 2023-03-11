@@ -4,8 +4,10 @@ import lombok.*;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Getter
@@ -19,8 +21,15 @@ public class Producto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
   private int codigo;
+    @ManyToMany (mappedBy = "producto")
+    private List<usuario> usuario;
+
+    @ManyToMany (mappedBy = "favoritos")
+    private List<usuario> usuarioF;
+
 
     @Column( nullable = false)
+    @Future
     private LocalDateTime fechaLimite;
     private String imagen;
     @Column ( nullable = false)
