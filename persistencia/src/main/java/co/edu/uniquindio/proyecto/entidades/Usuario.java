@@ -14,7 +14,7 @@ import java.util.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class usuario implements Serializable {
+public class Usuario implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @Column(length = 15)

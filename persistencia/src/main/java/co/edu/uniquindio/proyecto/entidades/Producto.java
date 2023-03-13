@@ -1,7 +1,6 @@
 package co.edu.uniquindio.proyecto.entidades;
 
 import lombok.*;
-import org.springframework.boot.context.properties.ConstructorBinding;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
@@ -22,10 +21,10 @@ public class Producto implements Serializable {
     @EqualsAndHashCode.Include
   private int codigo;
     @ManyToMany (mappedBy = "producto")
-    private List<usuario> usuario;
+    private List<Usuario> usuario;
 
     @ManyToMany (mappedBy = "favoritos")
-    private List<usuario> usuarioF;
+    private List<Usuario> usuarioF;
 
 
     @Column( nullable = false)
