@@ -61,5 +61,10 @@ public class Producto implements Serializable {
     @Column ( nullable = false)
     private Boolean isDisponible;
 
+    @Column ( nullable = false)
+    @Enumerated(EnumType.STRING)
+
+    private Categorias_Producto categoriasProducto;
+
 
 }

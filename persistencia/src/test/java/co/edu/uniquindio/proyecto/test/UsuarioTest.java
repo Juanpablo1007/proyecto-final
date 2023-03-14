@@ -20,7 +20,7 @@ public class UsuarioTest {
         usuario.setCedula("1001017577");
         usuario.setCorreo("juanp.delgadod@uqvirtual.edu.co");
         usuario.setContraseña("Juan123");
-        usuario.setEstado(Estado_Cuenta.Activa);
+        usuario.setEstado(true);
         usuario.setTelefono("3218711230");
         usuario.setDireccion("Reserva de la pastorita");
         usuario.setNombre("Juan Pablo");
@@ -36,7 +36,7 @@ public class UsuarioTest {
         usuario.setCedula("1001017577");
         usuario.setCorreo("juanp.delgadod@uqvirtual.edu.co");
         usuario.setContraseña("Juan123");
-        usuario.setEstado(Estado_Cuenta.Activa);
+        usuario.setEstado(true);
         usuario.setTelefono("3218711230");
         usuario.setDireccion("Reserva de la pastorita");
         usuario.setNombre("Juan Pablo");
@@ -55,7 +55,7 @@ public class UsuarioTest {
         usuario.setCedula("1001017577");
         usuario.setCorreo("juanp.delgadod@uqvirtual.edu.co");
         usuario.setContraseña("Juan123");
-        usuario.setEstado(Estado_Cuenta.Activa);
+        usuario.setEstado(true);
         usuario.setTelefono("3218711230");
         usuario.setDireccion("Reserva de la pastorita");
         usuario.setNombre("Juan Pablo");
@@ -76,7 +76,7 @@ public class UsuarioTest {
         usuario.setCedula("1001017577");
         usuario.setCorreo("juanp.delgadod@uqvirtual.edu.co");
         usuario.setContraseña("Juan123");
-        usuario.setEstado(Estado_Cuenta.Activa);
+        usuario.setEstado(true);
         usuario.setTelefono("3218711230");
         usuario.setDireccion("Reserva de la pastorita");
         usuario.setNombre("Juan Pablo");
