@@ -40,14 +40,26 @@ public class Producto implements Serializable {
 
     private String disponibilidad;
     @Column ( nullable = false)
+    @Enumerated(EnumType.STRING)
+
    private Categorias_Producto categorias;
     @Column ( nullable = false)
    private String comentarios;
     @Column ( nullable = false)
+    @Enumerated(EnumType.STRING)
 
    private Estado_Producto estado;
 
+    @OneToMany (mappedBy = "producto")
+    private List<Comentarios> comentario;
 
+    @ManyToMany (mappedBy = "productos")
+    private List<Carrito> carrito;
+    @Column ( nullable = false)
+    private Boolean isActivo;
+
+    @Column ( nullable = false)
+    private Boolean isDisponible;
 
 
 }

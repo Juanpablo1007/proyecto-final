@@ -2,10 +2,7 @@ package co.edu.uniquindio.proyecto.entidades;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 @Entity
@@ -14,7 +11,7 @@ import java.util.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario implements Serializable {
+public class Usuario extends Persona implements Serializable   {
     @Id
     @EqualsAndHashCode.Include
     @Column(length = 15)
@@ -27,23 +24,35 @@ private String contraseña;
     @ManyToMany
     private List<Producto> favoritos;
 
+    @OneToOne (mappedBy = "usuario")
+    private Carrito carrito;
+
 
 
 
 
     @Column ( nullable = false)
-private Estado_Cuenta estado;
+
+private Boolean estado;
     @Column ( nullable = false)
 
 private String nombre;
+ @OneToMany (mappedBy = "usuario")
+ private List<Comentarios> comentarios;
 
+    @OneToMany (mappedBy = "usuario")
+    private List<Compra> compra;
 
     private String telefono;
 
     private String direccion;
-    //@Column (unique = true, nullable = false)
+
     @Column ( nullable = false, unique = true)
     private String correo;
+
+
+
+
 
 
 

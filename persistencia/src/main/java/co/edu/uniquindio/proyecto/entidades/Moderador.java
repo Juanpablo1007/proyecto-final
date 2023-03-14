@@ -13,7 +13,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Moderador implements Serializable {
+public class Moderador extends Persona implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @Column (length = 15)
@@ -22,5 +22,12 @@ public class Moderador implements Serializable {
 
     @Column ( nullable = false)
     private String contraseña;
+
+    @Column ( nullable = false)
+
+    private String nombre;
+
+    @Column ( nullable = false, unique = true)
+    private String correo;
 
 }
