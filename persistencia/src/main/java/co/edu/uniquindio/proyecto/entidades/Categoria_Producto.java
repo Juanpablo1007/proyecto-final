@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.entidades;
 
-public enum Categorias_Producto {
+public enum Categoria_Producto {
 
     TECNOLOGIA,
     VEHICULOS,
@@ -17,5 +17,5 @@ public enum Categorias_Producto {
     BEBES,
     SALUD,
     INDUSTRIA_Y_OFICINAS,
-    SERVISIOS
+    SERVICIOS
 }

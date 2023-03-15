@@ -12,22 +12,23 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comentarios implements Serializable {
+@ToString
+public class Comentario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int codigo;
 
-
-    @Column( nullable = false)
+    @Column( nullable = false, length = 1000)
     private String texto;
     @Column( nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime fechaComentario;
+    private LocalDateTime fecha;
 
     @ManyToOne
     private Usuario usuario;
 
     @ManyToOne
     private Producto producto;
+
 }

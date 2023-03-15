@@ -10,17 +10,24 @@ import java.util.List;
 @Setter
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@AllArgsConstructor
 @NoArgsConstructor
+@ToString
+
 public class Carrito implements  Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int codigo;
-@ManyToMany
-private List <Producto> productos;
+    @ManyToMany
+    @ToString.Exclude
+    private List <Producto> productos;
 
-@OneToOne
+    @OneToOne
+    @JoinColumn(nullable = false)
     private Usuario usuario;
+
+    public Carrito(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

@@ -11,57 +11,57 @@ import java.util.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario extends Persona implements Serializable   {
+@ToString
+public class Usuario implements Serializable   {
+
     @Id
     @EqualsAndHashCode.Include
-    @Column(length = 15)
+    @Column(length = 10)
     private String cedula;
 
-    @Column ( nullable = false)
-private String contraseña;
+    @Column ( nullable = false, length = 100)
+    private String contraseña;
+    @Column ( nullable = false, length = 100)
+    private String nombre;
+    @Column ( nullable = false, unique = true, length = 100)
+    private String email;
+
+    @OneToMany(mappedBy = "usuario")
+    @ToString.Exclude
+    private List<Producto> productos;
     @ManyToMany
-    private List<Producto> producto;
-    @ManyToMany
-    private List<Producto> favoritos;
+    @ToString.Exclude
+    private List<Producto> productosFavoritos;
 
     @OneToOne (mappedBy = "usuario")
     private Carrito carrito;
 
-
-
-
-
     @Column ( nullable = false)
-
-private Boolean estado;
+    private Boolean isCuentaActiva;
     @Column ( nullable = false)
-
-private String nombre;
- @OneToMany (mappedBy = "usuario")
- private List<Comentarios> comentarios;
+    @OneToMany (mappedBy = "usuario")
+    @ToString.Exclude
+    private List<Comentario> comentarios;
 
     @OneToMany (mappedBy = "usuario")
-    private List<Compra> compra;
+    @ToString.Exclude
+    private List<Compra> compras;
 
+    @Column ( nullable = false, length = 100)
     private String telefono;
 
+    @Column ( nullable = false, length = 100)
     private String direccion;
 
-    @Column ( nullable = false, unique = true)
-    private String correo;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public Usuario(String cedula, String contraseña, String nombre, String email, Carrito carrito, Boolean isCuentaActiva, String telefono, String direccion) {
+        this.cedula = cedula;
+        this.contraseña = contraseña;
+        this.nombre = nombre;
+        this.email = email;
+        this.carrito = carrito;
+        this.isCuentaActiva = isCuentaActiva;
+        this.telefono = telefono;
+        this.direccion = direccion;
+    }
 }

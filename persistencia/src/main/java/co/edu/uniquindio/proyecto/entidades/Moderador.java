@@ -13,21 +13,20 @@ import java.io.Serializable;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Moderador extends Persona implements Serializable {
+@ToString
+public class Moderador implements Serializable {
+
     @Id
     @EqualsAndHashCode.Include
-    @Column (length = 15)
-
+    @Column(length = 10)
     private String cedula;
 
-    @Column ( nullable = false)
+    @Column ( nullable = false, length = 100)
     private String contraseña;
-
-    @Column ( nullable = false)
-
+    @Column ( nullable = false, length = 100)
     private String nombre;
+    @Column ( nullable = false, unique = true, length = 100)
+    private String email;
 
-    @Column ( nullable = false, unique = true)
-    private String correo;
 
 }

@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Setter
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Compra implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +22,7 @@ public class Compra implements Serializable {
     private int codigo;
 
     @Column( nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime fechaCompra;
+    private LocalDateTime fecha;
 
     @Column (nullable = false)
     private Double total;
@@ -29,9 +31,12 @@ public class Compra implements Serializable {
     private Usuario usuario;
 
 
-    @Column (nullable = false)
+    @Column (nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private MetodoDePago metodoDePago;
 
+    @ManyToMany
+    @ToString.Exclude
+    private List<Producto> productos;
 
 }

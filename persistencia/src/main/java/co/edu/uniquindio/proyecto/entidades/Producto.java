@@ -9,62 +9,76 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
-@Getter
 @Setter
+@Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Producto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-  private int codigo;
-    @ManyToMany (mappedBy = "producto")
-    private List<Usuario> usuario;
+    private int codigo;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Usuario usuario;
 
-    @ManyToMany (mappedBy = "favoritos")
-    private List<Usuario> usuarioF;
+    @ManyToMany(mappedBy = "productosFavoritos")
+    @ToString.Exclude
+    private List<Usuario> usuariosFavoritos;
 
-
-    @Column( nullable = false)
-    @Future
-    private LocalDateTime fechaLimite;
-    private String imagen;
-    @Column ( nullable = false)
-    private String nombre;
-    @Column ( nullable = false)
-    private String descripcion;
-    @Column ( nullable = false)
-
-
-    private String disponibilidad;
-    @Column ( nullable = false)
-    @Enumerated(EnumType.STRING)
-
-   private Categorias_Producto categorias;
-    @Column ( nullable = false)
-   private String comentarios;
-    @Column ( nullable = false)
-    @Enumerated(EnumType.STRING)
-
-   private Estado_Producto estado;
-
-    @OneToMany (mappedBy = "producto")
-    private List<Comentarios> comentario;
-
-    @ManyToMany (mappedBy = "productos")
-    private List<Carrito> carrito;
     @Column ( nullable = false)
     private Boolean isActivo;
+    @Column (nullable = false, length = 100)
+    private String imagen;
+
+    @Column ( nullable = false, length = 100)
+    private String nombre;
+
+    @Column ( nullable = false, length = 100)
+    private String descripcion;
+    @Column ( nullable = false)
+    private Double precio;
 
     @Column ( nullable = false)
     private Boolean isDisponible;
 
-    @Column ( nullable = false)
+    @Column ( nullable = false,length = 100)
     @Enumerated(EnumType.STRING)
+    private Estado_Producto estado;
+    @Column( nullable = false)
+    @Future
+    private LocalDateTime fechaLimite;
 
-    private Categorias_Producto categoriasProducto;
+    @Column ( nullable = false, length = 100, name = "categoria")
+    @Enumerated(EnumType.STRING)
+    @ElementCollection
+    @ToString.Exclude
+    private Set<Categoria_Producto> categorias;
 
+    @OneToMany (mappedBy = "producto")
+    @ToString.Exclude
+    private List<Comentario> comentario;
 
+    @ManyToMany(mappedBy = "productos")
+    @ToString.Exclude
+    private List<Carrito> carritos;
+
+    @ManyToMany (mappedBy = "productos")
+    @ToString.Exclude
+    private List<Compra> compras;
+
+  public Producto(Usuario usuario, Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias) {
+    this.usuario = usuario;
+    this.isActivo = isActivo;
+    this.imagen = imagen;
+    this.nombre = nombre;
+    this.descripcion = descripcion;
+    this.precio = precio;
+    this.isDisponible = isDisponible;
+    this.estado = estado;
+    this.fechaLimite = fechaLimite;
+    this.categorias = categorias;
+  }
 }
