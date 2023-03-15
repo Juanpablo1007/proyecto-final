@@ -18,9 +18,9 @@ public class UsuarioTest {
     public void registrarTest(){
         Usuario usuario = new Usuario();
         usuario.setCedula("1001017577");
-        usuario.setCorreo("juanp.delgadod@uqvirtual.edu.co");
+        usuario.setEmail("juanp.delgadod@uqvirtual.edu.co");
         usuario.setContraseña("Juan123");
-        usuario.setEstado(true);
+        usuario.setIsCuentaActiva(true);
         usuario.setTelefono("3218711230");
         usuario.setDireccion("Reserva de la pastorita");
         usuario.setNombre("Juan Pablo");
@@ -34,9 +34,9 @@ public class UsuarioTest {
     public void eliminarTest(){
         Usuario usuario = new Usuario();
         usuario.setCedula("1001017577");
-        usuario.setCorreo("juanp.delgadod@uqvirtual.edu.co");
+        usuario.setEmail("juanp.delgadod@uqvirtual.edu.co");
         usuario.setContraseña("Juan123");
-        usuario.setEstado(true);
+        usuario.setIsCuentaActiva(true);
         usuario.setTelefono("3218711230");
         usuario.setDireccion("Reserva de la pastorita");
         usuario.setNombre("Juan Pablo");
@@ -53,9 +53,9 @@ public class UsuarioTest {
     public void actualizarTest (){
         Usuario usuario = new Usuario();
         usuario.setCedula("1001017577");
-        usuario.setCorreo("juanp.delgadod@uqvirtual.edu.co");
+        usuario.setEmail("juanp.delgadod@uqvirtual.edu.co");
         usuario.setContraseña("Juan123");
-        usuario.setEstado(true);
+        usuario.setIsCuentaActiva(true);
         usuario.setTelefono("3218711230");
         usuario.setDireccion("Reserva de la pastorita");
         usuario.setNombre("Juan Pablo");
@@ -74,9 +74,9 @@ public class UsuarioTest {
     public void listarTest(){
         Usuario usuario = new Usuario();
         usuario.setCedula("1001017577");
-        usuario.setCorreo("juanp.delgadod@uqvirtual.edu.co");
+        usuario.setEmail("juanp.delgadod@uqvirtual.edu.co");
         usuario.setContraseña("Juan123");
-        usuario.setEstado(true);
+        usuario.setIsCuentaActiva(true);
         usuario.setTelefono("3218711230");
         usuario.setDireccion("Reserva de la pastorita");
         usuario.setNombre("Juan Pablo");
