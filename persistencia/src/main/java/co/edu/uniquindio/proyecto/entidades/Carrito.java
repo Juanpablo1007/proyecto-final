@@ -18,7 +18,7 @@ public class Carrito implements  Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private int codigo;
+    private Integer codigo;
     @ManyToMany
     @ToString.Exclude
     private List <Producto> productos;

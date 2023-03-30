@@ -19,7 +19,7 @@ public class Producto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private int codigo;
+    private Integer codigo;
     @ManyToOne
     @JoinColumn(nullable = false)
     private Usuario usuario;
@@ -53,9 +53,7 @@ public class Producto implements Serializable {
 
     @Column ( nullable = false, length = 100, name = "categoria")
     @Enumerated(EnumType.STRING)
-    @ElementCollection
-    @ToString.Exclude
-    private Set<Categoria_Producto> categorias;
+    private Categoria_Producto categorias;
 
     @OneToMany (mappedBy = "producto")
     @ToString.Exclude
@@ -69,7 +67,7 @@ public class Producto implements Serializable {
     @ToString.Exclude
     private List<Compra> compras;
 
-  public Producto(Usuario usuario, Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias) {
+  public Producto(Usuario usuario, Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite) {
     this.usuario = usuario;
     this.isActivo = isActivo;
     this.imagen = imagen;
@@ -79,6 +77,6 @@ public class Producto implements Serializable {
     this.isDisponible = isDisponible;
     this.estado = estado;
     this.fechaLimite = fechaLimite;
-    this.categorias = categorias;
+
   }
 }
