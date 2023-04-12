@@ -1,8 +1,20 @@
 package co.edu.uniquindio.proyecto.repositorios;
+import co.edu.uniquindio.proyecto.entidades.Moderador;
 import co.edu.uniquindio.proyecto.entidades.Producto;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProductoRepo  extends  JpaRepository <Producto, Integer>{
+    List<Moderador> findAllByIsActivo(boolean isActivo);
+    List<Moderador> findAllByIsDisponible(boolean isDisponible);
+
+    List<Moderador> findAllByNombre(String nombre);
+
+    Page<Producto> findAll(Pageable paginador);
 }

@@ -54,14 +54,15 @@ public class Usuario implements Serializable   {
     private String direccion;
 
 
-    public Usuario(String cedula, String contraseña, String nombre, String email, Carrito carrito, Boolean isCuentaActiva, String telefono, String direccion) {
+    public Usuario(String cedula, String contraseña, String nombre, String email,  Boolean isCuentaActiva, String telefono, String direccion) {
         this.cedula = cedula;
         this.contraseña = contraseña;
         this.nombre = nombre;
         this.email = email;
-        this.carrito = carrito;
         this.isCuentaActiva = isCuentaActiva;
         this.telefono = telefono;
         this.direccion = direccion;
     }
+
+
 }
