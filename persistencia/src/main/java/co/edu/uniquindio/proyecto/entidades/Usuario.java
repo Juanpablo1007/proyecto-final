@@ -47,6 +47,13 @@ public class Usuario implements Serializable   {
     @ToString.Exclude
     private List<Compra> compras;
 
+    @OneToMany (mappedBy = "usuario")
+    @ToString.Exclude
+    private List<Compra> venta;
+
+
+
+
     @Column ( nullable = false, length = 100)
     private String telefono;
 

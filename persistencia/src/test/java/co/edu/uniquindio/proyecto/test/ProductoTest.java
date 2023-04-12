@@ -44,6 +44,24 @@ public class ProductoTest {
        Assertions.assertNotNull(productoGuardado);
 
     }
+
+    @Test
+    public void obtenerNombreVendedorTest() {
+        Usuario usuario = usuarioRepo.findById("123").orElse(null);
+        Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();
+        categorias.add(Categoria_Producto.BEBES);
+        categorias.add(Categoria_Producto.CONSTRUCCION);
+        categorias.add(Categoria_Producto.HERRAMIENTAS);
+
+        Producto producto = new Producto(usuario, true, "url", "martillo", "es un martillo",
+                20000.0, true, Estado_Producto.AUTORIZADO,
+                LocalDateTime.now().plusMonths(2), categorias);
+
+        Producto productoGuardado = productoRepo.save(producto);
+
+        String nombre = productoRepo.obtenerNombreVendedor(1);
+        Assertions.assertEquals("juan",nombre);
+    }
     
     
     

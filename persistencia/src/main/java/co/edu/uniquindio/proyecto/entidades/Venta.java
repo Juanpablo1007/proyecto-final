@@ -1,35 +1,33 @@
 package co.edu.uniquindio.proyecto.entidades;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Entity
-@Setter
-@Getter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class Comentario implements Serializable {
-
+public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
 
-    @Column( nullable = false, length = 1000)
-    private String texto;
     @Column( nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime fecha;
+
+    @Column (nullable = false)
+    private Double total;
 
     @ManyToOne
     private Usuario usuario;
 
-    @ManyToOne
-    private Producto producto;
 
+    @Column (nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
+    private MetodoDePago metodoDePago;
+
+    @ManyToMany
+    @ToString.Exclude
+    private List<Producto> productos;
 }
-
