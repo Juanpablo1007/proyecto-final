@@ -53,8 +53,9 @@ public class Producto implements Serializable {
 
     @Column ( nullable = false, length = 100, name = "categoria")
     @Enumerated(EnumType.STRING)
-    private Categoria_Producto categorias;
-
+    @ElementCollection
+    @ToString.Exclude
+    private Set<Categoria_Producto> categorias;
     @OneToMany (mappedBy = "producto")
     @ToString.Exclude
     private List<Comentario> comentario;
@@ -67,7 +68,7 @@ public class Producto implements Serializable {
     @ToString.Exclude
     private List<Compra> compras;
 
-  public Producto(Usuario usuario, Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite) {
+  public Producto(Usuario usuario, Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias) {
     this.usuario = usuario;
     this.isActivo = isActivo;
     this.imagen = imagen;
@@ -77,6 +78,7 @@ public class Producto implements Serializable {
     this.isDisponible = isDisponible;
     this.estado = estado;
     this.fechaLimite = fechaLimite;
+    this.categorias=categorias;
 
   }
 }
