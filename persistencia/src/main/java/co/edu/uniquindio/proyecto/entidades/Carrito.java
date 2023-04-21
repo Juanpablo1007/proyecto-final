@@ -16,7 +16,7 @@ import java.util.List;
 public class Carrito implements  Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
     @ManyToMany
