@@ -1,10 +1,7 @@
 package co.edu.uniquindio.proyecto.test;
 
 
-import co.edu.uniquindio.proyecto.entidades.MetodoDePago;
-import co.edu.uniquindio.proyecto.entidades.Producto;
-import co.edu.uniquindio.proyecto.entidades.Usuario;
-import co.edu.uniquindio.proyecto.entidades.Venta;
+import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.CarritoRepo;
 import co.edu.uniquindio.proyecto.repositorios.ProductoRepo;
 import co.edu.uniquindio.proyecto.repositorios.UsuarioRepo;
@@ -53,8 +50,60 @@ public class VentaTest {
         Assertions.assertNotNull(ventaGenerada);
 
     }
+    @Test
+    public void eliminarTest() {
 
-    public void ereminarTest() {
+        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+
+        Producto producto=  productoRepo.findById(123).orElse(null);
+
+        List<Producto> productosventa= new ArrayList<>();
+
+        productosventa.add(producto);
+
+        Venta venta = new Venta();
+        venta.setCodigo(12345);
+        venta.setUsuario(usuario);
+        venta.setProductos(productosventa);
+        venta.setFecha(LocalDateTime.now());
+        venta.setTotal(20000.0);
+        venta.setMetodoDePago(MetodoDePago.EFECTIVO);
+
+        Venta ventaGenerada = ventaRepo.save(venta);
+
+        ventaRepo.delete(ventaGenerada);
+        Venta busquedaVenta = ventaRepo.findById(12345).orElse(null);
+        Assertions.assertNull(busquedaVenta);
+
+    }
+
+    @Test
+    public void actualizarTest() {
+
+        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+
+        Producto producto=  productoRepo.findById(123).orElse(null);
+
+        List<Producto> productosventa= new ArrayList<>();
+
+        productosventa.add(producto);
+
+        Venta venta = new Venta();
+        venta.setCodigo(12345);
+        venta.setUsuario(usuario);
+        venta.setProductos(productosventa);
+        venta.setFecha(LocalDateTime.now());
+        venta.setTotal(20000.0);
+        venta.setMetodoDePago(MetodoDePago.EFECTIVO);
+
+        Venta ventaGenerada = ventaRepo.save(venta);
+        ventaRepo.delete(ventaGenerada);
+        Venta busquedaventa = ventaRepo.findById(12345).orElse(null);
+        Assertions.assertNull(busquedaventa);
+
+    }
+@Test
+    public void ListarTest() {
 
         Usuario usuario= usuarioRepo.findById("123").orElse(null);
 

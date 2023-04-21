@@ -11,7 +11,9 @@ import co.edu.uniquindio.proyecto.repositorios.ProductoRepo;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @DataJpaTest
@@ -83,23 +85,65 @@ public class ProductoTest {
 
     }
 
-    /**  @Test
-      public void obtenerNombreVendedorTest() {
-          Usuario usuario = usuarioRepo.findById("123").orElse(null);
-          Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();
-          categorias.add(Categoria_Producto.BEBES);
-          categorias.add(Categoria_Producto.CONSTRUCCION);
-          categorias.add(Categoria_Producto.HERRAMIENTAS);
+    @Test
+    public void actualizarTest() {
+        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+        Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();
+        categorias.add(Categoria_Producto.BEBES);
+        categorias.add(Categoria_Producto.CONSTRUCCION);
+        categorias.add(Categoria_Producto.HERRAMIENTAS);
 
-          Producto producto = new Producto( usuario,true, "url", "martillo", "es un martillo",
-                  20000.0, true, Estado_Producto.AUTORIZADO,
-                  LocalDateTime.now().plusMonths(2), categorias);
+        Producto producto = new Producto();
+        producto.setCodigo(1234);
+        producto.setUsuario(usuario);
+        producto.setImagen("imagen/url");
+        producto.setNombre("destronillador");
+        producto.setDescripcion("es un destornillador ");
+        producto.setPrecio(24000.0);
+        producto.setIsDisponible(true);
+        producto.setEstado(Estado_Producto.AUTORIZADO);
+        producto.setFechaLimite(LocalDateTime.now().plusMonths(2));
+        producto.setCategorias(categorias);
 
-          Producto productoGuardado = productoRepo.save(producto);
+        Producto productoGuardado = productoRepo.save(producto);
 
-          String nombre = productoRepo.obtenerNombreVendedor(1);
-          Assertions.assertEquals("juan",nombre);
-      }**/
+       productoGuardado.setDescripcion("Es una destornillador de clase A");
+        productoRepo.save(productoGuardado);
+        Producto buscado = productoRepo.findById(1234).orElse(null);
+        Assertions.assertEquals(1234, buscado.getCodigo());
+
+
+    }
+
+    @Test
+    public void listarTest() {
+        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+        Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();
+        categorias.add(Categoria_Producto.BEBES);
+        categorias.add(Categoria_Producto.CONSTRUCCION);
+        categorias.add(Categoria_Producto.HERRAMIENTAS);
+
+        Producto producto = new Producto();
+        producto.setCodigo(1234);
+        producto.setUsuario(usuario);
+        producto.setImagen("imagen/url");
+        producto.setNombre("destronillador");
+        producto.setDescripcion("es un destornillador ");
+        producto.setPrecio(24000.0);
+        producto.setIsDisponible(true);
+        producto.setEstado(Estado_Producto.AUTORIZADO);
+        producto.setFechaLimite(LocalDateTime.now().plusMonths(2));
+        producto.setCategorias(categorias);
+
+        Producto productoGuardado = productoRepo.save(producto);
+
+
+        List<Producto> lista = new ArrayList<>();
+        lista.add(productoGuardado);
+        lista = productoRepo.findAll();
+
+        System.out.println(lista);
+    }
     
     
     

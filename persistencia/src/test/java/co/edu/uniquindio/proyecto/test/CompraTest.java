@@ -54,5 +54,85 @@ public class CompraTest {
 
     }
 
+@Test
+    public void EliminarTest() {
+
+        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+
+        Producto producto=  productoRepo.findById(123).orElse(null);
+
+        List<Producto> productoscompra= new ArrayList<>();
+
+        productoscompra.add(producto);
+
+        Compra compra = new Compra();
+        compra.setUsuario(usuario);
+        compra.setCodigo(1);
+        compra.setFecha(LocalDateTime.now());
+        compra.setTotal(20000.0);
+        compra.setProductos(productoscompra);
+        compra.setMetodoDePago(MetodoDePago.TRANSSACCION_BANCARIA);
+
+        Compra compraGenerada = compraRepo.save(compra);
+    compraRepo.delete(compraGenerada);
+    Compra busquedaCompra = compraRepo.findById(1).orElse(null);
+    Assertions.assertNull(busquedaCompra);
+
+    }
+
+    @Test
+    public void ActualizarTest() {
+
+        Usuario usuario = usuarioRepo.findById("123").orElse(null);
+
+        Producto producto = productoRepo.findById(123).orElse(null);
+
+        List<Producto> productoscompra = new ArrayList<>();
+
+        productoscompra.add(producto);
+
+        Compra compra = new Compra();
+        compra.setUsuario(usuario);
+        compra.setCodigo(1);
+        compra.setFecha(LocalDateTime.now());
+        compra.setTotal(20000.0);
+        compra.setProductos(productoscompra);
+        compra.setMetodoDePago(MetodoDePago.TRANSSACCION_BANCARIA);
+
+        Compra compraGenerada = compraRepo.save(compra);
+
+
+
+        compraGenerada.setMetodoDePago(MetodoDePago.EFECTIVO);
+        compraRepo.save(compraGenerada);
+        Compra buscado = compraRepo.findById(1).orElse(null);
+        Assertions.assertEquals(MetodoDePago.EFECTIVO, buscado.getMetodoDePago());
+
+    }
+
+    @Test
+    public void listarTest() {
+
+        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+
+        Producto producto=  productoRepo.findById(123).orElse(null);
+
+        List<Producto> productoscompra= new ArrayList<>();
+
+        productoscompra.add(producto);
+
+        Compra compra = new Compra();
+        compra.setUsuario(usuario);
+        compra.setCodigo(1);
+        compra.setFecha(LocalDateTime.now());
+        compra.setTotal(20000.0);
+        compra.setProductos(productoscompra);
+        compra.setMetodoDePago(MetodoDePago.TRANSSACCION_BANCARIA);
+
+        Compra compraGenerada = compraRepo.save(compra);
+        Assertions.assertNotNull(compraGenerada);
+
+    }
+
 
 }

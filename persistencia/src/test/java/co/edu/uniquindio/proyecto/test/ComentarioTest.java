@@ -39,6 +39,7 @@ public class ComentarioTest {
     public void registrarTest() {
 
 
+
         Usuario usuario = new Usuario();
         usuario.setCedula("1001017577");
         usuario.setEmail("juanp.delgadod@uqvirtual.edu.co");
@@ -48,7 +49,9 @@ public class ComentarioTest {
         usuario.setDireccion("Reserva de la pastorita");
         usuario.setNombre("Juan Pablo");
 
-    //     usuarioRepo.saveAndFlush(usuario);
+
+
+      usuarioRepo.save(usuario);
 
 
         Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();

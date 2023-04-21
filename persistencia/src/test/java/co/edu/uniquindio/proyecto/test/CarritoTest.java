@@ -32,14 +32,28 @@ public class CarritoTest {
 
 
 
-
+   @Test
   public void registrarTest() {
        Usuario usuario= usuarioRepo.findById("123").orElse(null);
-       Usuario usuario = new Usuario("1001017578", "1234", "juan david", "yutud1@hotmail.com", true, "3218711230", "reserva");
+      // Usuario usuario = new Usuario("1001017578", "1234", "juan david", "yutud1@hotmail.com", true, "3218711230", "reserva");
 
        //Producto producto=  productoRepo.findById(1234).orElse(null);
 
+       usuarioRepo.save(usuario);
 
+       Usuario usuario1 = new Usuario();
+       usuario1.setCedula("1001017577");
+       usuario1.setEmail("juanp.delgadod@uqvirtual.edu.co");
+       usuario1.setContraseña("Juan123");
+       usuario1.setIsCuentaActiva(true);
+       usuario1.setTelefono("3218711230");
+       usuario1.setDireccion("Reserva de la pastorita");
+       usuario1.setNombre("Juan Pablo");
+
+
+
+       usuarioRepo.save(usuario);
+       usuarioRepo.save(usuario1);
 
        Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();
        categorias.add(Categoria_Producto.BEBES);
@@ -60,16 +74,27 @@ public class CarritoTest {
 
 
 
-       Producto   productoGuardado = productoRepo.save(producto);
+       productoRepo.save(producto);
+
+
+       producto.setCodigo(1234);
+       producto.setUsuario(usuario);
+       producto.setImagen("url.png");
+       producto.setNombre("martillo");
+       producto.setDescripcion("es un martillo");
+       producto.setPrecio(20000.0);
+       producto.setIsDisponible(true);
+       producto.setEstado(Estado_Producto.AUTORIZADO);
+       producto.setFechaLimite(LocalDateTime.now().plusMonths(2));
+       producto.setCategorias(categorias);
+
+       productoRepo.save(producto);
 
 
 
-**/
 
 
-
-
-   }
+   }}
 
 
 
