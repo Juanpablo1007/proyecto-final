@@ -17,7 +17,6 @@ import java.util.*;
 @ToString
 public class Producto implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
     @ManyToOne
@@ -68,8 +67,8 @@ public class Producto implements Serializable {
     @ToString.Exclude
     private List<Compra> compras;
 
-  public Producto(Usuario usuario, Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias) {
-    this.usuario = usuario;
+  public Producto( Usuario usuario,  Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias) {
+      this.usuario = usuario;
     this.isActivo = isActivo;
     this.imagen = imagen;
     this.nombre = nombre;

@@ -12,12 +12,9 @@ import java.util.List;
 
 @Repository
 public interface ProductoRepo  extends  JpaRepository <Producto, Integer>{
-    List<Moderador> findAllByIsActivo(boolean isActivo);
-    List<Moderador> findAllByIsDisponible(boolean isDisponible);
 
-    List<Moderador> findAllByNombre(String nombre);
 
-    Page<Producto> findAll(Pageable paginador);
-    @Query ("select Producto.usuario.nombre from Producto p where p.codigo = :id")
-    String obtenerNombreVendedor(Integer id);
+
+    //@Query ("select Producto.usuario.nombre from Producto p where p.codigo = :id")
+    //String obtenerNombreVendedor(Integer id);
 }
