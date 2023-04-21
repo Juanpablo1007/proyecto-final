@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-// add 
+// add
 @Entity
 @Setter
 @Getter
