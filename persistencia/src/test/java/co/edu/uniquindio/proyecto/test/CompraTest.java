@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.test;
 
 
+import co.edu.uniquindio.proyecto.repositorios.CompraRepo;
 import co.edu.uniquindio.proyecto.repositorios.UsuarioRepo;
 import co.edu.uniquindio.proyecto.repositorios.VentaRepo;
 import org.junit.Test;
@@ -13,9 +14,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 public class CompraTest {
 
     @Autowired
-    private VentaRepo ventaRepo;
+    private CompraRepo compraRepo;
 
 
+    @Autowired
+    private UsuarioRepo usuarioRepo;
+
+
+    //@Test
 
 
 }

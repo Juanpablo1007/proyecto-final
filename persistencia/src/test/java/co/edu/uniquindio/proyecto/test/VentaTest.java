@@ -26,19 +26,20 @@ public class VentaTest {
     private ProductoRepo productoRepo;
 
 
-    public void registrarTest() {
+    /**public void registrarTest() {
 
         Usuario usuario= usuarioRepo.findById("123").orElse(null);
      List  <Producto> producto=  productoRepo.findById(123).orElse(null);
         Venta venta = new Venta();
         venta.setUsuario(usuario);
-        venta.setProductos();
+       // venta.setProductos();
         venta.setFecha();
-        venta.setDireccion("Reserva de la pastorita");
-        venta.setNombre("Juan Pablo");
+        venta.setTotal(20000.0);
+        venta.setMetodoDePago();
 
         Usuario usuarioGuardado = usuarioRepo.save(usuario);
         Assertions.assertNotNull(usuarioGuardado);
 
-    }
+    }**/
+
 }

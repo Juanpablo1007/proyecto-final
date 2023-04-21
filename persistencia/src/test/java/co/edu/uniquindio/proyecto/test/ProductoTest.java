@@ -48,9 +48,7 @@ public class ProductoTest {
         producto.setFechaLimite(LocalDateTime.now().plusMonths(2));
         producto.setCategorias(categorias);
 
-        //Producto producto = new Producto( usuario, true, "url", "martillo", "es un martillo",
-          //      20000.0, true, Estado_Producto.AUTORIZADO,
-           //      LocalDateTime.now().plusMonths(2),categorias);
+
 
         Producto   productoGuardado = productoRepo.save(producto);
        Assertions.assertNotNull(productoGuardado);
