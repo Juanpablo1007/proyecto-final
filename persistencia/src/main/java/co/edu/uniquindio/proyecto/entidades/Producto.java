@@ -15,6 +15,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+
 public class Producto implements Serializable {
     @Id
     @EqualsAndHashCode.Include
@@ -50,7 +51,7 @@ public class Producto implements Serializable {
     @Future
     private LocalDateTime fechaLimite;
 
-    @Column ( nullable = false, length = 100, name = "categoria")
+    @Column ( nullable = true, length = 100, name = "categoria")
     @Enumerated(EnumType.STRING)
     @ElementCollection
     @ToString.Exclude

@@ -144,7 +144,14 @@ public class ProductoTest {
 
         System.out.println(lista);
     }
-    
+    @Test
+    @Sql("classpath:productos.sql")
+    public void MostrarComentarios(){
+
+        List<Comentario> comentarios = productoRepo.obtenerComentarios(124);
+        comentarios.forEach(System.out::println);
+        Assertions.assertEquals(1, comentarios.size());
+    }
     
     
 }

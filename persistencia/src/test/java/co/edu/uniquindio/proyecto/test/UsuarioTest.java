@@ -1,10 +1,12 @@
 package co.edu.uniquindio.proyecto.test;
 
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import co.edu.uniquindio.proyecto.entidades.Usuario;
+import co.edu.uniquindio.proyecto.entidades.*;
+import co.edu.uniquindio.proyecto.repositorios.ProductoRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.jdbc.Sql;
 
 
 import javax.crypto.spec.PSource;
@@ -24,6 +27,8 @@ import javax.crypto.spec.PSource;
 public class UsuarioTest {
     @Autowired
     private UsuarioRepo usuarioRepo;
+    @Autowired
+    private ProductoRepo productoRepo;
 
     @Test
     public void registrarTest() {
@@ -167,5 +172,31 @@ public class UsuarioTest {
 
         System.out.println(lista);
     }
+    @Test
+    @Sql("classpath:productos.sql")
+    public void MostrarFavoritoTest(){
 
+        List<Producto> fav = usuarioRepo.obtenerProductoFavorito("juano@gmail.com");
+        fav.forEach(System.out::println);
+        Assertions.assertEquals(2, fav.size());
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void MostrarComentarios(){
+
+        List<Comentario> comentarios = usuarioRepo.obtenerComentarios("123");
+        comentarios.forEach(System.out::println);
+        Assertions.assertEquals(1, comentarios.size());
+    }
+    @Test
+    @Sql("classpath:productos.sql")
+    public void ListarUsuarioPórducto(){
+
+        List<Object[]> res = usuarioRepo.listarUsuarioProductos();
+      for (Object[] objeto : res){
+          System.out.println(objeto[0]+"----"+objeto[1]);
+      }
+        //Assertions.assertEquals(1, comentarios.size());
+    }
 }
