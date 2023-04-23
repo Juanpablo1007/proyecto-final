@@ -2,12 +2,9 @@ package co.edu.uniquindio.proyecto.test;
 
 
 import co.edu.uniquindio.proyecto.entidades.*;
-import co.edu.uniquindio.proyecto.repositorios.ComentarioRepo;
-import co.edu.uniquindio.proyecto.repositorios.ProductoRepo;
-import co.edu.uniquindio.proyecto.repositorios.UsuarioRepo;
-import co.edu.uniquindio.proyecto.repositorios.VentaRepo;
-import org.junit.Test;
+import co.edu.uniquindio.proyecto.repositorios.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -35,8 +32,94 @@ public class ComentarioTest {
     private ProductoRepo productoRepo;
 
     @Test
-    @Sql("classpath:productos.sql")
+    @Sql("classpath:comentarios.sql")
     public void registrarTest() {
+
+        Usuario usuario = usuarioRepo.findById("1004870909").orElse(null);
+
+        Producto producto = productoRepo.findById(1).orElse(null);
+
+        Comentario comentario = new Comentario("El producto es mediocre", LocalDateTime.now(), usuario, producto);
+
+        Comentario comentarioGenerado = comentarioRepo.save(comentario);
+
+        Assertions.assertNotNull(comentarioGenerado);
+
+    }
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void eliminarTest() {
+
+
+        Comentario comentarioGenerado = comentarioRepo.findById(1).orElse(null);
+
+        comentarioRepo.delete(comentarioGenerado);
+
+        Comentario busquedaComentario = comentarioRepo.findById(1).orElse(null);
+
+        Assertions.assertNull(busquedaComentario);
+
+    }
+
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void actualizarTest() {
+
+        Comentario comentarioGenerado = comentarioRepo.findById(1).orElse(null);
+        comentarioGenerado.setTexto("El producto es chistoso");
+        comentarioRepo.save(comentarioGenerado);
+        Comentario busquedaComentario = comentarioRepo.findById(1).orElse(null);
+        Assertions.assertEquals("El producto es chistoso", busquedaComentario.getTexto());
+
+    }
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void ListarTest() {
+
+        List<Comentario> lista = comentarioRepo.findAll();
+
+        lista.forEach(System.out::println);
+
+    }
+
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void buscarPorFechasAnteriores() {
+
+        List<Comentario> lista = comentarioRepo.findAllByFechaBefore(LocalDateTime.now());
+
+        lista.forEach(System.out::println);
+
+    }
+
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void buscarPorTexto() {
+
+        List<Comentario> lista = comentarioRepo.findAllByTextoContainsIgnoreCase("Buen");
+
+        lista.forEach(System.out::println);
+
+    }
+
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void buscarPorCedulaDeUsuario() {
+
+        List<Comentario> lista = comentarioRepo.findAllByUsuario_Cedula("1004870909");
+
+        lista.forEach(System.out::println);
+
+    }
+
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void buscarPorIdDeProducto() {
+
+        List<Comentario> lista = comentarioRepo.findAllByProducto_Codigo(1);
+
+        lista.forEach(System.out::println);
+    }
 
 
 
@@ -51,4 +134,4 @@ public class ComentarioTest {
 
 
 
-}
+

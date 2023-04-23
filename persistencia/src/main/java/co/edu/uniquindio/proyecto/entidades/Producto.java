@@ -18,6 +18,7 @@ import java.util.*;
 
 public class Producto implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
     @ManyToOne
@@ -44,6 +45,9 @@ public class Producto implements Serializable {
     @Column ( nullable = false)
     private Boolean isDisponible;
 
+    @Column (nullable = false)
+    private Integer unidades;
+
     @Column ( nullable = false,length = 100)
     @Enumerated(EnumType.STRING)
     private Estado_Producto estado;
@@ -64,11 +68,16 @@ public class Producto implements Serializable {
     @ToString.Exclude
     private List<Carrito> carritos;
 
-    @ManyToMany (mappedBy = "productos")
+    @OneToMany (mappedBy = "producto")
     @ToString.Exclude
     private List<Compra> compras;
 
-  public Producto( Usuario usuario,  Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias) {
+    @OneToMany (mappedBy = "producto")
+    @ToString.Exclude
+    private List<Venta> ventas;
+
+  public Producto( Usuario usuario,  Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias, Integer unidades) {
+
       this.usuario = usuario;
     this.isActivo = isActivo;
     this.imagen = imagen;
@@ -79,6 +88,7 @@ public class Producto implements Serializable {
     this.estado = estado;
     this.fechaLimite = fechaLimite;
     this.categorias=categorias;
+    this.unidades=unidades;
 
   }
 }

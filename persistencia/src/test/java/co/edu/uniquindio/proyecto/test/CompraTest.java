@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ public class CompraTest {
     @Autowired
     private CompraRepo compraRepo;
 
-
     @Autowired
     private UsuarioRepo usuarioRepo;
 
@@ -31,108 +31,87 @@ public class CompraTest {
     private ProductoRepo productoRepo;
 
     @Test
+    @Sql("classpath:compras.sql")
     public void registrarTest() {
 
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+        Usuario usuario= usuarioRepo.findById("1004870909").orElse(null);
 
-        Producto producto=  productoRepo.findById(123).orElse(null);
+        Producto producto=  productoRepo.findById(1).orElse(null);
 
-        List<Producto> productoscompra= new ArrayList<>();
+        int unidadesVendidas = 2;
 
-        productoscompra.add(producto);
-
-       Compra compra = new Compra();
-        compra.setUsuario(usuario);
-        compra.setCodigo(1);
-        compra.setFecha(LocalDateTime.now());
-        compra.setTotal(20000.0);
-        compra.setProductos(productoscompra);
-        compra.setMetodoDePago(MetodoDePago.TRANSSACCION_BANCARIA);
+        Compra compra = new Compra(LocalDateTime.now(),producto.getPrecio()*unidadesVendidas,usuario,MetodoDePago.TARJETA_DE_CREDITO,producto,unidadesVendidas);
 
         Compra compraGenerada = compraRepo.save(compra);
+
         Assertions.assertNotNull(compraGenerada);
 
     }
+    @Test
+    @Sql("classpath:compras.sql")
+    public void eliminarTest() {
 
-@Test
-    public void EliminarTest() {
 
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+        Compra compraGenerada = compraRepo.findById(1).orElse(null);
 
-        Producto producto=  productoRepo.findById(123).orElse(null);
+        compraRepo.delete(compraGenerada);
 
-        List<Producto> productoscompra= new ArrayList<>();
+        Compra busquedaCompra = compraRepo.findById(1).orElse(null);
 
-        productoscompra.add(producto);
-
-        Compra compra = new Compra();
-        compra.setUsuario(usuario);
-        compra.setCodigo(1);
-        compra.setFecha(LocalDateTime.now());
-        compra.setTotal(20000.0);
-        compra.setProductos(productoscompra);
-        compra.setMetodoDePago(MetodoDePago.TRANSSACCION_BANCARIA);
-
-        Compra compraGenerada = compraRepo.save(compra);
-    compraRepo.delete(compraGenerada);
-    Compra busquedaCompra = compraRepo.findById(1).orElse(null);
-    Assertions.assertNull(busquedaCompra);
+        Assertions.assertNull(busquedaCompra);
 
     }
 
     @Test
-    public void ActualizarTest() {
+    @Sql("classpath:compras.sql")
+    public void actualizarTest() {
 
-        Usuario usuario = usuarioRepo.findById("123").orElse(null);
-
-        Producto producto = productoRepo.findById(123).orElse(null);
-
-        List<Producto> productoscompra = new ArrayList<>();
-
-        productoscompra.add(producto);
-
-        Compra compra = new Compra();
-        compra.setUsuario(usuario);
-        compra.setCodigo(1);
-        compra.setFecha(LocalDateTime.now());
-        compra.setTotal(20000.0);
-        compra.setProductos(productoscompra);
-        compra.setMetodoDePago(MetodoDePago.TRANSSACCION_BANCARIA);
-
-        Compra compraGenerada = compraRepo.save(compra);
-
-
-
-        compraGenerada.setMetodoDePago(MetodoDePago.EFECTIVO);
+        Compra compraGenerada = compraRepo.findById(1).orElse(null);
+        compraGenerada.setMetodoDePago(MetodoDePago.TRANSACCION_BANCARIA);
         compraRepo.save(compraGenerada);
-        Compra buscado = compraRepo.findById(1).orElse(null);
-        Assertions.assertEquals(MetodoDePago.EFECTIVO, buscado.getMetodoDePago());
+        Compra busquedaCompra = compraRepo.findById(1).orElse(null);
+        Assertions.assertEquals(MetodoDePago.TRANSACCION_BANCARIA, busquedaCompra.getMetodoDePago());
+
+    }
+    @Test
+    @Sql("classpath:compras.sql")
+    public void ListarTest() {
+
+        List<Compra> lista = compraRepo.findAll();
+
+        lista.forEach(System.out::println);
 
     }
 
     @Test
-    public void listarTest() {
+    @Sql("classpath:compras.sql")
+    public void buscarPorFechasAnteriores() {
 
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+        List<Compra> lista = compraRepo.findAllByFechaBefore(LocalDateTime.now());
 
-        Producto producto=  productoRepo.findById(123).orElse(null);
-
-        List<Producto> productoscompra= new ArrayList<>();
-
-        productoscompra.add(producto);
-
-        Compra compra = new Compra();
-        compra.setUsuario(usuario);
-        compra.setCodigo(1);
-        compra.setFecha(LocalDateTime.now());
-        compra.setTotal(20000.0);
-        compra.setProductos(productoscompra);
-        compra.setMetodoDePago(MetodoDePago.TRANSSACCION_BANCARIA);
-
-        Compra compraGenerada = compraRepo.save(compra);
-        Assertions.assertNotNull(compraGenerada);
+        lista.forEach(System.out::println);
 
     }
+
+    @Test
+    @Sql("classpath:compras.sql")
+    public void buscarPorNombreDeUsuario() {
+
+        List<Compra> lista = compraRepo.findAllByUsuario_Nombre("Pedro");
+
+        lista.forEach(System.out::println);
+
+    }
+
+    @Test
+    @Sql("classpath:compras.sql")
+    public void buscarPorIdDeProducto() {
+
+        List<Compra> lista = compraRepo.findAllByProducto_Codigo(3);
+
+        lista.forEach(System.out::println);
+    }
+
 
 
 }

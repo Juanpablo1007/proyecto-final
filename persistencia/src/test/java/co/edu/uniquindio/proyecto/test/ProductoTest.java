@@ -26,132 +26,140 @@ public class ProductoTest {
 
     @Autowired
     private UsuarioRepo usuarioRepo;
-    private Carrito carrito = null;
 
     @Test
     @Sql("classpath:productos.sql")
     public void registrarTest(){
 
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+        Usuario usuario= usuarioRepo.findById("1004870909").orElse(null);
         Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();
         categorias.add(Categoria_Producto.BEBES);
         categorias.add(Categoria_Producto.CONSTRUCCION);
         categorias.add(Categoria_Producto.HERRAMIENTAS);
 
-        Producto producto = new Producto();
-        producto.setCodigo(123);
-        producto.setUsuario(usuario);
-        producto.setImagen("url.png");
-        producto.setNombre("martillo");
-        producto.setDescripcion("es un martillo");
-        producto.setPrecio(20000.0);
-        producto.setIsDisponible(true);
-        producto.setEstado(Estado_Producto.AUTORIZADO);
-        producto.setFechaLimite(LocalDateTime.now().plusMonths(2));
-        producto.setCategorias(categorias);
-
+        Producto producto = new Producto(usuario,true,"imagen","Nintendo","Consola nintendo",3000.0,true,Estado_Producto.SIN_REVISAR,LocalDateTime.now().plusMonths(5),categorias,30);
 
 
         Producto   productoGuardado = productoRepo.save(producto);
+        System.out.println(productoRepo.findById(10));
        Assertions.assertNotNull(productoGuardado);
 
     }
 
     @Test
+    @Sql("classpath:productos.sql")
     public void eliminarTest() {
 
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
-        Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();
-        categorias.add(Categoria_Producto.BEBES);
-        categorias.add(Categoria_Producto.CONSTRUCCION);
-        categorias.add(Categoria_Producto.HERRAMIENTAS);
-
-        Producto producto = new Producto();
-        producto.setCodigo(1234);
-        producto.setUsuario(usuario);
-        producto.setImagen("imagen/url");
-        producto.setNombre("destronillador");
-        producto.setDescripcion("es un destornillador ");
-        producto.setPrecio(24000.0);
-        producto.setIsDisponible(true);
-        producto.setEstado(Estado_Producto.AUTORIZADO);
-        producto.setFechaLimite(LocalDateTime.now().plusMonths(2));
-        producto.setCategorias(categorias);
-
-
+        Producto producto = productoRepo.findById(1).orElse(null);
         productoRepo.delete(producto);
-        Producto buscado = productoRepo.findById(123).orElse(null);
+        Producto buscado = productoRepo.findById(1).orElse(null);
         Assertions.assertNull(buscado);
 
     }
 
     @Test
+    @Sql("classpath:productos.sql")
     public void actualizarTest() {
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
-        Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();
-        categorias.add(Categoria_Producto.BEBES);
-        categorias.add(Categoria_Producto.CONSTRUCCION);
-        categorias.add(Categoria_Producto.HERRAMIENTAS);
 
-        Producto producto = new Producto();
-        producto.setCodigo(1234);
-        producto.setUsuario(usuario);
-        producto.setImagen("imagen/url");
-        producto.setNombre("destronillador");
-        producto.setDescripcion("es un destornillador ");
-        producto.setPrecio(24000.0);
-        producto.setIsDisponible(true);
-        producto.setEstado(Estado_Producto.AUTORIZADO);
-        producto.setFechaLimite(LocalDateTime.now().plusMonths(2));
-        producto.setCategorias(categorias);
 
-        Producto productoGuardado = productoRepo.save(producto);
-
-       productoGuardado.setDescripcion("Es una destornillador de clase A");
+        Producto productoGuardado = productoRepo.findById(1).orElse(null);
+        productoGuardado.setEstado(Estado_Producto.AUTORIZADO);
         productoRepo.save(productoGuardado);
-        Producto buscado = productoRepo.findById(1234).orElse(null);
-        Assertions.assertEquals(1234, buscado.getCodigo());
+        Producto buscado = productoRepo.findById(1).orElse(null);
+        Assertions.assertEquals(Estado_Producto.AUTORIZADO, buscado.getEstado());
 
 
     }
 
-    @Test
-    public void listarTest() {
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
-        Set<Categoria_Producto> categorias = new HashSet<Categoria_Producto>();
-        categorias.add(Categoria_Producto.BEBES);
-        categorias.add(Categoria_Producto.CONSTRUCCION);
-        categorias.add(Categoria_Producto.HERRAMIENTAS);
-
-        Producto producto = new Producto();
-        producto.setCodigo(1234);
-        producto.setUsuario(usuario);
-        producto.setImagen("imagen/url");
-        producto.setNombre("destronillador");
-        producto.setDescripcion("es un destornillador ");
-        producto.setPrecio(24000.0);
-        producto.setIsDisponible(true);
-        producto.setEstado(Estado_Producto.AUTORIZADO);
-        producto.setFechaLimite(LocalDateTime.now().plusMonths(2));
-        producto.setCategorias(categorias);
-
-        Producto productoGuardado = productoRepo.save(producto);
-
-
-        List<Producto> lista = new ArrayList<>();
-        lista.add(productoGuardado);
-        lista = productoRepo.findAll();
-
-        System.out.println(lista);
-    }
     @Test
     @Sql("classpath:productos.sql")
-    public void MostrarComentarios(){
+    public void listarTest() {
 
-        List<Comentario> comentarios = productoRepo.obtenerComentarios(124);
-        comentarios.forEach(System.out::println);
-        Assertions.assertEquals(1, comentarios.size());
+        List<Producto> lista = productoRepo.findAll();
+
+        lista.forEach(System.out::println);
     }
-    
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorNombre() {
+
+        List<Producto> lista = productoRepo.findAllByNombreContainsIgnoreCase("Xbox");
+
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorDescripcion() {
+
+        List<Producto> lista = productoRepo.findAllByDescripcionContainsIgnoreCase("descripcion");
+
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorUsuarioCedula() {
+
+        List<Producto> lista = productoRepo.findAllByUsuario_Cedula("1004870909");
+
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorCategoria() {
+
+        List<Producto> lista = productoRepo.findAllByCategoriasContains(Categoria_Producto.TECNOLOGIA);
+
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorEstado() {
+
+        List<Producto> lista = productoRepo.findAllByEstado(Estado_Producto.AUTORIZADO);
+
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorDisponibilidad() {
+
+        List<Producto> lista = productoRepo.findAllByIsDisponible(true);
+
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorIsActivo() {
+
+        List<Producto> lista = productoRepo.findAllByIsActivo(true);
+
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorRangoDePrecio() {
+
+        List<Producto> lista = productoRepo.listarPorRangoDePrecio(2000.,6000.);
+
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarProductosFavoritosUsuario() {
+
+        List<Producto> lista = productoRepo.obtenerProductosDeUsuarioFavoritos("1004870909");
+
+        lista.forEach(System.out::println);
+    }
+
     
 }

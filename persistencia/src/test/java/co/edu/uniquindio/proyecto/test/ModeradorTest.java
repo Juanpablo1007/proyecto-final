@@ -7,8 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import co.edu.uniquindio.proyecto.repositorios.ModeradorRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -17,38 +24,97 @@ public class ModeradorTest {
     private ModeradorRepo moderadorRepo;
 
     @Test
-
-    public void registrarTest (){
-        Moderador moderador = new Moderador("1001017577","123","Juan", "yutu6d1@hotmail.com" );
+    public void registrarTest() {
+        Moderador moderador = new Moderador("1004870908","contraseña Nueva","Moderador nuevo","moderadornuevo@gmail.com");
         Moderador moderadorGuardado = moderadorRepo.save(moderador);
-        Assertions.assertNotNull(moderadorGuardado );
+        Assertions.assertNotNull(moderadorGuardado);
+
     }
 
     @Test
-    public void eliminarTest(){
-        Moderador moderador = new Moderador("1001017577","123","Juan", "yutu6d1@hotmail.com" );
-        Moderador moderadorGuardado = moderadorRepo.save(moderador);
-         moderadorRepo.delete(moderador);
-        Moderador buscado = moderadorRepo.findById("1001017577").orElse(null);
+    @Sql("classpath:moderadores.sql")
+    public void eliminarTest() {
+
+        Moderador moderadorGuardado = moderadorRepo.findById("1004870909").orElse(null);
+        moderadorRepo.delete(moderadorGuardado);
+        Moderador buscado = moderadorRepo.findById("1004870909").orElse(null);
         Assertions.assertNull(buscado);
+
     }
 
     @Test
-    public void actualizarTest (){
-        Moderador moderador = new Moderador("1001017577","123","Juan", "yutu6d1@hotmail.com" );
-        Moderador moderadorGuardado = moderadorRepo.save(moderador);
-        moderadorGuardado.setNombre("pablo");
-        Moderador buscado = moderadorRepo.findById("1001017577").orElse(null);
-        Assertions.assertEquals("pablo", buscado.getNombre());
+    @Sql("classpath:moderadores.sql")
+    public void actualizarTest() {
+
+        Moderador moderadorGuardado = moderadorRepo.findById("1004870909").orElse(null);
+        moderadorGuardado.setNombre("Didier");
+        moderadorRepo.save(moderadorGuardado);
+        Moderador buscado = moderadorRepo.findById("1004870909").orElse(null);
+        Assertions.assertEquals("Didier", buscado.getNombre());
+
+
     }
 
     @Test
-    public void listarTest(){
-        Moderador moderador = new Moderador("1011007577","321","Pablo", "juanp.delgadod@uqvirtual.edu.co" );
-        Moderador moderador1 = new Moderador("1001017577","123","Juan", "yutu6d1@hotmail.com" );
-         moderadorRepo.save(moderador);
-        moderadorRepo.save(moderador1);
+    @Sql("classpath:moderadores.sql")
+    public void listarTest() {
+
         List<Moderador> lista = moderadorRepo.findAll();
-        System.out.println(lista);
+
+        lista.forEach(System.out::println);
     }
+
+    @Test
+    @Sql("classpath:moderadores.sql")
+    public void filtrarNombreTest() {
+
+        List<Moderador> lista = moderadorRepo.findAllByNombreContainsIgnoreCase("juan");
+        lista.forEach(System.out::println);
+
+    }
+
+    @Test
+    @Sql("classpath:moderadores.sql")
+    public void filtrarCorreoTest() {
+
+        Optional<Moderador> moderador = moderadorRepo.findByEmailIgnoreCase("correo1@gmail.com");
+        if (moderador.isPresent()) {
+            System.out.println(moderador.get());
+        } else {
+            System.err.println("Ese correo no exite");
+        }
+
+    }
+
+    @Test
+    @Sql("classpath:moderadores.sql")
+    public void verificarAutenticacionTest() {
+
+        Optional<Moderador> moderador = moderadorRepo.findByEmailAndContraseña("correo3@gmail.com", "contraseña3");
+        if (moderador.isPresent()) {
+            System.out.println(moderador.get());
+        } else {
+            System.err.println("El email o contraseña no coninciden");
+        }
+
+    }
+
+    @Test
+    @Sql("classpath:moderadores.sql")
+    public void paginarListaTest() {
+
+        Pageable paginador = PageRequest.of(0, 2); // El archivo usuario.sql los crea en orden de ID (cedula) es decir, la cedula "menor" va primero
+        Page<Moderador> lista = moderadorRepo.findAll(paginador);
+
+        System.out.println(lista.stream().collect(Collectors.toList())); // hace la lista en partes, dependiendo de los pagueRequest
+    }
+    @Test
+    @Sql("classpath:moderadores.sql")
+    public void ordenarListaTest() {
+
+        List<Moderador> lista = moderadorRepo.findAll(Sort.by("nombre")); //ordena por orden alfabetico
+
+        lista.forEach(System.out::println);
+    }
+
 }

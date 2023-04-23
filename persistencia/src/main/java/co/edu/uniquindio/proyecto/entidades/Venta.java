@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.entidades;
 
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,8 +17,6 @@ import java.util.*;
 @NoArgsConstructor
 @ToString
 public class Venta {
-
-
 
 
     @Id
@@ -40,7 +39,20 @@ public class Venta {
     @Enumerated(EnumType.STRING)
     private MetodoDePago metodoDePago;
 
-    @ManyToMany
+    @ManyToOne
     @ToString.Exclude
-    private List<Producto> productos;
+    private Producto producto;
+
+    @Column (nullable = false)
+    private Integer unidadesVendidas;
+
+
+    public Venta(LocalDateTime fecha, Double total, Usuario usuario, MetodoDePago metodoDePago, Producto producto, Integer unidadesVendidas) {
+        this.fecha = fecha;
+        this.total = total;
+        this.usuario = usuario;
+        this.metodoDePago = metodoDePago;
+        this.producto = producto;
+        this.unidadesVendidas = unidadesVendidas;
+    }
 }

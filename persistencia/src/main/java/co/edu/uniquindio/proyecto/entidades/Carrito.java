@@ -11,12 +11,12 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-@ToString
+
 
 public class Carrito implements  Serializable {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
     @ManyToMany
@@ -29,5 +29,10 @@ public class Carrito implements  Serializable {
 
     public Carrito(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Carrito(" +"codigo: " + codigo + ", cedula de usuario: " + usuario.getCedula() + ")";
     }
 }

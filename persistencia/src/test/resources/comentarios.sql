@@ -9,10 +9,7 @@ insert into producto values (2,"descripcion2","AUTORIZADO","2023-12-2 12:45:56",
 insert into producto values (3,"descripcion2","AUTORIZADO","2023-12-2 12:45:56","imagen2",0,0,"Play 4",1000,5,"1004399032");
 insert into producto values (4,"descripcion3","DENEGADO","2023-12-3 12:45:56","imagen3",1,0,"Pc gamer",5000,5,"1004223311");
 
-insert into producto_categorias values (1,"TECNOLOGIA");
-insert into producto_categorias values (3,"TECNOLOGIA");
-
-insert into usuario_productos_favoritos values ("1004870909",2);
-
-
-
+insert into comentario values (1,now(),"Buen producto",1,"1004870909");
+insert into comentario values (2,now(),"Mal producto",2,"1004870909");
+insert into comentario values (3,now(),"Excelente producto",3,"1004870909");
+insert into comentario values (4,now(),"Pesimo producto",1,"1004399032");

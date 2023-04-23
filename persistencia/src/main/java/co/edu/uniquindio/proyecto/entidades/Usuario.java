@@ -38,7 +38,7 @@ public class Usuario implements Serializable   {
 
     @Column ( nullable = false)
     private Boolean isCuentaActiva;
-    @Column ( nullable = false)
+
     @OneToMany (mappedBy = "usuario")
     @ToString.Exclude
     private List<Comentario> comentarios;
@@ -49,9 +49,7 @@ public class Usuario implements Serializable   {
 
     @OneToMany (mappedBy = "usuario")
     @ToString.Exclude
-    private List<Compra> venta;
-
-
+    private List<Venta> ventas;
 
 
     @Column ( nullable = false, length = 100)

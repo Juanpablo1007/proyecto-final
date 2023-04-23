@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import co.edu.uniquindio.proyecto.entidades.*;
-import co.edu.uniquindio.proyecto.repositorios.ProductoRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,6 @@ import javax.crypto.spec.PSource;
 public class UsuarioTest {
     @Autowired
     private UsuarioRepo usuarioRepo;
-    @Autowired
-    private ProductoRepo productoRepo;
 
     @Test
     public void registrarTest() {
@@ -47,156 +44,100 @@ public class UsuarioTest {
     }
 
     @Test
+    @Sql("classpath:usuarios.sql")
     public void eliminarTest() {
-        Usuario usuario = new Usuario();
-        usuario.setCedula("1001017577");
-        usuario.setEmail("juanp.delgadod@uqvirtual.edu.co");
-        usuario.setContraseña("Juan123");
-        usuario.setIsCuentaActiva(true);
-        usuario.setTelefono("3218711230");
-        usuario.setDireccion("Reserva de la pastorita");
-        usuario.setNombre("Juan Pablo");
 
-        Usuario usuarioGuardado = usuarioRepo.save(usuario);
-
-        usuarioRepo.delete(usuario);
-        Usuario buscado = usuarioRepo.findById("1001017577").orElse(null);
+        Usuario usuarioGuardado = usuarioRepo.findById("1004870909").orElse(null);
+        usuarioRepo.delete(usuarioGuardado);
+        Usuario buscado = usuarioRepo.findById("1004870909").orElse(null);
         Assertions.assertNull(buscado);
 
     }
 
     @Test
+    @Sql("classpath:usuarios.sql")
     public void actualizarTest() {
-        Usuario usuario = new Usuario();
-        usuario.setCedula("1001017577");
-        usuario.setEmail("juanp.delgadod@uqvirtual.edu.co");
-        usuario.setContraseña("Juan123");
-        usuario.setIsCuentaActiva(true);
-        usuario.setTelefono("3218711230");
-        usuario.setDireccion("Reserva de la pastorita");
-        usuario.setNombre("Juan Pablo");
 
-        Usuario usuarioGuardado = usuarioRepo.save(usuario);
-
+        Usuario usuarioGuardado = usuarioRepo.findById("1004870909").orElse(null);
         usuarioGuardado.setNombre("Didier");
         usuarioRepo.save(usuarioGuardado);
-        Usuario buscado = usuarioRepo.findById("1001017577").orElse(null);
+        Usuario buscado = usuarioRepo.findById("1004870909").orElse(null);
         Assertions.assertEquals("Didier", buscado.getNombre());
 
 
     }
 
     @Test
+    @Sql("classpath:usuarios.sql")
     public void listarTest() {
-        Usuario usuario = new Usuario();
-        usuario.setCedula("1001017577");
-        usuario.setEmail("juanp.delgadod@uqvirtual.edu.co");
-        usuario.setContraseña("Juan123");
-        usuario.setIsCuentaActiva(true);
-        usuario.setTelefono("3218711230");
-        usuario.setDireccion("Reserva de la pastorita");
-        usuario.setNombre("Juan Pablo");
 
-        Usuario usuarioGuardado = usuarioRepo.save(usuario);
         List<Usuario> lista = usuarioRepo.findAll();
 
-        System.out.println(lista);
+        lista.forEach(System.out::println);
     }
 
     @Test
+    @Sql("classpath:usuarios.sql")
     public void filtrarnNombreTest() {
-        Usuario usuario3 = new Usuario("1001017579", "123", "didier", "yutud@hotmail.com", true, "3218711230", "reserva");
-        Usuario usuario2 = new Usuario("1001017578", "123", "juan david", "yutud1@hotmail.com", true, "3218711230", "reserva");
-        Usuario usuario1 = new Usuario("1001017577", "123", "juan pablo", "yutu6d1@hotmail.com", true, "3218711230", "reserva");
-        usuarioRepo.save(usuario1);
-        usuarioRepo.save(usuario2);
-        usuarioRepo.save(usuario3);
-        List<Usuario> lista = usuarioRepo.findAllByNombreContains("juan");
+
+        List<Usuario> lista = usuarioRepo.findAllByNombreContainsIgnoreCase("juan");
         lista.forEach(System.out::println);
 
     }
 
-    @Test 
+    @Test
+    @Sql("classpath:usuarios.sql")
     public void filtrarCorreoTest() {
-        Usuario usuario1 = new Usuario("1001017579", "123", "didier", "yutud@hotmail.com", true, "3218711230", "reserva");
-        usuarioRepo.save(usuario1);
-        Optional<Usuario> usuario = usuarioRepo.findByEmail("yutud@hotmail.com");
+
+        Optional<Usuario> usuario = usuarioRepo.findByEmailIgnoreCase("correo1@gmail.com");
         if (usuario.isPresent()) {
             System.out.println(usuario.get());
         } else {
-            System.err.println("ese correo no exite");
+            System.err.println("Ese correo no exite");
         }
 
     }
 
     @Test
-    public void verificarTest() {
-        Usuario usuario1 = new Usuario("1001017579", "123", "didier", "yutud@hotmail.com", true, "3218711230", "reserva");
-        usuarioRepo.save(usuario1);
-        Optional<Usuario> usuario = usuarioRepo.findByEmailAndContraseña("yutud@hotmail.com", "123");
+    @Sql("classpath:usuarios.sql")
+    public void verificarAutenticacionTest() {
+
+        Optional<Usuario> usuario = usuarioRepo.findByEmailAndContraseña("correo3@gmail.com", "contraseña3");
         if (usuario.isPresent()) {
             System.out.println(usuario.get());
         } else {
-            System.err.println("el usuario o contraseña no coninciden");
+            System.err.println("El email o contraseña no coninciden");
         }
 
     }
 
     @Test
+    @Sql("classpath:usuarios.sql")
     public void paginarListaTest() {
-        Usuario usuario4 = new Usuario("1001017580", "123", "daniel", "yutu@hotmail.com", true, "3218711230", "reserva");
-        Usuario usuario3 = new Usuario("1001017579", "123", "didier", "yutud@hotmail.com", true, "3218711230", "reserva");
-        Usuario usuario2 = new Usuario("1001017578", "123", "juan david", "yutud1@hotmail.com", true, "3218711230", "reserva");
-        Usuario usuario1 = new Usuario("1001017577", "123", "juan pablo", "yutu6d1@hotmail.com", true, "3218711230", "reserva");
-        usuarioRepo.save(usuario1);
-        usuarioRepo.save(usuario2);
-        usuarioRepo.save(usuario3);
-        usuarioRepo.save(usuario4);
-        Pageable paginador = PageRequest.of(1, 2);
+
+        Pageable paginador = PageRequest.of(0, 2); // El archivo usuario.sql los crea en orden de ID (cedula) es decir, la cedula "menor" va primero
         Page<Usuario> lista = usuarioRepo.findAll(paginador);
 
         System.out.println(lista.stream().collect(Collectors.toList())); // hace la lista en partes, dependiendo de los pagueRequest
     }
     @Test
+    @Sql("classpath:usuarios.sql")
     public void ordenarListaTest() {
-        Usuario usuario4 = new Usuario("1001017580", "123", "daniel", "yutu@hotmail.com", true, "3218711230", "reserva");
-        Usuario usuario3 = new Usuario("1001017579", "123", "didier", "yutud@hotmail.com", true, "3218711230", "reserva");
-        Usuario usuario2 = new Usuario("1001017578", "123", "juan david", "yutud1@hotmail.com", true, "3218711230", "reserva");
-        Usuario usuario1 = new Usuario("1001017577", "123", "juan pablo", "yutu6d1@hotmail.com", true, "3218711230", "reserva");
-        usuarioRepo.save(usuario1);
-        usuarioRepo.save(usuario2);
-        usuarioRepo.save(usuario3);
-        usuarioRepo.save(usuario4);
 
         List<Usuario> lista = usuarioRepo.findAll(Sort.by("nombre")); //ordena por orden alfabetico
 
-        System.out.println(lista);
+        lista.forEach(System.out::println);
     }
-    @Test
-    @Sql("classpath:productos.sql")
-    public void MostrarFavoritoTest(){
 
-        List<Producto> fav = usuarioRepo.obtenerProductoFavorito("juano@gmail.com");
-        fav.forEach(System.out::println);
-        Assertions.assertEquals(2, fav.size());
-    }
 
     @Test
-    @Sql("classpath:productos.sql")
-    public void MostrarComentarios(){
+    @Sql("classpath:usuarios.sql")
+    public void encontrarUsuariosActivos() {
 
-        List<Comentario> comentarios = usuarioRepo.obtenerComentarios("123");
-        comentarios.forEach(System.out::println);
-        Assertions.assertEquals(1, comentarios.size());
+        List<Usuario> lista = usuarioRepo.findAllByIsCuentaActiva(true);
+        lista.forEach(System.out::println);
     }
-    @Test
-    @Sql("classpath:productos.sql")
-    public void ListarUsuarioPórducto(){
 
-        List<Object[]> res = usuarioRepo.listarUsuarioProductos();
-      for (Object[] objeto : res){
-          System.out.println(objeto[0]+"----"+objeto[1]);
-      }
-        //Assertions.assertEquals(1, comentarios.size());
-    }
+
+
 }

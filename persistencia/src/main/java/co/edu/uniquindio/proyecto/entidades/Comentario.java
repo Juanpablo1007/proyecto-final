@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Comentario implements Serializable {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
 
@@ -31,5 +31,11 @@ public class Comentario implements Serializable {
     @ManyToOne
     private Producto producto;
 
+    public Comentario(String texto, LocalDateTime fecha, Usuario usuario, Producto producto) {
+        this.texto = texto;
+        this.fecha = fecha;
+        this.usuario = usuario;
+        this.producto = producto;
+    }
 }
 

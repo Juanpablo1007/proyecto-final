@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -27,103 +29,87 @@ public class VentaTest {
     @Autowired
     private ProductoRepo productoRepo;
 
-     @Test
+    @Test
+    @Sql("classpath:ventas.sql")
     public void registrarTest() {
 
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+        Usuario usuario= usuarioRepo.findById("1004870909").orElse(null);
 
-        Producto producto=  productoRepo.findById(123).orElse(null);
+        Producto producto=  productoRepo.findById(1).orElse(null);
 
-         List<Producto> productosventa= new ArrayList<>();
+        int unidadesVendidas = 2;
 
-        productosventa.add(producto);
-
-        Venta venta = new Venta();
-        venta.setCodigo(12345);
-        venta.setUsuario(usuario);
-        venta.setProductos(productosventa);
-        venta.setFecha(LocalDateTime.now());
-        venta.setTotal(20000.0);
-        venta.setMetodoDePago(MetodoDePago.EFECTIVO);
+        Venta venta = new Venta(LocalDateTime.now(),producto.getPrecio()*unidadesVendidas,usuario,MetodoDePago.TARJETA_DE_CREDITO,producto,unidadesVendidas);
 
         Venta ventaGenerada = ventaRepo.save(venta);
+
         Assertions.assertNotNull(ventaGenerada);
 
     }
     @Test
+    @Sql("classpath:ventas.sql")
     public void eliminarTest() {
 
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
 
-        Producto producto=  productoRepo.findById(123).orElse(null);
-
-        List<Producto> productosventa= new ArrayList<>();
-
-        productosventa.add(producto);
-
-        Venta venta = new Venta();
-        venta.setCodigo(12345);
-        venta.setUsuario(usuario);
-        venta.setProductos(productosventa);
-        venta.setFecha(LocalDateTime.now());
-        venta.setTotal(20000.0);
-        venta.setMetodoDePago(MetodoDePago.EFECTIVO);
-
-        Venta ventaGenerada = ventaRepo.save(venta);
+        Venta ventaGenerada = ventaRepo.findById(1).orElse(null);
 
         ventaRepo.delete(ventaGenerada);
-        Venta busquedaVenta = ventaRepo.findById(12345).orElse(null);
+
+        Venta busquedaVenta = ventaRepo.findById(1).orElse(null);
+
         Assertions.assertNull(busquedaVenta);
 
     }
 
     @Test
+    @Sql("classpath:ventas.sql")
     public void actualizarTest() {
 
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
-
-        Producto producto=  productoRepo.findById(123).orElse(null);
-
-        List<Producto> productosventa= new ArrayList<>();
-
-        productosventa.add(producto);
-
-        Venta venta = new Venta();
-        venta.setCodigo(12345);
-        venta.setUsuario(usuario);
-        venta.setProductos(productosventa);
-        venta.setFecha(LocalDateTime.now());
-        venta.setTotal(20000.0);
-        venta.setMetodoDePago(MetodoDePago.EFECTIVO);
-
-        Venta ventaGenerada = ventaRepo.save(venta);
-        ventaRepo.delete(ventaGenerada);
-        Venta busquedaventa = ventaRepo.findById(12345).orElse(null);
-        Assertions.assertNull(busquedaventa);
+        Venta ventaGenerada = ventaRepo.findById(1).orElse(null);
+        ventaGenerada.setMetodoDePago(MetodoDePago.TRANSACCION_BANCARIA);
+        ventaRepo.save(ventaGenerada);
+        Venta busquedaventa = ventaRepo.findById(1).orElse(null);
+        Assertions.assertEquals(MetodoDePago.TRANSACCION_BANCARIA, busquedaventa.getMetodoDePago());
 
     }
-@Test
-    public void ListarTest() {
+    @Test
+    @Sql("classpath:ventas.sql")
+        public void ListarTest() {
 
-        Usuario usuario= usuarioRepo.findById("123").orElse(null);
+        List<Venta> lista = ventaRepo.findAll();
 
-        Producto producto=  productoRepo.findById(123).orElse(null);
+        lista.forEach(System.out::println);
 
-        List<Producto> productosventa= new ArrayList<>();
+        }
 
-        productosventa.add(producto);
+    @Test
+    @Sql("classpath:ventas.sql")
+    public void buscarPorFechasAnteriores() {
 
-        Venta venta = new Venta();
-        venta.setCodigo(12345);
-        venta.setUsuario(usuario);
-        venta.setProductos(productosventa);
-        venta.setFecha(LocalDateTime.now());
-        venta.setTotal(20000.0);
-        venta.setMetodoDePago(MetodoDePago.EFECTIVO);
+        List<Venta> lista = ventaRepo.findAllByFechaBefore(LocalDateTime.now());
 
-        Venta ventaGenerada = ventaRepo.save(venta);
-        Assertions.assertNotNull(ventaGenerada);
+        lista.forEach(System.out::println);
 
     }
 
-}
+    @Test
+    @Sql("classpath:ventas.sql")
+    public void buscarPorNombreDeUsuario() {
+
+        List<Venta> lista = ventaRepo.findAllByUsuario_Nombre("Pedro");
+
+        lista.forEach(System.out::println);
+
+    }
+
+    @Test
+    @Sql("classpath:ventas.sql")
+    public void buscarPorIdDeProducto() {
+
+           List<Venta> lista = ventaRepo.findAllByProducto_Codigo(3);
+
+           lista.forEach(System.out::println);
+        }
+
+    }
+

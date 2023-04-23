@@ -17,6 +17,7 @@ import java.util.List;
 @ToString
 public class Compra implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
 
@@ -34,8 +35,19 @@ public class Compra implements Serializable {
     @Enumerated(EnumType.STRING)
     private MetodoDePago metodoDePago;
 
-    @ManyToMany
+    @ManyToOne
     @ToString.Exclude
-    private List<Producto> productos;
+    private Producto producto;
 
+    @Column (nullable = false)
+    private Integer unidadesCompradas;
+
+    public Compra(LocalDateTime fecha, Double total, Usuario usuario, MetodoDePago metodoDePago, Producto producto, Integer unidadesCompradas) {
+        this.fecha = fecha;
+        this.total = total;
+        this.usuario = usuario;
+        this.metodoDePago = metodoDePago;
+        this.producto = producto;
+        this.unidadesCompradas = unidadesCompradas;
+    }
 }
