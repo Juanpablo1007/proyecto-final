@@ -120,7 +120,14 @@ public class ComentarioTest {
 
         lista.forEach(System.out::println);
     }
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void lsitarUsuarioComentariosNoRepetidos() {
 
+        List<Usuario> usuarios = comentarioRepo.findAllByUsuario_Cedula_Sin_Repetir(1);
+
+        usuarios.forEach(System.out::println);
+    }
 
 
 

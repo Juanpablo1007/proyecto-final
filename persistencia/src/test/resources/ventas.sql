@@ -14,4 +14,5 @@ insert into venta values (2,now(),"TARJETA_DE_CREDITO",6000,2,2,"1004399032");
 insert into venta values (3,now(),"TRANSACCION_BANCARIA",3000,3,3,"1004223311");
 insert into venta values (4,now(),"EFECTIVO",20000,4,4,"1004254687");
 insert into venta values (5,now(),"EFECTIVO",5000,5,3,"1004254687");
-
+insert into venta values (6,now(),"EFECTIVO",5000,1,1,"1004870909");
+insert into venta values (7,now(),"EFECTIVO",3000,1,1,"1004870909");

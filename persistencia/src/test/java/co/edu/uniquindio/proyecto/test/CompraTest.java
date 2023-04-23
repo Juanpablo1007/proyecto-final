@@ -102,7 +102,15 @@ public class CompraTest {
         lista.forEach(System.out::println);
 
     }
+    @Test
+    @Sql("classpath:compras.sql")
+    public void buscarPorCedulaDeUsuario() {
 
+        List<Compra> lista = compraRepo.findAllByUsuario_Cedula("1004870909");
+
+        lista.forEach(System.out::println);
+
+    }
     @Test
     @Sql("classpath:compras.sql")
     public void buscarPorIdDeProducto() {
@@ -111,7 +119,29 @@ public class CompraTest {
 
         lista.forEach(System.out::println);
     }
+    @Test
+    @Sql("classpath:compras.sql")
+    public void ListarProductosCompradosPorUsuario() {
+
+        List<Producto> lista = compraRepo.obtenerListaProductosComprados("1004870909");
+
+        lista.forEach(System.out::println);
+    }
+    @Test
+    @Sql("classpath:compras.sql")
+    public void ListarCantidadProductosCompradosPorUsuario() {
+
+        Long total = compraRepo.obtenerListaProductosCompradosSinRepetir("1004870909");
+
+       System.out.println(total);
+    }
+    @Test
+    @Sql("classpath:Compras.sql")
+    public void calcularTotalVentas() {
 
 
+        Long compras = compraRepo.calcularTotalCompras("1004870909");
+        System.out.println(compras);
+    }
 
 }

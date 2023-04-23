@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.context.jdbc.Sql;
 
 import javax.swing.text.html.Option;
@@ -110,6 +111,31 @@ public class VentaTest {
 
            lista.forEach(System.out::println);
         }
+    @Test
+    @Sql("classpath:Ventas.sql")
+    public void ListarProductosCompradosPorUsuario() {
+
+        List<Producto> lista = ventaRepo.obtenerListaProductosVendidos("1004870909");
+
+        lista.forEach(System.out::println);
+    }
+    @Test
+    @Sql("classpath:Ventas.sql")
+    public void calcularTotalVentas() {
+
+
+        Long ventas = ventaRepo.calcularTotalVentas("1004399032");
+    System.out.println(ventas);
+    }
+    @Test
+    @Sql("classpath:compras.sql")
+    public void buscarPorCedulaDeUsuario() {
+
+        List<Compra> lista = ventaRepo.findAllByUsuario_Cedula("1004870909");
+
+        lista.forEach(System.out::println);
+
+    }
 
     }
 

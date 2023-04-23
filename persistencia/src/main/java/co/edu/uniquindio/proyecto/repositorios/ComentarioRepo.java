@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.repositorios;
 import co.edu.uniquindio.proyecto.entidades.Comentario;
 import co.edu.uniquindio.proyecto.entidades.Compra;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,9 +17,13 @@ public interface ComentarioRepo extends JpaRepository < Comentario , Integer> {
 
     List<Comentario> findAllByTextoContainsIgnoreCase(String texto);
 
+
     List<Comentario> findAllByUsuario_Cedula(String cedula);
 
     List<Comentario> findAllByProducto_Codigo(Integer codigo);
+
+    @Query ("SELECT  c.usuario from Producto p join p.comentario c where p.codigo = :id")
+    List<Usuario> findAllByUsuario_Cedula_Sin_Repetir(Integer id);
 
 }
 

@@ -1,5 +1,7 @@
 package co.edu.uniquindio.proyecto.test;
 
+import co.edu.uniquindio.proyecto.dto.InfoUsuarioVenta;
+import co.edu.uniquindio.proyecto.dto.ProductoValido;
 import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.UsuarioRepo;
 import org.junit.jupiter.api.Assertions;
@@ -161,5 +163,51 @@ public class ProductoTest {
         lista.forEach(System.out::println);
     }
 
-    
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarProductosActivos() {
+
+        List<ProductoValido> lista = productoRepo.listarProductosActivos(true);
+
+        lista.forEach(System.out::println);
+    }
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarProductosDisponibles() {
+
+        List<ProductoValido> lista = productoRepo.listarProductosDisponibles(true);
+
+        lista.forEach(System.out::println);
+    }
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarProductosPorInicial() {
+
+        List<String> lista = productoRepo.listarProductosPorInicial("p" + "%");
+
+        lista.forEach(System.out::println);
+    }
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarProductosPorPrecioMayor() {
+
+        List<Producto> lista = productoRepo.obtenerProductosDeMayorPrecio();
+
+        lista.forEach(System.out::println);
+    }@Test
+    @Sql("classpath:productos.sql")
+    public void listarProductosPorPrecioMenor() {
+
+        List<Producto> lista = productoRepo.obtenerProductosDeMenorPrecio();
+
+        lista.forEach(System.out::println);
+    }
+    @Test
+    @Sql("classpath:productos.sql")
+    public void obtenerProductosENVenta() {
+
+        List<InfoUsuarioVenta> lista = productoRepo.obtenerProductosEnVenta();
+
+        lista.forEach(System.out::println);
+    }
 }
