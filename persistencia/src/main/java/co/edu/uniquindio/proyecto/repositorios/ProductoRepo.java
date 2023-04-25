@@ -52,4 +52,6 @@ List<Producto> obtenerProductosDeMayorPrecio();
 
     @Query ("select new co.edu.uniquindio.proyecto.dto.InfoUsuarioVenta (p.usuario.nombre, p.usuario.email, count (p))  from Producto p group by p.usuario")
 List<InfoUsuarioVenta> obtenerProductosEnVenta();
+
+
 }

@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.entidades;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.util.*;
 @Entity
@@ -24,6 +25,7 @@ public class Usuario implements Serializable   {
     @Column ( nullable = false, length = 100)
     private String nombre;
     @Column ( nullable = false, unique = true, length = 100)
+    @Email
     private String email;
 
     @OneToMany(mappedBy = "usuario")

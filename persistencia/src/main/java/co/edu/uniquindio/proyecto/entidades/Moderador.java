@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 
 @Entity
@@ -26,6 +27,7 @@ public class Moderador implements Serializable {
     @Column ( nullable = false, length = 100)
     private String nombre;
     @Column ( nullable = false, unique = true, length = 100)
+    @Email
     private String email;
 
 
