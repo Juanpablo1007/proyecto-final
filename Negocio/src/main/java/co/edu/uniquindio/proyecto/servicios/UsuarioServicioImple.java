@@ -261,11 +261,7 @@ public class UsuarioServicioImple implements UsuarioServicio {
         return ventaRepo.calcularTotalVentas(cedula);
     }
 
-    @Override
-    public Carrito asignarCarrito(Carrito carrito) throws Exception {
 
-        return carritoRepo.save(carrito);
-    }
 
 }
 

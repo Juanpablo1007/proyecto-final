@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.entidades;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
@@ -21,12 +22,12 @@ public class CarritoProductos implements Serializable {
     @EqualsAndHashCode.Include
     CarritoProductosLlave id = new CarritoProductosLlave();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("carritoCodigo")
     @JoinColumn(name = "carrito_codigo")
     Carrito carrito;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("productoCodigo")
     @JoinColumn(name = "producto_codigo")
     Producto producto;
@@ -35,5 +36,9 @@ public class CarritoProductos implements Serializable {
     Integer unidades;
 
 
-
+    public CarritoProductos(Carrito carrito, Producto producto, Integer unidades) {
+        this.carrito = carrito;
+        this.producto = producto;
+        this.unidades = unidades;
+    }
 }

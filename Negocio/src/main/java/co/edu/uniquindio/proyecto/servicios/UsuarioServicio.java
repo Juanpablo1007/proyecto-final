@@ -54,6 +54,6 @@ public interface UsuarioServicio {
     Long calcularTotalVenta (String cedula);
 
 
-    Carrito asignarCarrito(Carrito carrito) throws Exception;
+
 
 }
