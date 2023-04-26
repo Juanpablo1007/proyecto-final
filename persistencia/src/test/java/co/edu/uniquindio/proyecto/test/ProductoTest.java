@@ -43,7 +43,7 @@ public class ProductoTest {
 
 
         Producto   productoGuardado = productoRepo.save(producto);
-        System.out.println(productoRepo.findById(10));
+        System.out.println(productoGuardado.getCodigo());
        Assertions.assertNotNull(productoGuardado);
 
     }

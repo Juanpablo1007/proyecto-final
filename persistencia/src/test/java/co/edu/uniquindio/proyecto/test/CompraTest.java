@@ -140,7 +140,7 @@ public class CompraTest {
     public void calcularTotalVentas() {
 
 
-        Long compras = compraRepo.calcularTotalCompras("1004870909");
+        Long compras = compraRepo.calcularTotalCompras(3);
         System.out.println(compras);
     }
 

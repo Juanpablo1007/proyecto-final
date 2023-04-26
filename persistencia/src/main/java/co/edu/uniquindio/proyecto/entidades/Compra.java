@@ -4,6 +4,9 @@ package co.edu.uniquindio.proyecto.entidades;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,11 +28,11 @@ public class Compra implements Serializable {
     private LocalDateTime fecha;
 
     @Column (nullable = false)
+    @PositiveOrZero
     private Double total;
 
     @ManyToOne
-    @ToString.Exclude
-
+    @NotNull
     private Usuario usuario;
 
 
@@ -38,10 +41,11 @@ public class Compra implements Serializable {
     private MetodoDePago metodoDePago;
 
     @ManyToOne
-    @ToString.Exclude
+    @NotNull
     private Producto producto;
 
     @Column (nullable = false)
+    @Min(value = 1, message = "Se debe vender minimamente una unidad del producto")
     private Integer unidadesCompradas;
 
     public Compra(LocalDateTime fecha, Double total, Usuario usuario, MetodoDePago metodoDePago, Producto producto, Integer unidadesCompradas) {

@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -18,7 +20,7 @@ import java.util.*;
 
 public class Producto implements Serializable {
     @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
     @ManyToOne
@@ -35,17 +37,20 @@ public class Producto implements Serializable {
     private String imagen;
 
     @Column ( nullable = false, length = 100)
+    @NotBlank(message = "El producto debe tener un nombre")
     private String nombre;
 
     @Column ( nullable = false, length = 100)
     private String descripcion;
     @Column ( nullable = false)
+    @PositiveOrZero
     private Double precio;
 
     @Column ( nullable = false)
     private Boolean isDisponible;
 
     @Column (nullable = false)
+    @PositiveOrZero
     private Integer unidades;
 
     @Column ( nullable = false,length = 100)
@@ -64,9 +69,9 @@ public class Producto implements Serializable {
     @ToString.Exclude
     private List<Comentario> comentario;
 
-    @ManyToMany(mappedBy = "productos")
+    @OneToMany(mappedBy = "producto")
     @ToString.Exclude
-    private List<Carrito> carritos;
+    private List<CarritoProductos> carritos;
 
     @OneToMany (mappedBy = "producto")
     @ToString.Exclude

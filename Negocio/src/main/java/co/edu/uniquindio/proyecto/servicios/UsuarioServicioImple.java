@@ -40,6 +40,7 @@ public class UsuarioServicioImple implements UsuarioServicio {
         if (buscado.isPresent()) {
             throw new Exception("el email del usuario ya existe");
         }
+
         return usuarioRepo.save(u);
 
     }
@@ -89,7 +90,7 @@ public class UsuarioServicioImple implements UsuarioServicio {
         if (!buscado.isPresent()) {
             return productoRepo.save(producto);
         }
-        throw new Exception("el id del producto ya existe");
+        throw new Exception("Ya existe un producto con ese codigo");
     }
 
 
@@ -251,13 +252,19 @@ public class UsuarioServicioImple implements UsuarioServicio {
     }
 
     @Override
-    public Long calcularTotal(String cedula) {
-        return compraRepo.calcularTotalCompras(cedula);
+    public Long calcularTotal(Integer codigo) {
+        return compraRepo.calcularTotalCompras(codigo);
     }
 
     @Override
     public Long calcularTotalVenta(String cedula) {
         return ventaRepo.calcularTotalVentas(cedula);
+    }
+
+    @Override
+    public Carrito asignarCarrito(Carrito carrito) throws Exception {
+
+        return carritoRepo.save(carrito);
     }
 
 }

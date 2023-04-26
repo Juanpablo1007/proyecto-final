@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.*;
 @Entity
@@ -29,9 +30,11 @@ public class Venta {
     private LocalDateTime fecha;
 
     @Column (nullable = false)
+    @PositiveOrZero
     private Double total;
 
     @ManyToOne
+    @NotNull
     private Usuario usuario;
 
 
@@ -40,10 +43,12 @@ public class Venta {
     private MetodoDePago metodoDePago;
 
     @ManyToOne
+    @NotNull
     @ToString.Exclude
     private Producto producto;
 
     @Column (nullable = false)
+    @Min(value = 1, message = "Se debe vender minimamente una unidad del producto") //validar que maximo sea producto.getUnidades();
     private Integer unidadesVendidas;
 
 

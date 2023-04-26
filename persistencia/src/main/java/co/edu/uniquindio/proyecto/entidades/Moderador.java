@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Entity
@@ -23,8 +24,10 @@ public class Moderador implements Serializable {
     private String cedula;
 
     @Column ( nullable = false, length = 100)
+    @NotBlank(message = "El moderador debe tener una contraseña")
     private String contraseña;
     @Column ( nullable = false, length = 100)
+    @NotBlank(message = "El moderador debe tener un nombre")
     private String nombre;
     @Column ( nullable = false, unique = true, length = 100)
     @Email

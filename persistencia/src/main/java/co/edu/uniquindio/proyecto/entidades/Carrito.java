@@ -4,7 +4,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Setter
@@ -19,16 +21,18 @@ public class Carrito implements  Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
-    @ManyToMany
+    @OneToMany(mappedBy = "carrito")
     @ToString.Exclude
-    private List <Producto> productos;
+    private List <CarritoProductos> productos;
 
     @OneToOne
     @JoinColumn(nullable = false)
     private Usuario usuario;
 
     public Carrito(Usuario usuario) {
+
         this.usuario = usuario;
+
     }
 
     @Override

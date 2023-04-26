@@ -14,3 +14,6 @@ insert into carrito values (2,"1004399032");
 insert into carrito values (3,"1004223311");
 insert into carrito values (4,"1004254687");
 insert into carrito values (5,"1004944713");
+
+insert into carrito_productos values (1,2,30);
+insert into carrito_productos values (1,1,5);

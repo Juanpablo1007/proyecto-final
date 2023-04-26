@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.*;
 @Entity
@@ -21,8 +22,11 @@ public class Usuario implements Serializable   {
     private String cedula;
 
     @Column ( nullable = false, length = 100)
+    @NotBlank(message = "El usuario debe tener una contraseña")
+
     private String contraseña;
     @Column ( nullable = false, length = 100)
+    @NotBlank(message = "El usuario debe tener un nombre")
     private String nombre;
     @Column ( nullable = false, unique = true, length = 100)
     @Email

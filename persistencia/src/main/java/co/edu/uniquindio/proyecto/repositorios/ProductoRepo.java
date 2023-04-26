@@ -54,4 +54,7 @@ List<Producto> obtenerProductosDeMayorPrecio();
 List<InfoUsuarioVenta> obtenerProductosEnVenta();
 
 
+    @Query ("select p from Carrito c, IN (c.productos) p where c.usuario.cedula = :cedula")
+    List<Producto> obtenerProductosDeUsuarioCarrito(String cedula);
+
 }

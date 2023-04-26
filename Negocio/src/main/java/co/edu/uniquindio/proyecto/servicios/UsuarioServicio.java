@@ -49,14 +49,11 @@ public interface UsuarioServicio {
 
     void EliminarProducto  (Producto producto) throws Exception;
 
-    Long calcularTotal (String cedula);
+    Long calcularTotal (Integer total);
 
     Long calcularTotalVenta (String cedula);
 
 
-
-
-
-
+    Carrito asignarCarrito(Carrito carrito) throws Exception;
 
 }

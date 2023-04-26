@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.test;
 
 import co.edu.uniquindio.proyecto.entidades.*;
+import co.edu.uniquindio.proyecto.repositorios.CarritoProductosRepo;
 import co.edu.uniquindio.proyecto.repositorios.CarritoRepo;
 import co.edu.uniquindio.proyecto.repositorios.ProductoRepo;
 import co.edu.uniquindio.proyecto.repositorios.UsuarioRepo;
@@ -12,10 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -30,6 +28,9 @@ public class CarritoTest {
 
     @Autowired
     private UsuarioRepo usuarioRepo;
+
+    @Autowired
+    private CarritoProductosRepo carritoProductosRepo;
 
 
 
@@ -66,11 +67,11 @@ public class CarritoTest {
      public void actualizarTest() {
 
           Carrito carritoGenerado = carritoRepo.findById(1).orElse(null);
-          Producto producto = productoRepo.findById(1).orElse(null);
-          carritoGenerado.getProductos().add(producto);
+          Usuario usuario = usuarioRepo.findById("1004254687").orElse(null);
+          carritoGenerado.setUsuario(usuario);
           carritoRepo.save(carritoGenerado);
           Carrito busquedaCarrito = carritoRepo.findById(1).orElse(null);
-          Assertions.assertEquals(1, busquedaCarrito.getProductos().size());
+          Assertions.assertEquals("Pedro", busquedaCarrito.getUsuario().getNombre());
 
      }
 
@@ -97,6 +98,40 @@ public class CarritoTest {
         }
 
     }
+
+    @Test
+    @Sql("classpath:carritos.sql")
+    public void agregarProducto() {
+
+        Carrito carritoGenerado = carritoRepo.findById(1).orElse(null);
+        Producto producto1 = productoRepo.findById(1).orElse(null);
+        Producto producto2 = productoRepo.findById(2).orElse(null);
+        CarritoProductos productosEnElCarrito = new CarritoProductos();
+        productosEnElCarrito.setCarrito(carritoGenerado);
+        productosEnElCarrito.setUnidades(30);
+        productosEnElCarrito.setProducto(producto1);
+        carritoProductosRepo.save(productosEnElCarrito);
+        CarritoProductosLlave llave = new CarritoProductosLlave(1,1);
+        CarritoProductos productosBuscados = carritoProductosRepo.findById(llave).orElse(null);
+        carritoGenerado.getProductos().add(productosBuscados);
+        producto1.getCarritos().add(productosBuscados);
+        Carrito carritoActualizado = carritoRepo.save(carritoGenerado);
+        Producto productActualizado = productoRepo.save(producto1);
+        System.out.println(productActualizado.getCarritos());
+        System.out.println(carritoActualizado.getProductos());
+
+    }
+
+    @Test
+    @Sql("classpath:carritos.sql")
+    public void calcularTotalCarrito() {
+
+        Long total = carritoProductosRepo.calcularTotalCompras(1);
+
+        System.out.println(total);
+
+    }
+
 
 }
 
