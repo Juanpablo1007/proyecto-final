@@ -18,7 +18,7 @@ import java.util.*;
 
 public class Producto implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
     @ManyToOne

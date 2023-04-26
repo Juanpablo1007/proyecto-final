@@ -127,15 +127,7 @@ public class VentaTest {
         Long ventas = ventaRepo.calcularTotalVentas("1004399032");
     System.out.println(ventas);
     }
-    @Test
-    @Sql("classpath:compras.sql")
-    public void buscarPorCedulaDeUsuario() {
 
-        List<Compra> lista = ventaRepo.findAllByUsuario_Cedula("1004870909");
-
-        lista.forEach(System.out::println);
-
-    }
 
     }
 

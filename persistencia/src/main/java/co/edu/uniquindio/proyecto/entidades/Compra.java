@@ -28,6 +28,8 @@ public class Compra implements Serializable {
     private Double total;
 
     @ManyToOne
+    @ToString.Exclude
+
     private Usuario usuario;
 
 
