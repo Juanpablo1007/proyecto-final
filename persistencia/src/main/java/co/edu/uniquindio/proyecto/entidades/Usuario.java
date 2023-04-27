@@ -32,7 +32,7 @@ public class Usuario implements Serializable   {
     @Email
     private String email;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<Producto> productos;
     @ManyToMany

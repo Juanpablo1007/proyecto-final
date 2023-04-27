@@ -13,9 +13,9 @@ import java.util.Optional;
 
 @Repository
 public interface ModeradorRepo extends JpaRepository <Moderador, String> {
-    List <Moderador> findAllByNombreContainsIgnoreCase(String nombre);
+    List <Moderador> findAllByNombreContainsIgnoreCase(String nombre) ;
 
-    Optional <Moderador> findByEmailIgnoreCase(String email);
+    Optional <Moderador> findByEmailIgnoreCase(String email) throws Exception;
 
     Optional<Moderador> findByEmailAndContraseña (String email, String contraseña);
     Page <Moderador>findAll(Pageable paginador);

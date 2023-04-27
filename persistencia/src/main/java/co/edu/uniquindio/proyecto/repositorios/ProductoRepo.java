@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -22,6 +23,8 @@ public interface ProductoRepo  extends  JpaRepository <Producto, Integer>{
 
     List<Producto> findAllByUsuario_Cedula(String cedula);
 
+    @Query ("select p from Producto p group by p.categorias  ")
+    List<Objects []> listarProductosCategorias();
 
     List<Producto> findAllByCategoriasContains(Categoria_Producto categoria);
 
@@ -33,6 +36,7 @@ public interface ProductoRepo  extends  JpaRepository <Producto, Integer>{
 
     @Query ("select p from Producto p where p.precio between :precio1 and :precio2")
     List<Producto> listarPorRangoDePrecio(Double precio1, Double precio2);
+
 
     Page<Producto> findAll(Pageable paginador);
 
@@ -50,11 +54,19 @@ List<Producto> obtenerProductosDeMayorPrecio();
     @Query ("select p from Producto p order by p.precio asc ")
     List<Producto> obtenerProductosDeMenorPrecio();
 
+
+
     @Query ("select new co.edu.uniquindio.proyecto.dto.InfoUsuarioVenta (p.usuario.nombre, p.usuario.email, count (p))  from Producto p group by p.usuario")
 List<InfoUsuarioVenta> obtenerProductosEnVenta();
 
 
     @Query ("select p from Carrito c, IN (c.productos) p where c.usuario.cedula = :cedula")
     List<Producto> obtenerProductosDeUsuarioCarrito(String cedula);
+
+    @Query ("select p.comentario from Producto p where p.codigo =  :id")
+    List<Comentario> buscarComentarios (Integer id);
+
+    @Query ("select p from Producto p order by p.estado desc")
+    List<Producto> productosOrdenadosPorEstado();
 
 }

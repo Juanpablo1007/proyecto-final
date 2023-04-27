@@ -25,7 +25,7 @@ public interface VentaRepo  extends JpaRepository<Venta, Integer> {
     @Query("select v.producto from Venta  v where v.usuario.cedula = :cedula ")
     List<Producto> obtenerListaProductosVendidos(String cedula);
 
-    @Query ("select sum(v.producto.precio * v.unidadesVendidas) from Venta v where v.usuario.cedula = :cedula")
-    Long calcularTotalVentas(String cedula);
+    @Query ("select v.producto.precio * v.unidadesVendidas from Venta v where v.codigo = :codigo")
+    Double calcularTotalVentas(Integer codigo);
 
 }

@@ -84,181 +84,20 @@ public class UsuarioServicioImple implements UsuarioServicio {
         throw new Exception("El correo o contraseña esta incorrecto");
     }
 
-    @Override
-    public Producto publicarProducto(Producto producto) throws Exception {
-        Optional<Producto> buscado = productoRepo.findById(producto.getCodigo());
-        if (!buscado.isPresent()) {
-            return productoRepo.save(producto);
-        }
-        throw new Exception("Ya existe un producto con ese codigo");
-    }
 
 
-    @Override
-    public Producto comentarProducto(Comentario comentario, Producto p) throws Exception {
-        Optional<Comentario> buscado = comentarioRepo.findById(comentario.getCodigo());
 
-        return null;
-    }
 
-    // este metodo le falta
 
-    @Override
-    public void guardarProductoFavorito(Producto producto) throws Exception {
 
-    }
 
-    @Override
-    public void quitarProductoFavorito(Producto producto) throws Exception {
 
-    }
 
-    @Override
-    public Compra comprarProducto(Carrito carrito) throws Exception {
-        return null;
-    }
+
 
     @Override
     public void RecuperarContraseña(String email, String contraseña) throws Exception {
 
-    }
-
-
-    @Override
-    public List<Producto> listarProductoPrecio(Double precioAlto, Double preciobajo) throws Exception {
-        List<Producto> productos = productoRepo.listarPorRangoDePrecio(preciobajo, precioAlto);
-        if (productos.isEmpty()) {
-            throw new Exception("no hay productos de estos precios");
-        }
-        return productos;
-    }
-
-    @Override
-    public List<Producto> buscarProductoNombre(String nombre) throws Exception {
-        List<Producto> productos = productoRepo.findAllByNombreContainsIgnoreCase(nombre);
-        if (productos.isEmpty()) {
-            throw new Exception("no hay productos con estos nombres");
-        }
-        return productos;
-    }
-
-    @Override // este metodo no ha podido pasar el test
-    public Compra registrarCompra(Usuario u, Producto p, Compra c) throws Exception {
-        Optional<Usuario> usuario = usuarioRepo.findById(u.getCedula());
-        Optional<Producto> producto = productoRepo.findById(p.getCodigo());
-        if (usuario.isPresent() && producto.isPresent()) {
-            return compraRepo.save(c);
-
-        }
-        if (p.getUnidades() < c.getUnidadesCompradas()) {
-            throw new Exception("no hay suficientes unidades");
-        }
-        throw new Exception("el usuario o producto no estan registrados");
-
-    }
-
-    @Override
-    public Venta registrarVenta(Usuario u, Producto p, Venta v) throws Exception {
-        Optional<Usuario> usuario = usuarioRepo.findById(u.getCedula());
-        Optional<Producto> producto = productoRepo.findById(p.getCodigo());
-        if (usuario.isPresent() && producto.isPresent()) {
-            return ventaRepo.save(v);
-
-        }
-        if (p.getUnidades() < v.getUnidadesVendidas()) {
-            throw new Exception("no hay suficientes unidades");
-        }
-        throw new Exception("el usuario o producto no estan registrados");
-    }
-
-    public Compra registrarventa(Usuario u, Producto p, Compra c) throws Exception {
-        Optional<Usuario> usuario = usuarioRepo.findById(u.getCedula());
-        Optional<Producto> producto = productoRepo.findById(p.getCodigo());
-        if (usuario.isPresent() && producto.isPresent()) {
-            return compraRepo.save(c);
-
-        }
-        if (p.getUnidades() < c.getUnidadesCompradas()) {
-            throw new Exception("no hay suficientes unidades");
-        }
-        throw new Exception("el usuario o producto no estan registrados");
-
-    }
-
-
-
-    @Override //este metodo se hace despues de arreglar el de registrar compra
-    public List<Compra> listarCompras(Usuario u) {
-        return compraRepo.findAllByUsuario_Cedula(u.getCedula());
-    }
-
-    @Override
-    public List<Venta> listarVenta(Usuario u) throws Exception {
-        return ventaRepo.findAllByUsuario_Cedula(u.getCedula());
-    }
-
-    @Override
-    public List<Producto> listarProductosPublicados() throws Exception {
-        List<Producto> productos = productoRepo.findAll();
-        if (productos.isEmpty()) {
-            throw new Exception("no hay productos aun");
-        }
-        return productos;
-
-    }
-
-    @Override
-    public List<Producto> listarProductosFavoritos(String cedula) throws Exception {
-        Optional<Usuario> buscado = usuarioRepo.findById(cedula);
-        if (!buscado.isEmpty()) {
-            return productoRepo.obtenerProductosDeUsuarioFavoritos(cedula);
-
-        }
-        throw new Exception("el codigo del usuario no esta registrado");
-    }
-
-    @Override
-    public Producto ActualizarProducto(Producto producto) throws Exception {
-        Optional<Producto> buscado = productoRepo.findById(producto.getCodigo());
-        if (buscado.isPresent()) {
-            return productoRepo.save(producto);
-
-        } else {
-            throw new Exception("el codigo del producto no esta registrado");
-        }
-
-
-    }
-
-    @Override
-    public Compra ActualizarCompra(Compra compra) throws Exception {
-        return compraRepo.save(compra);
-    }
-
-    @Override
-    public Venta ActualizarVenta(Venta venta) throws Exception {
-        return ventaRepo.save(venta);
-    }
-
-    @Override
-    public void EliminarProducto(Producto producto) throws Exception {
-        Optional<Producto> buscado = productoRepo.findById(producto.getCodigo());
-        if (buscado.isPresent()) {
-            productoRepo.deleteById(producto.getCodigo());
-
-        } else {
-            throw new Exception("el codigo del producto no esta registrado");
-        }
-    }
-
-    @Override
-    public Long calcularTotal(Integer codigo) {
-        return compraRepo.calcularTotalCompras(codigo);
-    }
-
-    @Override
-    public Long calcularTotalVenta(String cedula) {
-        return ventaRepo.calcularTotalVentas(cedula);
     }
 
 

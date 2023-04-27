@@ -4,6 +4,8 @@ import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -12,63 +14,87 @@ public class CarritoServicioImple implements CarritoServicio{
     private final UsuarioRepo usuarioRepo;
     private final ProductoRepo productoRepo;
     private final CarritoRepo carritoRepo;
-    private final ComentarioRepo comentarioRepo;
-    private final CompraRepo compraRepo;
-    private final VentaRepo ventaRepo;
+
     private final CarritoProductosRepo carritoProductosRepo;
 
-    public CarritoServicioImple(UsuarioRepo usuarioRepo, ProductoRepo productoRepo, CarritoRepo carritoRepo, ComentarioRepo comentarioRepo, CompraRepo compraRepo, VentaRepo ventaRepo, CarritoProductosRepo carritoProductosRepo) {
+    public CarritoServicioImple(UsuarioRepo usuarioRepo, ProductoRepo productoRepo, CarritoRepo carritoRepo, CarritoProductosRepo carritoProductosRepo) {
         this.usuarioRepo = usuarioRepo;
         this.productoRepo = productoRepo;
         this.carritoRepo = carritoRepo;
-        this.comentarioRepo = comentarioRepo;
-        this.compraRepo = compraRepo;
-        this.ventaRepo = ventaRepo;
         this.carritoProductosRepo = carritoProductosRepo;
     }
     @Override
-    public Carrito asignarCarrito(Carrito carrito, String cedula) throws Exception {
-        Optional<Carrito> carritoUsuario = carritoRepo.findByUsuario_Cedula(cedula);
+    public Carrito asignarCarrito(Carrito carrito, Usuario usuario) throws Exception {
 
-        if(carritoUsuario.isPresent()){
-            throw new Exception("Ya existe un carrito asignado a ese user");
-        }
+        usuario.setCarrito(carrito);
+        carrito.setUsuario(usuario);
+        usuarioRepo.save(usuario);
 
         return carritoRepo.save(carrito);
 
     }
 
     @Override
-    public void agregarProducto(Integer codigoProducto, Integer codigoCarrito, Integer unidades) throws Exception {
+    public CarritoProductos agregarProducto(Integer codigoProducto, Integer codigoCarrito, Integer unidades) throws Exception {
 
         Optional<Carrito> carrito = carritoRepo.findById(codigoCarrito);
         Optional<Producto> producto= productoRepo.findById(codigoProducto);
+        CarritoProductosLlave idCarritoProductos = new CarritoProductosLlave(codigoCarrito,codigoProducto);
+        Optional<CarritoProductos> infoCarritoProductoEncontrado = carritoProductosRepo.findById(idCarritoProductos);
 
         if(carrito.isEmpty()){
             throw new Exception("No existe un carrito con ese codigo");
         }
+
+        if(infoCarritoProductoEncontrado.isPresent()){
+            throw new Exception("No se puede agregar un producto 2 veces");
+        }
+
         if(producto.isEmpty()){
             throw new Exception("No existe un producto con ese codigo");
         }
+
         if(unidades > producto.get().getUnidades()){
             throw new Exception("Sin stock");
         }
 
         CarritoProductos carritoProductos = new CarritoProductos(carrito.get(),producto.get(),unidades);
-        carrito.get().getProductos().add(carritoProductos);
-        producto.get().getCarritos().add(carritoProductos);
         CarritoProductos productoInfoBuscado = carritoProductosRepo.save(carritoProductos);
+        if(carrito.get().getProductos() == null) {
+            List<CarritoProductos> productos = new ArrayList<CarritoProductos>();
+            carrito.get().setProductos(productos);
+        }
+        if(producto.get().getCarritos() == null) {
+            List<CarritoProductos> carritos = new ArrayList<CarritoProductos>();
+            producto.get().setCarritos(carritos);
+        }
+        carrito.get().getProductos().add(productoInfoBuscado);
+        producto.get().getCarritos().add(productoInfoBuscado);
 
+        carritoRepo.save(carrito.get());
+        productoRepo.save(producto.get());
+
+        return productoInfoBuscado;
 
     }
 
     @Override
-    public void eliminar(Integer codigoProducto, Carrito carrito) throws Exception {
+    public Boolean eliminarProducto(CarritoProductosLlave codigo) throws Exception {
 
+        carritoRepo.deleteById(codigo.getCarritoCodigo());
+        productoRepo.deleteById(codigo.getProductoCodigo());
+        carritoProductosRepo.deleteById(codigo);
+
+        if(carritoRepo.findById(codigo.getCarritoCodigo()).isEmpty() && productoRepo.findById(codigo.getProductoCodigo()).isEmpty() && carritoProductosRepo.findById(codigo).isEmpty())
+        {
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void calcularTotalCarrito(Integer codigoCarrito) {
+    public Double calcularTotalCarrito(Integer codigoCarrito) {
 
+        return carritoProductosRepo.calcularTotalCarrito(codigoCarrito);
     }
 }

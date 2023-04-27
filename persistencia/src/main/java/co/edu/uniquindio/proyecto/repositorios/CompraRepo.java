@@ -23,10 +23,10 @@ public interface CompraRepo extends JpaRepository <Compra, Integer> {
     List<Producto> obtenerListaProductosComprados(String cedula);
 
     @Query("select  count (distinct c.producto) from Compra  c where c.usuario.cedula = :cedula ")
-    Long obtenerListaProductosCompradosSinRepetir(String cedula);
+    Double obtenerListaProductosCompradosSinRepetir(String cedula);
 
     @Query ("select c.producto.precio * c.unidadesCompradas from Compra c where c.codigo = :codigo")
-    Long calcularTotalCompras(Integer codigo);
+    Double calcularTotalCompras(Integer codigo);
 
 
 

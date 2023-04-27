@@ -28,4 +28,7 @@ public interface UsuarioRepo extends JpaRepository <Usuario, String> {
 
     List <Usuario> findAllByIsCuentaActiva(Boolean isActiva);
 
+    @Query ("select u.productosFavoritos from Usuario u where u.cedula =  :cedula")
+    List<Producto> buscarFavoritos (String cedula);
+
 }

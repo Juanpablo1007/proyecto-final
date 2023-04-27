@@ -1,17 +1,16 @@
 package co.edu.uniquindio.proyecto.servicios;
 
-import co.edu.uniquindio.proyecto.entidades.Carrito;
-import co.edu.uniquindio.proyecto.entidades.Producto;
+import co.edu.uniquindio.proyecto.entidades.*;
 
 public interface CarritoServicio {
 
-    Carrito asignarCarrito(Carrito carrito, String cedula) throws Exception;
+    Carrito asignarCarrito(Carrito carrito, Usuario usuario) throws Exception;
 
-    void agregarProducto(Integer codigoProduto, Integer codigoCarrito,Integer unidades) throws Exception;
+    CarritoProductos agregarProducto(Integer codigoProduto, Integer codigoCarrito, Integer unidades) throws Exception;
 
-    void eliminar(Integer codigoProducto, Carrito carrito) throws Exception;
+    Boolean eliminarProducto(CarritoProductosLlave codigo) throws Exception;
 
-    void calcularTotalCarrito(Integer codigoCarrito);
+    Double calcularTotalCarrito(Integer codigoCarrito);
 
 
 }

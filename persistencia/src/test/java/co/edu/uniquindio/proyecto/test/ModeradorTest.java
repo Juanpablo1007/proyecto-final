@@ -73,18 +73,8 @@ public class ModeradorTest {
 
     }
 
-    @Test
-    @Sql("classpath:moderadores.sql")
-    public void filtrarCorreoTest() {
 
-        Optional<Moderador> moderador = moderadorRepo.findByEmailIgnoreCase("correo1@gmail.com");
-        if (moderador.isPresent()) {
-            System.out.println(moderador.get());
-        } else {
-            System.err.println("Ese correo no exite");
-        }
 
-    }
 
     @Test
     @Sql("classpath:moderadores.sql")

@@ -4,75 +4,80 @@ import co.edu.uniquindio.proyecto.repositorios.*;
 import org.springframework.stereotype.Service;
 import co.edu.uniquindio.proyecto.entidades.*;
 
+import java.sql.SQLOutput;
+import java.util.List;
 import java.util.Optional;
 @Service
-public class ModeradorServicioImple implements  ModeradorServicio {
+public  class ModeradorServicioImple implements  ModeradorServicio {
 
 
-    private final UsuarioRepo usuarioRepo;
     private final ModeradorRepo moderadorRepo;
     private final ProductoRepo productoRepo;
-    private final CarritoRepo carritoRepo;
-    private final ComentarioRepo comentarioRepo;
-    private final CompraRepo compraRepo;
-    private final VentaRepo ventaRepo;
 
- public ModeradorServicioImple(UsuarioRepo usuarioRepo,ModeradorRepo moderadorRepo, ProductoRepo productoRepo, CarritoRepo carritoRepo, ComentarioRepo comentarioRepo, CompraRepo compraRepo, VentaRepo ventaRepo) {
- this.usuarioRepo = usuarioRepo;
+
+ public ModeradorServicioImple(ModeradorRepo moderadorRepo, ProductoRepo productoRepo) {
  this.moderadorRepo= moderadorRepo;
  this.productoRepo = productoRepo;
- this.carritoRepo = carritoRepo;
- this.comentarioRepo = comentarioRepo;
- this.compraRepo = compraRepo;
- this.ventaRepo = ventaRepo;
  }
 
+    @Override
+    public Moderador registrarModerador (Moderador m){
+     return  moderadorRepo.save(m);
+
+    }
+
 
 
     @Override
+    public Optional<Moderador> loginMod (String email, String contraseña) throws Exception {
 
-    public Moderador registrarModerador (Moderador moderador) throws Exception {
-        Optional<Moderador> buscado = moderadorRepo.findById(moderador.getCedula());
-        if (!buscado.isPresent()) {
-            return moderadorRepo.save(moderador);
+    Optional <Moderador> buscado = moderadorRepo.findByEmailAndContraseña( email,  contraseña);
+        if (buscado.isPresent()) {
+            return buscado;
         }
-        throw new Exception("Ya existe un producto con ese codigo");
+        throw new Exception("El correo o contraseña esta incorrecto");
+
+
+    }
+
+    @Override
+
+    public void prohibirProducto (Producto producto) throws Exception {
+Optional<Producto> p = productoRepo.findById(producto.getCodigo());
+
+        if (!p.isPresent()) {
+            throw new Exception("Producto no esta registrado");
+
+
+
+
+        }
+        producto.setEstado(Estado_Producto.DENEGADO);
+        productoRepo.save(producto);
+
     }
 
 
     @Override
 
-    public Moderador prohibirProducto (Producto producto) throws Exception {
-      /**
+    public void AutorizarProducto (Producto producto) throws Exception {
 
-        if (!(producto ==null)) {
+        Optional<Producto> p = productoRepo.findById(producto.getCodigo());
 
-            productoGuardado.setEstado(Estado_Producto.DENEGADO);
-            productoRepo.save(productoGuardado);
-            Producto buscado = productoRepo.findById(producto.getCodigo()).orElse(null);
-            Assertions.assertEquals(Estado_Producto.AUTORIZADO, buscado.getEstado());
-            return moderadorRepo.save(moderador);
+        if (!p.isPresent()) {
+            throw new Exception("Producto no esta registrado");
+
+
+
+
         }
-        throw new Exception("Producto no disponibles para modificacion");**/
-      return null;
+        producto.setEstado(Estado_Producto.AUTORIZADO);
+        productoRepo.save(producto);
     }
 
-
     @Override
-
-    public Moderador AutorizarProducto (Producto producto) throws Exception {
-        /**  Producto productoGuardado = productoRepo.findById(producto.getCodigo()).orElse(null);
-
-        if (!(productoGuardado ==null)) {
-
-            productoGuardado.setEstado(Estado_Producto.AUTORIZADO);
-            productoRepo.save(productoGuardado);
-            Producto buscado = productoRepo.findById(producto.getCodigo()).orElse(null);
-            Assertions.assertEquals(Estado_Producto.AUTORIZADO, buscado.getEstado());
-            return moderadorRepo.save(moderador);
-        }
-        throw new Exception("Producto no disponibles para modificacion");**/
-        return null;
+    public List<Producto> listarProductosPorEstado() {
+        return productoRepo.productosOrdenadosPorEstado();
     }
 
 

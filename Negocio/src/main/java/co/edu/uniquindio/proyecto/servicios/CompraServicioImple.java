@@ -13,32 +13,57 @@ public class CompraServicioImple implements CompraServicio {
 
     private final UsuarioRepo usuarioRepo;
     private final ProductoRepo productoRepo;
-    private final CarritoRepo carritoRepo;
-    private final ComentarioRepo comentarioRepo;
     private final CompraRepo compraRepo;
-    private final VentaRepo ventaRepo;
 
-    public CompraServicioImple(UsuarioRepo usuarioRepo, ProductoRepo productoRepo, CarritoRepo carritoRepo, ComentarioRepo comentarioRepo, CompraRepo compraRepo, VentaRepo ventaRepo) {
+
+    public CompraServicioImple(UsuarioRepo usuarioRepo, ProductoRepo productoRepo, CompraRepo compraRepo) {
         this.usuarioRepo = usuarioRepo;
         this.productoRepo = productoRepo;
-        this.carritoRepo = carritoRepo;
-        this.comentarioRepo = comentarioRepo;
         this.compraRepo = compraRepo;
-        this.ventaRepo = ventaRepo;
     }
 
     @Override
     public Compra realizarCompra(Compra c,Usuario u, Producto p) throws Exception {
+
         Optional<Usuario> usuario = usuarioRepo.findById(u.getCedula());
         Optional<Producto> producto = productoRepo.findById(p.getCodigo());
         if (usuario.isPresent() && producto.isPresent()) {
-            return compraRepo.save(c);
+            if(usuario.get().getIsCuentaActiva()) {
+                Compra compraGuardada = compraRepo.save(c);
+                Double total = calcularTotalCompra(compraGuardada.getCodigo());
+                compraGuardada.setTotal(total);
+                compraGuardada = compraRepo.save(compraGuardada);
+                List<Compra> comprasUsuario = compraRepo.findAllByUsuario_Cedula(usuario.get().getCedula());
+                List<Compra> comprasProducto = compraRepo.findAllByProducto_Codigo(producto.get().getCodigo());
+
+                usuario.get().setCompras(comprasUsuario);
+                usuarioRepo.save(usuario.get());
+
+
+                producto.get().setCompras(comprasProducto);
+                productoRepo.save(producto.get());
+
+                return compraGuardada;
+            }else{
+                throw new Exception("El usuario no esta activo");
+            }
 
         }
         if (p.getUnidades() < c.getUnidadesCompradas()) {
             throw new Exception("No hay suficientes unidades");
         }
-        throw new Exception("el usuario o producto no estan registrados");
+        throw new Exception("El usuario o producto no estan registrados");
 
+    }
+
+    @Override
+    public Double calcularTotalCompra(Integer codigo) {
+        return compraRepo.calcularTotalCompras(codigo);
+    }
+
+    @Override
+    public List<Compra> listarComprasDeUsuario(Usuario u) {
+
+        return compraRepo.findAllByUsuario_Cedula(u.getCedula());
     }
 }

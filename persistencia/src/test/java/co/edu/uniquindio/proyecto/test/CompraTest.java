@@ -131,7 +131,7 @@ public class CompraTest {
     @Sql("classpath:compras.sql")
     public void ListarCantidadProductosCompradosPorUsuario() {
 
-        Long total = compraRepo.obtenerListaProductosCompradosSinRepetir("1004870909");
+        Double total = compraRepo.obtenerListaProductosCompradosSinRepetir("1004870909");
 
        System.out.println(total);
     }
@@ -140,7 +140,7 @@ public class CompraTest {
     public void calcularTotalVentas() {
 
 
-        Long compras = compraRepo.calcularTotalCompras(3);
+        Double compras = compraRepo.calcularTotalCompras(3);
         System.out.println(compras);
     }
 

@@ -1,11 +1,13 @@
 package co.edu.uniquindio.proyecto.test;
 
 
+
 import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.CarritoRepo;
 import co.edu.uniquindio.proyecto.repositorios.ProductoRepo;
 import co.edu.uniquindio.proyecto.repositorios.UsuarioRepo;
 import co.edu.uniquindio.proyecto.repositorios.VentaRepo;
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.time.LocalDateTime.now;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class VentaTest {
@@ -29,6 +33,11 @@ public class VentaTest {
     private UsuarioRepo usuarioRepo;
     @Autowired
     private ProductoRepo productoRepo;
+
+
+
+
+
 
     @Test
     @Sql("classpath:ventas.sql")
@@ -124,10 +133,9 @@ public class VentaTest {
     public void calcularTotalVentas() {
 
 
-        Long ventas = ventaRepo.calcularTotalVentas("1004399032");
+        Double ventas = ventaRepo.calcularTotalVentas(1);
     System.out.println(ventas);
     }
-
 
     }
 
