@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 public interface VentaServicio {
     Venta realizarVenta(Venta venta, Usuario u, Producto p)  throws Exception;
 
-    Double calcularTotal (Integer total);
+    Double calcularTotal (Integer codigo);
 }

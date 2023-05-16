@@ -90,23 +90,6 @@ public class ProductoServicioImple implements ProductoServicio{
     }
 
     @Override
-    public void quitarProductoFavorito(Producto p,Usuario usuario) throws Exception {
-        Optional<Producto> producto = productoRepo.findById(p.getCodigo());
-        Optional<Usuario> u = usuarioRepo.findById(usuario.getCedula());
-
-        if(!producto.isPresent() ){
-            throw  new Exception("el producto no se encuentra registrado");
-        }
-        if(!u.isPresent() ){
-            throw  new Exception("el usuario no esta registrado");
-        }
-        List<Producto> fav = usuarioRepo.buscarFavoritos(usuario.getCedula());
-        fav.remove(p);
-        usuario.setProductosFavoritos(fav);
-        usuarioRepo.save(usuario);
-    }
-
-    @Override
     public List<Producto> listarProductoPrecio(Double precioAlto, Double preciobajo) throws Exception {
         List<Producto> productos = productoRepo.listarPorRangoDePrecio(preciobajo, precioAlto);
         if (productos.isEmpty() ) {

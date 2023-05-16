@@ -12,8 +12,6 @@ public interface ProductoServicio {
 
     void guardarProductoFavorito (Producto producto, Usuario usuario) throws Exception;
 
-    void quitarProductoFavorito (Producto producto, Usuario usuario) throws Exception;
-
     List<Producto> listarProductoPrecio(Double precioBajo, Double precioAlto) throws Exception;
 
     List<Producto> buscarProductoNombre (String nombre)  throws Exception;

@@ -10,7 +10,7 @@ import co.edu.uniquindio.proyecto.dto.EmailDto;
 import javax.mail.internet.MimeMessage;
 
 @Service
-public class PasswordResetRequestImple implements EmailServicio{
+public class EmailServicioImple implements EmailServicio{
    @Autowired
 
     private JavaMailSender javaMailSender;
