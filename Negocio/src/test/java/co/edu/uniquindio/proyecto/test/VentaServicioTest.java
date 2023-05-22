@@ -64,7 +64,7 @@ public class VentaServicioTest {
             Usuario u = usuarioServicio.registrarUsuario(usuario);
             Producto p = productoServicio.publicarProducto(producto,u);
             Producto p2 = productoServicio.publicarProducto(producto2,u);
-            Carrito c = carritoServicio.asignarCarrito(carrito,u);
+            Carrito c = carritoServicio.asignarCarrito(carrito,u.getCedula());
 
             carritoServicio.agregarProducto(p.getCodigo(),c.getCodigo(),3);
             carritoServicio.agregarProducto(p2.getCodigo(),c.getCodigo(),5);

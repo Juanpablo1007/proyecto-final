@@ -24,13 +24,25 @@ public class CarritoServicioImple implements CarritoServicio{
         this.carritoProductosRepo = carritoProductosRepo;
     }
     @Override
-    public Carrito asignarCarrito(Carrito carrito, Usuario usuario) throws Exception {
+    public Carrito asignarCarrito(Carrito carrito, String usuarioCedula) throws Exception {
 
-        usuario.setCarrito(carrito);
-        carrito.setUsuario(usuario);
-        usuarioRepo.save(usuario);
+        Optional<Usuario> usuario = usuarioRepo.findById(usuarioCedula);
 
-        return carritoRepo.save(carrito);
+        if(usuario.isEmpty()){
+            throw new Exception("No existe un usuario con esa id");
+        }
+
+        carrito.setUsuario(usuario.get());
+        carritoRepo.save(carrito);
+
+        Optional<Carrito> carritoBuscado = carritoRepo.findById(carrito.getCodigo());
+        if(carritoBuscado.isEmpty()){
+            throw new Exception("No existe un carrito con esa id");
+        }
+        usuario.get().setCarrito(carritoBuscado.get());
+        usuarioRepo.save(usuario.get());
+
+        return carritoBuscado.get();
 
     }
 
@@ -46,10 +58,6 @@ public class CarritoServicioImple implements CarritoServicio{
             throw new Exception("No existe un carrito con ese codigo");
         }
 
-        if(infoCarritoProductoEncontrado.isPresent()){
-            throw new Exception("No se puede agregar un producto 2 veces");
-        }
-
         if(producto.isEmpty()){
             throw new Exception("No existe un producto con ese codigo");
         }
@@ -57,9 +65,19 @@ public class CarritoServicioImple implements CarritoServicio{
         if(unidades > producto.get().getUnidades()){
             throw new Exception("Sin stock");
         }
+        CarritoProductos productoInfoBuscado = null;
 
-        CarritoProductos carritoProductos = new CarritoProductos(carrito.get(),producto.get(),unidades);
-        CarritoProductos productoInfoBuscado = carritoProductosRepo.save(carritoProductos);
+        if(infoCarritoProductoEncontrado.isPresent()){
+            Integer unidadesAnteriores= infoCarritoProductoEncontrado.get().getUnidades();
+            infoCarritoProductoEncontrado.get().setUnidades(unidades+unidadesAnteriores);
+            productoInfoBuscado = carritoProductosRepo.save(infoCarritoProductoEncontrado.get());
+            carrito.get().getProductos().remove(productoInfoBuscado);
+            producto.get().getCarritos().remove(productoInfoBuscado);
+        }else{
+            CarritoProductos carritoProductos = new CarritoProductos(carrito.get(),producto.get(),unidades);
+             productoInfoBuscado = carritoProductosRepo.save(carritoProductos);
+        }
+
         if(carrito.get().getProductos() == null) {
             List<CarritoProductos> productos = new ArrayList<CarritoProductos>();
             carrito.get().setProductos(productos);
@@ -79,17 +97,24 @@ public class CarritoServicioImple implements CarritoServicio{
     }
 
     @Override
-    public Boolean eliminarProducto(CarritoProductosLlave codigo) throws Exception {
+    public CarritoProductos eliminarProducto(CarritoProductosLlave codigo) throws Exception {
 
-        carritoRepo.deleteById(codigo.getCarritoCodigo());
-        productoRepo.deleteById(codigo.getProductoCodigo());
+        Optional<CarritoProductos> carritoProductos = carritoProductosRepo.findById(codigo);
+
+        if(carritoProductos.isEmpty()){
+            throw new Exception("El producto con esa id no se encuentra en el carrito con esa id");
+        }
+
+        Carrito carrito = carritoRepo.findById(codigo.getCarritoCodigo()).orElse(null);
+        Producto producto = productoRepo.findById(codigo.getProductoCodigo()).orElse(null);
+
+        carrito.getProductos().remove(carritoProductos.get());
+        producto.getCarritos().remove(carritoProductos.get());
+        carritoRepo.save(carrito);
+        productoRepo.save(producto);
         carritoProductosRepo.deleteById(codigo);
 
-        if(carritoRepo.findById(codigo.getCarritoCodigo()).isEmpty() && productoRepo.findById(codigo.getProductoCodigo()).isEmpty() && carritoProductosRepo.findById(codigo).isEmpty())
-        {
-            return true;
-        }
-        return false;
+        return carritoProductosRepo.findById(codigo).orElse(null);
     }
 
     @Override

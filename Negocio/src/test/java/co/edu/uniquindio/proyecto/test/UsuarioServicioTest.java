@@ -59,7 +59,7 @@ public class UsuarioServicioTest {
         usuario.setNombre("Juan Pablo");
 
         try {
-            //Usuario usuario1 = usuarioServicio.registrarUsuario(usuario);
+            Usuario usuario1 = usuarioServicio.registrarUsuario(usuario);
             usuarioServicio.EliminarUsuario(usuario.getCedula());
             Assertions.assertTrue(true);
         } catch (Exception e) {

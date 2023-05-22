@@ -33,13 +33,14 @@ public class CarritoServicioTest {
     @Test
     public void asignarCarritoAUsuario() throws Exception {
         Usuario usuario = new Usuario("1001017577","Juan123","Juan Pablo","juanp.delgadod@uqvirutal.edu.co",true,"3218711230","Reserva de la pastorita");
-        Carrito carrito = new Carrito(usuario);
+        Carrito carrito = new Carrito();
 
         try{
             Usuario usuarioCreado = usuarioServicio.registrarUsuario(usuario);
-            Carrito carritoAsignado = carritoServicio.asignarCarrito(carrito,usuarioCreado);
+            Carrito carritoAsignado = carritoServicio.asignarCarrito(carrito,usuarioCreado.getCedula());
 
-            System.out.println(carritoAsignado.getUsuario());
+            System.out.println(usuarioCreado);
+            System.out.println(carritoAsignado);
 
             Assertions.assertNotNull(carritoAsignado);
         }
@@ -64,16 +65,16 @@ public class CarritoServicioTest {
         try{
             Usuario usuarioCreado = usuarioServicio.registrarUsuario(usuario);
             Producto productoCreado = productoServicio.publicarProducto(producto,usuarioCreado);
-            Carrito carritoAsignado = carritoServicio.asignarCarrito(carrito,usuarioCreado);
-            usuarioCreado.setCarrito(carritoAsignado);
+            Carrito carritoAsignado = carritoServicio.asignarCarrito(carrito,usuarioCreado.getCedula());
             CarritoProductos infoProducto = carritoServicio.agregarProducto(productoCreado.getCodigo(),carritoAsignado.getCodigo(),5);
 
 
+            System.out.println(usuarioCreado);
+            System.out.println(productoCreado);
+            System.out.println(carritoAsignado);
             System.out.println(infoProducto);
-            System.out.println(infoProducto.getProducto());
-            System.out.println(infoProducto.getCarrito().getProductos());
 
-            Assertions.assertNotNull(carritoAsignado);
+            Assertions.assertNotNull(infoProducto);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -96,15 +97,21 @@ public class CarritoServicioTest {
         try {
             Usuario usuarioCreado = usuarioServicio.registrarUsuario(usuario);
             Producto productoCreado = productoServicio.publicarProducto(producto,usuarioCreado);
-            Carrito carritoAsignado = carritoServicio.asignarCarrito(carrito,usuarioCreado);
+            Carrito carritoAsignado = carritoServicio.asignarCarrito(carrito,usuarioCreado.getCedula());
             usuarioCreado.setCarrito(carritoAsignado);
             CarritoProductos infoProducto = carritoServicio.agregarProducto(productoCreado.getCodigo(), carritoAsignado.getCodigo(), 5);
 
             CarritoProductosLlave carritoProductosLlave = new CarritoProductosLlave(infoProducto.getCarrito().getCodigo(),infoProducto.getProducto().getCodigo());
 
-            Boolean isEliminado =carritoServicio.eliminarProducto(carritoProductosLlave);
+            CarritoProductos productoEliminado =carritoServicio.eliminarProducto(carritoProductosLlave);
 
-           Assertions.assertTrue(isEliminado);
+            System.out.println(usuarioCreado);
+            System.out.println(productoCreado.getCarritos());
+            System.out.println(carritoAsignado.getProductos());
+            System.out.println(infoProducto);
+            System.out.println(productoEliminado);
+
+           Assertions.assertNull(productoEliminado);
         } catch (Exception e) {
             e.printStackTrace();
             Assertions.assertTrue(false);
@@ -128,8 +135,7 @@ public class CarritoServicioTest {
             Usuario usuarioCreado = usuarioServicio.registrarUsuario(usuario);
             Producto productoCreado = productoServicio.publicarProducto(producto,usuarioCreado);
             Producto producto2Creado = productoServicio.publicarProducto(producto2,usuarioCreado);
-            Carrito carritoAsignado = carritoServicio.asignarCarrito(carrito,usuarioCreado);
-            usuarioCreado.setCarrito(carritoAsignado);
+            Carrito carritoAsignado = carritoServicio.asignarCarrito(carrito,usuarioCreado.getCedula());
             CarritoProductos infoProducto = carritoServicio.agregarProducto(productoCreado.getCodigo(), carritoAsignado.getCodigo(), 5);
             CarritoProductos infoProducto2 = carritoServicio.agregarProducto(producto2Creado.getCodigo(), carritoAsignado.getCodigo(), 7);
 
