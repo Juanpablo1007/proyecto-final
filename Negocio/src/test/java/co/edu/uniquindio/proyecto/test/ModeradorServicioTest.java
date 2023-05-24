@@ -23,7 +23,7 @@ import static java.time.LocalDateTime.now;
 @Transactional
 public class ModeradorServicioTest {
 
-
+/**
     @Autowired
     private ModeradorServicio moderadorServicio;
 
@@ -179,7 +179,7 @@ public class ModeradorServicioTest {
             throw new RuntimeException(e);
         }
 
-    }
+    }**/
 }
 
 

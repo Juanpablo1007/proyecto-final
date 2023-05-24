@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.servicios;
 
+import co.edu.uniquindio.proyecto.dto.CompraPostDTO;
 import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.*;
 import org.springframework.stereotype.Service;
@@ -23,16 +24,17 @@ public class CompraServicioImple implements CompraServicio {
     }
 
     @Override
-    public Compra realizarCompra(Compra c,Usuario u, Producto p) throws Exception {
+    public void realizarCompra(CompraPostDTO compraPostDTO) throws Exception {
 
-        Optional<Usuario> usuario = usuarioRepo.findById(u.getCedula());
-        Optional<Producto> producto = productoRepo.findById(p.getCodigo());
+        Optional<Usuario> usuario = usuarioRepo.findById(compraPostDTO.getUsuarioCedula());
+        Optional<Producto> producto = productoRepo.findById(compraPostDTO.getProductoCodigo());
         if (usuario.isPresent() && producto.isPresent()) {
             if(usuario.get().getIsCuentaActiva()) {
-                Compra compraGuardada = compraRepo.save(c);
+                Compra compra = new Compra(LocalDateTime.now(),0.0,usuario.get(),compraPostDTO.getMetodoDePago(),producto.get(),compraPostDTO.getUnidadesCompradas());
+                Compra compraGuardada = compraRepo.save(compra);
                 Double total = calcularTotalCompra(compraGuardada.getCodigo());
                 compraGuardada.setTotal(total);
-                compraGuardada = compraRepo.save(compraGuardada);
+                Compra compraGuardadaTotal = compraRepo.save(compraGuardada);
                 List<Compra> comprasUsuario = compraRepo.findAllByUsuario_Cedula(usuario.get().getCedula());
                 List<Compra> comprasProducto = compraRepo.findAllByProducto_Codigo(producto.get().getCodigo());
 
@@ -41,15 +43,15 @@ public class CompraServicioImple implements CompraServicio {
 
 
                 producto.get().setCompras(comprasProducto);
+                producto.get().setUnidades(producto.get().getUnidades()-compraPostDTO.getUnidadesCompradas());
                 productoRepo.save(producto.get());
 
-                return compraGuardada;
             }else{
                 throw new Exception("El usuario no esta activo");
             }
 
         }
-        if (p.getUnidades() < c.getUnidadesCompradas()) {
+        if (producto.get().getUnidades() < compraPostDTO.getUnidadesCompradas()) {
             throw new Exception("No hay suficientes unidades");
         }
         throw new Exception("El usuario o producto no estan registrados");
@@ -61,9 +63,9 @@ public class CompraServicioImple implements CompraServicio {
         return compraRepo.calcularTotalCompras(codigo);
     }
 
-    @Override
+  /**  @Override
     public List<Compra> listarComprasDeUsuario(Usuario u) {
 
         return compraRepo.findAllByUsuario_Cedula(u.getCedula());
-    }
+    }**/
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.*;
 @Entity
@@ -22,11 +23,11 @@ public class Usuario implements Serializable   {
     private String cedula;
 
     @Column ( nullable = false, length = 100)
-    @NotBlank(message = "El usuario debe tener una contraseña")
+    @NotEmpty(message = "El usuario debe tener una contraseña")
 
     private String contraseña;
     @Column ( nullable = false, length = 100)
-    @NotBlank(message = "El usuario debe tener un nombre")
+    @NotEmpty(message = "El usuario debe tener un nombre")
     private String nombre;
     @Column ( nullable = false, unique = true, length = 100)
     @Email
@@ -34,10 +35,10 @@ public class Usuario implements Serializable   {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    private List<Producto> productos;
+    private List<Producto> productos = new ArrayList<>();
     @ManyToMany
     @ToString.Exclude
-    private List<Producto> productosFavoritos;
+    private List<Producto> productosFavoritos = new ArrayList<>();
 
     @OneToOne (mappedBy = "usuario")
     private Carrito carrito;
@@ -47,15 +48,15 @@ public class Usuario implements Serializable   {
 
     @OneToMany (mappedBy = "usuario")
     @ToString.Exclude
-    private List<Comentario> comentarios;
+    private List<Comentario> comentarios = new ArrayList<>();
 
     @OneToMany (mappedBy = "usuario")
     @ToString.Exclude
-    private List<Compra> compras;
+    private List<Compra> compras = new ArrayList<>();
 
     @OneToMany (mappedBy = "usuario")
     @ToString.Exclude
-    private List<Venta> ventas;
+    private List<Venta> ventas = new ArrayList<>();
 
 
     @Column ( nullable = false, length = 100)

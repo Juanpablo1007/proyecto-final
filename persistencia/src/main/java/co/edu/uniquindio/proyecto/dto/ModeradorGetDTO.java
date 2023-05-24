@@ -7,9 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ModeradorGetDTP {
+public class ModeradorGetDTO {
     private String cedula;
-    private String contraseña;
     private String nombre;
     private String email;
 }

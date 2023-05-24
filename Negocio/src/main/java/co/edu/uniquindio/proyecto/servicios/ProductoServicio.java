@@ -1,12 +1,13 @@
 package co.edu.uniquindio.proyecto.servicios;
 
+import co.edu.uniquindio.proyecto.dto.ProductoPostDTO;
 import co.edu.uniquindio.proyecto.entidades.*;
 
 import java.util.List;
 
 public interface ProductoServicio {
 
-    Producto publicarProducto  (Producto producto,Usuario usuario) throws Exception;
+    Integer publicarProducto  (ProductoPostDTO productoPostDTO) throws Exception;
 
     Producto comentarProducto (Producto p, Comentario co,Usuario u)  throws Exception;
 

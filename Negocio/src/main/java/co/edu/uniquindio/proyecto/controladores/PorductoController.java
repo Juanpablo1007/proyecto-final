@@ -1,9 +1,8 @@
 package co.edu.uniquindio.proyecto.controladores;
-import co.edu.uniquindio.proyecto.dto.MensajeDTO;
+import co.edu.uniquindio.proyecto.dto.MensajeGetDTO;
 
 import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.servicios.ProductoServicio;
-import co.edu.uniquindio.proyecto.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,27 +16,27 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping( "api/Producto")
-public class PorductoController {
+@RequestMapping( value = "api/Producto")
+public class PorductoController {/**
     @Autowired
     private final ProductoServicio servicio;
     @PostMapping
-    public ResponseEntity<MensajeDTO> publicarProducto(@Valid @RequestBody Producto p,@Valid @RequestBody Usuario usuario) throws Exception {
+    public ResponseEntity<MensajeGetDTO> publicarProducto(@Valid @RequestBody Producto p, @Valid @RequestBody Usuario usuario) throws Exception {
         servicio.publicarProducto(p,usuario);
-        return ResponseEntity.status(201).body(new MensajeDTO(HttpStatus.CREATED, false,
+        return ResponseEntity.status(201).body(new MensajeGetDTO(HttpStatus.CREATED, false,
                 "producto publicado correctamente"));
     }
     @PutMapping()
-    public ResponseEntity<MensajeDTO> comentarProducto (@Valid @RequestBody Producto p, @Valid @RequestBody Comentario co,@Valid @RequestBody Usuario u) throws Exception {
+    public ResponseEntity<MensajeGetDTO> comentarProducto (@Valid @RequestBody Producto p, @Valid @RequestBody Comentario co, @Valid @RequestBody Usuario u) throws Exception {
 
         servicio.comentarProducto(p,co,u);
-        return  ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false,
+        return  ResponseEntity.status(HttpStatus.OK).body( new MensajeGetDTO(HttpStatus.OK, false,
                 "producto comentado con exito" ) );
     } @PutMapping()
-    public ResponseEntity<MensajeDTO> guardarProductoFavorito (@Valid @RequestBody Producto p, @Valid @RequestBody Usuario u) throws Exception {
+    public ResponseEntity<MensajeGetDTO> guardarProductoFavorito (@Valid @RequestBody Producto p, @Valid @RequestBody Usuario u) throws Exception {
 
         servicio.guardarProductoFavorito(p, u);
-        return  ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false,
+        return  ResponseEntity.status(HttpStatus.OK).body( new MensajeGetDTO(HttpStatus.OK, false,
                 "producto favorito guardado" ) );
     }
 
@@ -57,16 +56,16 @@ public class PorductoController {
         return servicio.listarProductosFavoritos(u);
     }
     @PutMapping()
-    public ResponseEntity<MensajeDTO> Actualizar(@Valid @RequestBody Producto producto) throws Exception {
+    public ResponseEntity<MensajeGetDTO> Actualizar(@Valid @RequestBody Producto producto) throws Exception {
 
         servicio.ActualizarProducto(producto);
-        return  ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false,
+        return  ResponseEntity.status(HttpStatus.OK).body( new MensajeGetDTO(HttpStatus.OK, false,
                 "Actualizado correctamente" ) );
     }
     @DeleteMapping
-    public ResponseEntity<MensajeDTO> eliminar(@PathVariable Producto producto) throws Exception {
+    public ResponseEntity<MensajeGetDTO> eliminar(@PathVariable Producto producto) throws Exception {
         servicio.EliminarProducto(producto);
-        return ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false,
+        return ResponseEntity.status(HttpStatus.OK).body( new MensajeGetDTO(HttpStatus.OK, false,
                 "Eliminado correctamente" ) );
-    }
+    }**/
 }

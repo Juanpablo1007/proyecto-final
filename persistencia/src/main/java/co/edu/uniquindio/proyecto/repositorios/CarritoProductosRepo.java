@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CarritoProductosRepo extends JpaRepository<CarritoProductos, CarritoProductosLlave> {
 
-    @Query("select sum(c.producto.precio * c.unidades) from CarritoProductos c where c.carrito.codigo =:codigoCarrito")
-    Double calcularTotalCarrito(Integer codigoCarrito);
+    @Query("select sum(c.producto.precio * c.unidades) from CarritoProductos c where c.carrito.usuario.cedula =:usuarioCedulaCarrito")
+    Double calcularTotalCarrito(String usuarioCedulaCarrito);
 
 
 }

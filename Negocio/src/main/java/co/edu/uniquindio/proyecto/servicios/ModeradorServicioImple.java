@@ -1,5 +1,9 @@
 package co.edu.uniquindio.proyecto.servicios;
 
+import co.edu.uniquindio.proyecto.dto.ModeradorGetDTO;
+import co.edu.uniquindio.proyecto.dto.ModeradorPostDTO;
+import co.edu.uniquindio.proyecto.dto.ProductoGetDTO;
+import co.edu.uniquindio.proyecto.dto.SesionPostDTO;
 import co.edu.uniquindio.proyecto.repositorios.*;
 import org.springframework.stereotype.Service;
 import co.edu.uniquindio.proyecto.entidades.*;
@@ -7,31 +11,31 @@ import co.edu.uniquindio.proyecto.entidades.*;
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
+
 @Service
-public  class ModeradorServicioImple implements  ModeradorServicio {
+public class ModeradorServicioImple implements ModeradorServicio {
 
 
     private final ModeradorRepo moderadorRepo;
     private final ProductoRepo productoRepo;
 
 
- public ModeradorServicioImple(ModeradorRepo moderadorRepo, ProductoRepo productoRepo) {
- this.moderadorRepo= moderadorRepo;
- this.productoRepo = productoRepo;
- }
+    public ModeradorServicioImple(ModeradorRepo moderadorRepo, ProductoRepo productoRepo) {
+        this.moderadorRepo = moderadorRepo;
+        this.productoRepo = productoRepo;
+    }
 
     @Override
-    public Moderador registrarModerador (Moderador m){
-     return  moderadorRepo.save(m);
+    public void registrarModerador(ModeradorPostDTO moderadorPostDTO) {
+        return moderadorRepo.save(m);
 
     }
 
 
-
     @Override
-    public Optional<Moderador> loginMod (String email, String contraseña) throws Exception {
+    public ModeradorGetDTO loginMod(SesionPostDTO sesionPostDTO) throws Exception {
 
-    Optional <Moderador> buscado = moderadorRepo.findByEmailAndContraseña( email,  contraseña);
+        Optional<Moderador> buscado = moderadorRepo.findByEmailAndContraseña(email, contraseña);
         if (buscado.isPresent()) {
             return buscado;
         }
@@ -42,13 +46,11 @@ public  class ModeradorServicioImple implements  ModeradorServicio {
 
     @Override
 
-    public void prohibirProducto (Producto producto) throws Exception {
-Optional<Producto> p = productoRepo.findById(producto.getCodigo());
+    public void prohibirProducto(Integer productoCodigo) throws Exception {
+        Optional<Producto> p = productoRepo.findById(producto.getCodigo());
 
         if (!p.isPresent()) {
             throw new Exception("Producto no esta registrado");
-
-
 
 
         }
@@ -60,14 +62,12 @@ Optional<Producto> p = productoRepo.findById(producto.getCodigo());
 
     @Override
 
-    public void AutorizarProducto (Producto producto) throws Exception {
+    public void AutorizarProducto(Integer productoCodigo) throws Exception {
 
         Optional<Producto> p = productoRepo.findById(producto.getCodigo());
 
         if (!p.isPresent()) {
             throw new Exception("Producto no esta registrado");
-
-
 
 
         }
@@ -76,8 +76,19 @@ Optional<Producto> p = productoRepo.findById(producto.getCodigo());
     }
 
     @Override
-    public List<Producto> listarProductosPorEstado() {
+    public List<ProductoGetDTO> listarProductosPorEstado() {
+
         return productoRepo.productosOrdenadosPorEstado();
+    }
+
+    @Override
+    public ModeradorGetDTO obtenerModeradorPorCedula(String cedula) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<ModeradorGetDTO> listarModeradores() {
+        return null;
     }
 
 

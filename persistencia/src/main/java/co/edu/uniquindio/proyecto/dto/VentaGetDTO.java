@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 public class VentaGetDTO {
-    private Integer codigo;
+
     private LocalDateTime fecha;
     private Double total;
-    private Usuario usuario;
+    private String usuarioCedula;
     private MetodoDePago metodoDePago;
-    private Producto producto;
+    private ProductoGetDTO producto;
     private Integer unidadesVendidas;
 }

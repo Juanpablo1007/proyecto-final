@@ -29,7 +29,7 @@ public class Producto implements Serializable {
 
     @ManyToMany(mappedBy = "productosFavoritos")
     @ToString.Exclude
-    private List<Usuario> usuariosFavoritos;
+    private List<Usuario> usuariosFavoritos = new ArrayList<>();
 
     @Column ( nullable = false)
     private Boolean isActivo;
@@ -60,31 +60,30 @@ public class Producto implements Serializable {
     @Future
     private LocalDateTime fechaLimite;
 
-    @Column ( nullable = true, length = 100, name = "categoria")
+    @Column ( nullable = false, length = 100, name = "categoria")
     @Enumerated(EnumType.STRING)
     @ElementCollection
     @ToString.Exclude
     private Set<Categoria_Producto> categorias;
     @OneToMany (mappedBy = "producto")
     @ToString.Exclude
-    private List<Comentario> comentario;
+    private List<Comentario> comentario = new ArrayList<>();
 
     @OneToMany(mappedBy = "producto")
     @ToString.Exclude
-    private List<CarritoProductos> carritos;
+    private List<CarritoProductos> carritos = new ArrayList<>();
 
     @OneToMany (mappedBy = "producto")
     @ToString.Exclude
-    private List<Compra> compras;
+    private List<Compra> compras = new ArrayList<>();
 
     @OneToMany (mappedBy = "producto")
     @ToString.Exclude
-    private List<Venta> ventas;
+    private List<Venta> ventas = new ArrayList<>();
 
-  public Producto( Usuario usuario,  Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias, Integer unidades) {
+  public Producto( Usuario usuario,  Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias, Integer unidades) {this.usuario = usuario;
 
-      this.usuario = usuario;
-    this.isActivo = isActivo;
+      this.isActivo = isActivo;
     this.imagen = imagen;
     this.nombre = nombre;
     this.descripcion = descripcion;

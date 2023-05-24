@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
-public class MensajeDTO {
+public class MensajeGetDTO {
     private HttpStatus httpStatus;
     private boolean flag;
     private Object mensaje;

@@ -14,11 +14,12 @@ import java.time.LocalDateTime;
 @ToString
 public class CompraGetDTO {
 
-    private Integer codigo;
     private LocalDateTime fecha;
     private Double total;
-    private Usuario usuario;
+    private String usuarioCedula;
     private MetodoDePago metodoDePago;
-    private Producto producto;
+    private ProductoGetDTO producto;
     private Integer unidadesCompradas;
+
+
 }

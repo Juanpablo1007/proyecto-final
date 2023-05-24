@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.servicios;
 
+import co.edu.uniquindio.proyecto.dto.*;
 import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.*;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class CarritoServicioImple implements CarritoServicio{
         this.carritoProductosRepo = carritoProductosRepo;
     }
     @Override
-    public Carrito asignarCarrito(Carrito carrito, String usuarioCedula) throws Exception {
+    public void asignarCarrito(String usuarioCedula) throws Exception {
 
         Optional<Usuario> usuario = usuarioRepo.findById(usuarioCedula);
 
@@ -32,49 +33,46 @@ public class CarritoServicioImple implements CarritoServicio{
             throw new Exception("No existe un usuario con esa id");
         }
 
-        carrito.setUsuario(usuario.get());
-        carritoRepo.save(carrito);
-
-        Optional<Carrito> carritoBuscado = carritoRepo.findById(carrito.getCodigo());
-        if(carritoBuscado.isEmpty()){
-            throw new Exception("No existe un carrito con esa id");
-        }
-        usuario.get().setCarrito(carritoBuscado.get());
+        Carrito carrito = new Carrito(usuario.get());
+        Carrito carritoGuardado = carritoRepo.save(carrito);
+        usuario.get().setCarrito(carritoGuardado);
         usuarioRepo.save(usuario.get());
 
-        return carritoBuscado.get();
+
 
     }
 
     @Override
-    public CarritoProductos agregarProducto(Integer codigoProducto, Integer codigoCarrito, Integer unidades) throws Exception {
+    public void agregarProducto(CarritoProductosPostDTO carritoProductosPostDTO) throws Exception {
 
-        Optional<Carrito> carrito = carritoRepo.findById(codigoCarrito);
-        Optional<Producto> producto= productoRepo.findById(codigoProducto);
-        CarritoProductosLlave idCarritoProductos = new CarritoProductosLlave(codigoCarrito,codigoProducto);
-        Optional<CarritoProductos> infoCarritoProductoEncontrado = carritoProductosRepo.findById(idCarritoProductos);
+        Optional<Carrito> carrito = carritoRepo.findByUsuario_Cedula(carritoProductosPostDTO.getUsuarioCedulaCarrito());
+        Optional<Producto> producto= productoRepo.findById(carritoProductosPostDTO.getProductoCodigo());
 
         if(carrito.isEmpty()){
-            throw new Exception("No existe un carrito con ese codigo");
+            throw new Exception("No existe un carrito asignado a ese usuario");
         }
 
         if(producto.isEmpty()){
             throw new Exception("No existe un producto con ese codigo");
         }
 
-        if(unidades > producto.get().getUnidades()){
+        if(carritoProductosPostDTO.getUnidades() > producto.get().getUnidades()){
             throw new Exception("Sin stock");
         }
+
+        CarritoProductosLlave idCarritoProductos = new CarritoProductosLlave(carrito.get().getCodigo(), producto.get().getCodigo());
+        Optional<CarritoProductos> infoCarritoProductoEncontrado = carritoProductosRepo.findById(idCarritoProductos);
+
         CarritoProductos productoInfoBuscado = null;
 
         if(infoCarritoProductoEncontrado.isPresent()){
             Integer unidadesAnteriores= infoCarritoProductoEncontrado.get().getUnidades();
-            infoCarritoProductoEncontrado.get().setUnidades(unidades+unidadesAnteriores);
+            infoCarritoProductoEncontrado.get().setUnidades(carritoProductosPostDTO.getUnidades()+unidadesAnteriores);
             productoInfoBuscado = carritoProductosRepo.save(infoCarritoProductoEncontrado.get());
             carrito.get().getProductos().remove(productoInfoBuscado);
             producto.get().getCarritos().remove(productoInfoBuscado);
         }else{
-            CarritoProductos carritoProductos = new CarritoProductos(carrito.get(),producto.get(),unidades);
+            CarritoProductos carritoProductos = new CarritoProductos(carrito.get(),producto.get(), carritoProductosPostDTO.getUnidades());
              productoInfoBuscado = carritoProductosRepo.save(carritoProductos);
         }
 
@@ -89,37 +87,76 @@ public class CarritoServicioImple implements CarritoServicio{
         carrito.get().getProductos().add(productoInfoBuscado);
         producto.get().getCarritos().add(productoInfoBuscado);
 
-        carritoRepo.save(carrito.get());
+        Carrito carritoFinal = carritoRepo.save(carrito.get());
         productoRepo.save(producto.get());
 
-        return productoInfoBuscado;
 
     }
 
     @Override
-    public CarritoProductos eliminarProducto(CarritoProductosLlave codigo) throws Exception {
+    public void eliminarProducto(EliminarProductoCarritoDTO eliminarProductoCarritoDTO) throws Exception {
 
-        Optional<CarritoProductos> carritoProductos = carritoProductosRepo.findById(codigo);
+        Optional<Carrito> carritoEncontrado = carritoRepo.findByUsuario_Cedula(eliminarProductoCarritoDTO.getUsuarioCedulaCarrito());
+        Optional<Producto> productoEncontrado = productoRepo.findById(eliminarProductoCarritoDTO.getProductoCodigo());
+
+        if(carritoEncontrado.isEmpty()){
+            throw new Exception("No existe un carrito asignado a ese usuario");
+        }
+        if (productoEncontrado.isEmpty()){
+            throw new Exception("El producto con esa id no existe");
+        }
+
+        Carrito carrito = carritoEncontrado.get();
+        Producto producto= productoEncontrado.get();
+
+        CarritoProductosLlave idCarritoProductos = new CarritoProductosLlave(carrito.getCodigo(),producto.getCodigo());
+
+        Optional<CarritoProductos> carritoProductos = carritoProductosRepo.findById(idCarritoProductos);
 
         if(carritoProductos.isEmpty()){
             throw new Exception("El producto con esa id no se encuentra en el carrito con esa id");
         }
 
-        Carrito carrito = carritoRepo.findById(codigo.getCarritoCodigo()).orElse(null);
-        Producto producto = productoRepo.findById(codigo.getProductoCodigo()).orElse(null);
-
         carrito.getProductos().remove(carritoProductos.get());
         producto.getCarritos().remove(carritoProductos.get());
         carritoRepo.save(carrito);
         productoRepo.save(producto);
-        carritoProductosRepo.deleteById(codigo);
+        carritoProductosRepo.deleteById(idCarritoProductos);
 
-        return carritoProductosRepo.findById(codigo).orElse(null);
     }
 
     @Override
-    public Double calcularTotalCarrito(Integer codigoCarrito) {
+    public Double calcularTotalCarrito(String usuarioCedulaCarrito) {
 
-        return carritoProductosRepo.calcularTotalCarrito(codigoCarrito);
+        return carritoProductosRepo.calcularTotalCarrito(usuarioCedulaCarrito);
+    }
+
+    @Override
+    public CarritoGetDTO obtenerCarrito(String usuarioCedulaCarrito) throws Exception {
+
+        Optional<Carrito> carritoEncontrado = carritoRepo.findByUsuario_Cedula(usuarioCedulaCarrito);
+        if(carritoEncontrado.isEmpty()){
+            throw new Exception("No existe un carrito asignado a ese usuario");
+        }
+        Carrito carrito =carritoEncontrado.get();
+
+        CarritoGetDTO carritoGetDTO = new CarritoGetDTO(carrito.getUsuario().getCedula(),calcularTotalCarrito(carrito.getUsuario().getCedula()),carrito.getProductos());
+
+        return carritoGetDTO;
+    }
+
+    @Override
+    public List<CarritoGetDTO> obtenerCarritos() {
+        List<CarritoGetDTO> carritoGetDTOS = new ArrayList<>();
+
+        List<Carrito> carritosEntidad = carritoRepo.findAll();
+
+        for (Carrito carrito: carritosEntidad
+             ) {
+            CarritoGetDTO carritoGetDTO = new CarritoGetDTO(carrito.getUsuario().getCedula(),calcularTotalCarrito(carrito.getUsuario().getCedula()),carrito.getProductos());
+            carritoGetDTOS.add(carritoGetDTO);
+        }
+
+        return carritoGetDTOS;
     }
 }

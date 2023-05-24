@@ -1,7 +1,5 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.dto.InfoUsuarioVenta;
-import co.edu.uniquindio.proyecto.dto.ProductoValido;
 import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.UsuarioRepo;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +11,6 @@ import co.edu.uniquindio.proyecto.repositorios.ProductoRepo;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -167,7 +164,7 @@ public class ProductoTest {
     @Sql("classpath:productos.sql")
     public void listarProductosActivos() {
 
-        List<ProductoValido> lista = productoRepo.listarProductosActivos(true);
+        List<Producto> lista = productoRepo.listarProductosActivos();
 
         lista.forEach(System.out::println);
     }
@@ -175,7 +172,7 @@ public class ProductoTest {
     @Sql("classpath:productos.sql")
     public void listarProductosDisponibles() {
 
-        List<ProductoValido> lista = productoRepo.listarProductosDisponibles(true);
+        List<Producto> lista = productoRepo.listarProductosDisponibles();
 
         lista.forEach(System.out::println);
     }
@@ -206,8 +203,9 @@ public class ProductoTest {
     @Sql("classpath:productos.sql")
     public void obtenerProductosENVenta() {
 
-        List<InfoUsuarioVenta> lista = productoRepo.obtenerProductosEnVenta();
+        List<Producto> lista = productoRepo.obtenerProductosEnVenta();
 
         lista.forEach(System.out::println);
+
     }
 }

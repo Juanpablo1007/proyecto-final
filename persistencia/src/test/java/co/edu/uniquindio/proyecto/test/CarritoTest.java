@@ -126,7 +126,7 @@ public class CarritoTest {
     @Sql("classpath:carritos.sql")
     public void calcularTotalCarrito() {
 
-        Double total = carritoProductosRepo.calcularTotalCarrito(1);
+        Double total = carritoProductosRepo.calcularTotalCarrito("1004870909");
 
         System.out.println(total);
 

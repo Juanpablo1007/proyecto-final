@@ -4,6 +4,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class Carrito implements  Serializable {
     private Integer codigo;
     @OneToMany(mappedBy = "carrito")
     @ToString.Exclude
-    private List <CarritoProductos> productos;
+    private List <CarritoProductos> productos = new ArrayList<>();;
 
     @OneToOne
     @JoinColumn(nullable = false)

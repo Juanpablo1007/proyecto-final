@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.controladores;
 
-import co.edu.uniquindio.proyecto.dto.MensajeDTO;
+import co.edu.uniquindio.proyecto.dto.MensajeGetDTO;
 
 import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.servicios.UsuarioServicio;
@@ -17,8 +17,8 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping( "api/usuario")
-public class UsuarioController {
+@RequestMapping(value = "api/usuario")
+public class UsuarioController {/**
     @Autowired
     private final UsuarioServicio servicio;
   @GetMapping
@@ -27,28 +27,28 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<MensajeDTO> registrar(@Valid @RequestBody Usuario usuario) throws Exception {
+    public ResponseEntity<MensajeGetDTO> registrar(@Valid @RequestBody Usuario usuario) throws Exception {
         servicio.registrarUsuario(usuario);
-        return ResponseEntity.status(201).body(new MensajeDTO(HttpStatus.CREATED, false,
+        return ResponseEntity.status(201).body(new MensajeGetDTO(HttpStatus.CREATED, false,
                 "Usuario creado correctamente"));
     }
     @DeleteMapping("/{cedula}")
-    public ResponseEntity<MensajeDTO> eliminar(@PathVariable String cedula) throws Exception {
+    public ResponseEntity<MensajeGetDTO> eliminar(@PathVariable String cedula) throws Exception {
       servicio.EliminarUsuario(cedula);
-      return ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false,
+      return ResponseEntity.status(HttpStatus.OK).body( new MensajeGetDTO(HttpStatus.OK, false,
               "Eliminado correctamente" ) );
     }
     @GetMapping("/{correo}" )
-    public ResponseEntity<MensajeDTO> log(@PathVariable String correo,@PathVariable String contraseña) throws Exception {
+    public ResponseEntity<MensajeGetDTO> log(@PathVariable String correo, @PathVariable String contraseña) throws Exception {
       servicio.logUsuario(correo, contraseña);
-      return ResponseEntity.status(200).body( new MensajeDTO(HttpStatus.OK, false,
+      return ResponseEntity.status(200).body( new MensajeGetDTO(HttpStatus.OK, false,
               servicio.logUsuario(correo, contraseña) ) );
     }
     @PutMapping()
-    public ResponseEntity<MensajeDTO> Actualizar(@Valid @RequestBody Usuario usuario) throws Exception {
+    public ResponseEntity<MensajeGetDTO> Actualizar(@Valid @RequestBody Usuario usuario) throws Exception {
 
       servicio.ActualizarUsuario(usuario);
-      return  ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false,
+      return  ResponseEntity.status(HttpStatus.OK).body( new MensajeGetDTO(HttpStatus.OK, false,
                 "Actualizado correctamente" ) );
-    }
+    }**/
 }

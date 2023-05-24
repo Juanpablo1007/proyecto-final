@@ -1,12 +1,7 @@
 package co.edu.uniquindio.proyecto.controladores;
-import co.edu.uniquindio.proyecto.dto.EmailDto;
-import co.edu.uniquindio.proyecto.dto.MensajeDTO;
-
-import co.edu.uniquindio.proyecto.entidades.*;
-import co.edu.uniquindio.proyecto.servicios.CompraServicio;
+import co.edu.uniquindio.proyecto.dto.EmailGetDTO;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +14,12 @@ import java.util.Properties;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping( "api/email")
-public class EmailController {
+@RequestMapping( value = "api/email")
+public class EmailController {/**
     @PostMapping()
-    public ResponseEntity<String> enviarEmail(@Valid @RequestBody EmailDto emailDto) {
+    public ResponseEntity<String> enviarEmail(@Valid @RequestBody EmailGetDTO emailGetDTO) {
         try {
-            enviarCorreo(emailDto);
+            enviarCorreo(emailGetDTO);
             return ResponseEntity.ok("Correo electrónico enviado correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -32,7 +27,7 @@ public class EmailController {
         }
     }
 
-    private void enviarCorreo(EmailDto emailDto) throws MessagingException {
+    private void enviarCorreo(EmailGetDTO emailGetDTO) throws MessagingException {
         // Configuración del servidor de correo
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -53,12 +48,12 @@ public class EmailController {
 
         // Creación del mensaje de correo
         Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(emailDto.getDestinatario()));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailDto.getDestinatario()));
-        message.setSubject(emailDto.getAsunto());
-        message.setText(emailDto.getCuerpo());
+        message.setFrom(new InternetAddress(emailGetDTO.getDestinatario()));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailGetDTO.getDestinatario()));
+        message.setSubject(emailGetDTO.getAsunto());
+        message.setText(emailGetDTO.getCuerpo());
 
         // Envío del correo electrónico
         Transport.send(message);
-    }
+    }**/
 }

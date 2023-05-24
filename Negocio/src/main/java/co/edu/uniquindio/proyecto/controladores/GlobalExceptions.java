@@ -10,39 +10,39 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.ArrayList;
 import java.util.List;
-import co.edu.uniquindio.proyecto.dto.MensajeDTO;
+import co.edu.uniquindio.proyecto.dto.MensajeGetDTO;
 @RestControllerAdvice
-public class GlobalExceptions {
+public class GlobalExceptions {/**
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<MensajeDTO> badCredentialsException(BadCredentialsException e){
+    public ResponseEntity<MensajeGetDTO> badCredentialsException(BadCredentialsException e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new
-                MensajeDTO(HttpStatus.BAD_REQUEST, true, "Datos de autenticación incorrectos") );
+                MensajeGetDTO(HttpStatus.BAD_REQUEST, true, "Datos de autenticación incorrectos") );
     }
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<MensajeDTO> generalException(Exception e){
+    public ResponseEntity<MensajeGetDTO> generalException(Exception e){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body( new
-                MensajeDTO(HttpStatus.INTERNAL_SERVER_ERROR, true, e.getMessage()) );
+                MensajeGetDTO(HttpStatus.INTERNAL_SERVER_ERROR, true, e.getMessage()) );
     }
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<MensajeDTO> accessDeniedException(AccessDeniedException
+    public ResponseEntity<MensajeGetDTO> accessDeniedException(AccessDeniedException
                                                                     accessDeniedException) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new
-                MensajeDTO(HttpStatus.FORBIDDEN, true, "No se puede acceder a este recurso"));
+                MensajeGetDTO(HttpStatus.FORBIDDEN, true, "No se puede acceder a este recurso"));
     }
     @ExceptionHandler(AttributeException.class)
-    public ResponseEntity<MensajeDTO> throwAttributeException(AttributeException e) {
-        return ResponseEntity.badRequest().body(new MensajeDTO(HttpStatus.BAD_REQUEST, true,
+    public ResponseEntity<MensajeGetDTO> throwAttributeException(AttributeException e) {
+        return ResponseEntity.badRequest().body(new MensajeGetDTO(HttpStatus.BAD_REQUEST, true,
                 e.getMessage()));
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MensajeDTO> validationException(MethodArgumentNotValidException ex){
+    public ResponseEntity<MensajeGetDTO> validationException(MethodArgumentNotValidException ex){
         List<String> messages = new ArrayList<>();
         BindingResult results = ex.getBindingResult();
         for (FieldError e: results.getFieldErrors()) {
             messages.add(e.getField()+": "+e.getDefaultMessage());
         }
-        return ResponseEntity.badRequest().body(new MensajeDTO(HttpStatus.BAD_REQUEST, true,
+        return ResponseEntity.badRequest().body(new MensajeGetDTO(HttpStatus.BAD_REQUEST, true,
                 messages.toString()));
-    }
+    }**/
 }
 
