@@ -1,5 +1,9 @@
 package co.edu.uniquindio.proyecto.servicios;
 
+import co.edu.uniquindio.proyecto.dto.SesionDTO;
+import co.edu.uniquindio.proyecto.dto.TokenDTO;
+import co.edu.uniquindio.proyecto.dto.UsuarioGetDTO;
+import co.edu.uniquindio.proyecto.dto.UsuarioPostDTO;
 import co.edu.uniquindio.proyecto.entidades.*;
 
 import java.util.List;
@@ -7,17 +11,14 @@ import java.util.Optional;
 
 public interface UsuarioServicio {
 
-    Usuario registrarUsuario  (Usuario u) throws Exception;
+    void registrarUsuario  (UsuarioPostDTO usuarioPostDTO) throws Exception;
 
-    Usuario ActualizarUsuario  (Usuario u) throws Exception;
+    void actualizarUsuario  (UsuarioPostDTO usuarioPostDTO) throws Exception;
 
-    void EliminarUsuario  (String cedula) throws Exception;
+    void eliminarUsuario  (String cedula) throws Exception;
 
-    List<Usuario> listarUsuario()  throws Exception;
-    Optional <Usuario> logUsuario  (String correo, String contraseña) throws Exception;
-
-
-    void RecuperarContraseña (String email, String contraseña)  throws Exception;
+    UsuarioGetDTO buscarUsuario(String cedula) throws Exception;
+    List<UsuarioGetDTO> listarUsuarios();
 
 
 }

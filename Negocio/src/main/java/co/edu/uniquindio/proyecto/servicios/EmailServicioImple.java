@@ -2,37 +2,33 @@ package co.edu.uniquindio.proyecto.servicios;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import co.edu.uniquindio.proyecto.dto.EmailGetDTO;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 @Service
-public class EmailServicioImple implements EmailServicio{
-   @Autowired
+public class EmailServicioImple implements EmailServicio {
 
     private JavaMailSender javaMailSender;
 
+    public EmailServicioImple(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
+
     @Override
-    public boolean enviarEmail(EmailGetDTO emailGetDTO) throws Exception {
-        MimeMessage mensaje = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mensaje);
+    public void enviarEmail(EmailGetDTO emailGetDTO) throws Exception {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(emailGetDTO.getDestinatario());
+        message.setSubject(emailGetDTO.getAsunto());
+        message.setText(emailGetDTO.getCuerpo());
 
-        try {
-            helper.setSubject(emailGetDTO.getAsunto());
-            helper.setText(emailGetDTO.getCuerpo(), true);
-            helper.setTo(emailGetDTO.getDestinatario());
-            helper.setFrom("no-reply@unimarket.com");
-
-            javaMailSender.send(mensaje);
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-
+        javaMailSender.send(message);
     }
 }

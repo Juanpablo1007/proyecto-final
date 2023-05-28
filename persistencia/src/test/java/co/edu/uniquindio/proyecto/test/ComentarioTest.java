@@ -39,7 +39,7 @@ public class ComentarioTest {
 
         Producto producto = productoRepo.findById(1).orElse(null);
 
-        Comentario comentario = new Comentario("El producto es mediocre", LocalDateTime.now(), usuario, producto);
+        Comentario comentario = new Comentario("El producto es mediocre", LocalDateTime.now(), usuario, producto,1.0);
 
         Comentario comentarioGenerado = comentarioRepo.save(comentario);
 

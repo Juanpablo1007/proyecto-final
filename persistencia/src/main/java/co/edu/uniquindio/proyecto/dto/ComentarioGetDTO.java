@@ -18,4 +18,6 @@ public class ComentarioGetDTO {
     private String usuarioCedula;
     private Integer productoCodigo;
 
+    private Double calificacion;
+
 }

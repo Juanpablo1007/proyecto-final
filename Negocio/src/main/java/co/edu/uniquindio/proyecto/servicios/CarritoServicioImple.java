@@ -15,14 +15,15 @@ public class CarritoServicioImple implements CarritoServicio{
     private final UsuarioRepo usuarioRepo;
     private final ProductoRepo productoRepo;
     private final CarritoRepo carritoRepo;
-
     private final CarritoProductosRepo carritoProductosRepo;
+    private final Mapeador mapeador;
 
-    public CarritoServicioImple(UsuarioRepo usuarioRepo, ProductoRepo productoRepo, CarritoRepo carritoRepo, CarritoProductosRepo carritoProductosRepo) {
+    public CarritoServicioImple(UsuarioRepo usuarioRepo, ProductoRepo productoRepo, CarritoRepo carritoRepo, CarritoProductosRepo carritoProductosRepo, Mapeador mapeador) {
         this.usuarioRepo = usuarioRepo;
         this.productoRepo = productoRepo;
         this.carritoRepo = carritoRepo;
         this.carritoProductosRepo = carritoProductosRepo;
+        this.mapeador=mapeador;
     }
     @Override
     public void asignarCarrito(String usuarioCedula) throws Exception {
@@ -37,7 +38,6 @@ public class CarritoServicioImple implements CarritoServicio{
         Carrito carritoGuardado = carritoRepo.save(carrito);
         usuario.get().setCarrito(carritoGuardado);
         usuarioRepo.save(usuario.get());
-
 
 
     }
@@ -140,9 +140,7 @@ public class CarritoServicioImple implements CarritoServicio{
         }
         Carrito carrito =carritoEncontrado.get();
 
-        CarritoGetDTO carritoGetDTO = new CarritoGetDTO(carrito.getUsuario().getCedula(),calcularTotalCarrito(carrito.getUsuario().getCedula()),carrito.getProductos());
-
-        return carritoGetDTO;
+        return mapeador.carritoACarritoGetDTO(carrito);
     }
 
     @Override
@@ -153,10 +151,11 @@ public class CarritoServicioImple implements CarritoServicio{
 
         for (Carrito carrito: carritosEntidad
              ) {
-            CarritoGetDTO carritoGetDTO = new CarritoGetDTO(carrito.getUsuario().getCedula(),calcularTotalCarrito(carrito.getUsuario().getCedula()),carrito.getProductos());
+            CarritoGetDTO carritoGetDTO = mapeador.carritoACarritoGetDTO(carrito);
             carritoGetDTOS.add(carritoGetDTO);
         }
 
         return carritoGetDTOS;
     }
+
 }

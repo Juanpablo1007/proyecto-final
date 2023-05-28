@@ -9,12 +9,12 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SesionPostDTO {
+public class SesionDTO {
 
     @NotEmpty(message = "la contraseña no puede estar vacia")
     @Length(max = 100, message = "La contraseña ser de 100 caracteres o menos")
     private String contraseña;
-    @NotEmpty(message = "El nombre no puede estar vacio")
-    @Length(max = 100, message = "El nombre debe ser de 100 caracteres o menos")
-    private String nombre;
+    @NotEmpty(message = "El email no puede estar vacio")
+    @Length(max = 100, message = "El email debe ser de 100 caracteres o menos")
+    private String email;
 }

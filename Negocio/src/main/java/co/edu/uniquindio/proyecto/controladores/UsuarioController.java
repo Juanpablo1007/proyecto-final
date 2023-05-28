@@ -1,54 +1,53 @@
 package co.edu.uniquindio.proyecto.controladores;
 
-import co.edu.uniquindio.proyecto.dto.MensajeGetDTO;
-
+import co.edu.uniquindio.proyecto.dto.MensajeDTO;
+import co.edu.uniquindio.proyecto.dto.UsuarioPostDTO;
 import co.edu.uniquindio.proyecto.entidades.*;
+import co.edu.uniquindio.proyecto.servicios.CarritoServicio;
 import co.edu.uniquindio.proyecto.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import lombok.AllArgsConstructor;
-
 import javax.validation.Valid;
 import java.util.List;
 
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "api/usuario")
-public class UsuarioController {/**
-    @Autowired
+@RequestMapping(value = "api/usuarios")
+public class UsuarioController {
     private final UsuarioServicio servicio;
-  @GetMapping
-   public List<Usuario> listar() throws Exception {
-        return servicio.listarUsuario();
+
+
+    @PutMapping("/actualizar")
+    public ResponseEntity<MensajeDTO> actualizarUsuario(@Valid @RequestBody UsuarioPostDTO usuarioPostDTO) throws Exception {
+
+        servicio.actualizarUsuario(usuarioPostDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new MensajeDTO(HttpStatus.OK, false,
+                "Usuario actualizado correctamente"));
     }
 
-    @PostMapping
-    public ResponseEntity<MensajeGetDTO> registrar(@Valid @RequestBody Usuario usuario) throws Exception {
-        servicio.registrarUsuario(usuario);
-        return ResponseEntity.status(201).body(new MensajeGetDTO(HttpStatus.CREATED, false,
-                "Usuario creado correctamente"));
-    }
-    @DeleteMapping("/{cedula}")
-    public ResponseEntity<MensajeGetDTO> eliminar(@PathVariable String cedula) throws Exception {
-      servicio.EliminarUsuario(cedula);
-      return ResponseEntity.status(HttpStatus.OK).body( new MensajeGetDTO(HttpStatus.OK, false,
-              "Eliminado correctamente" ) );
-    }
-    @GetMapping("/{correo}" )
-    public ResponseEntity<MensajeGetDTO> log(@PathVariable String correo, @PathVariable String contraseña) throws Exception {
-      servicio.logUsuario(correo, contraseña);
-      return ResponseEntity.status(200).body( new MensajeGetDTO(HttpStatus.OK, false,
-              servicio.logUsuario(correo, contraseña) ) );
-    }
-    @PutMapping()
-    public ResponseEntity<MensajeGetDTO> Actualizar(@Valid @RequestBody Usuario usuario) throws Exception {
 
-      servicio.ActualizarUsuario(usuario);
-      return  ResponseEntity.status(HttpStatus.OK).body( new MensajeGetDTO(HttpStatus.OK, false,
-                "Actualizado correctamente" ) );
-    }**/
+    @DeleteMapping("/eliminar/{cedula}")
+    public ResponseEntity<MensajeDTO> eliminar(@PathVariable String cedula) throws Exception {
+        servicio.eliminarUsuario(cedula);
+        return ResponseEntity.status(HttpStatus.OK).body(new MensajeDTO(HttpStatus.OK, false,
+                "Usuario eliminado correctamente"));
+    }
+
+    @GetMapping("/obtener/{cedula}")
+    public ResponseEntity<MensajeDTO> obtener(@PathVariable String cedula) throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(new MensajeDTO(HttpStatus.OK, false,
+                servicio.buscarUsuario(cedula)));
+    }
+    @GetMapping("/listar")
+    public ResponseEntity<MensajeDTO> listarUsuarios() throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(new MensajeDTO(HttpStatus.OK, false,
+                servicio.listarUsuarios()));
+    }
+
+
+
 }

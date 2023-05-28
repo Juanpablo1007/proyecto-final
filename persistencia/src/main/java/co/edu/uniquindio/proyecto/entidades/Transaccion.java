@@ -1,15 +1,16 @@
 package co.edu.uniquindio.proyecto.entidades;
 
+
 import lombok.*;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
-import java.util.*;
+import java.time.LocalDateTime;
+
+// add
 @Entity
 @Setter
 @Getter
@@ -17,13 +18,10 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Venta {
-
-
+public class Transaccion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-
     private Integer codigo;
 
     @Column( nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -35,7 +33,11 @@ public class Venta {
 
     @ManyToOne
     @NotNull
-    private Usuario usuario;
+    private Usuario usuarioCompra;
+
+    @ManyToOne
+    @NotNull
+    private Usuario usuarioVenta;
 
 
     @Column (nullable = false, length = 50)
@@ -44,20 +46,19 @@ public class Venta {
 
     @ManyToOne
     @NotNull
-    @ToString.Exclude
     private Producto producto;
 
     @Column (nullable = false)
-    @Min(value = 1, message = "Se debe vender minimamente una unidad del producto") //validar que maximo sea producto.getUnidades();
-    private Integer unidadesVendidas;
+    @Min(value = 1, message = "Se debe vender minimamente una unidad del producto")
+    private Integer unidadesCompradas;
 
-
-    public Venta(LocalDateTime fecha, Double total, Usuario usuario, MetodoDePago metodoDePago, Producto producto, Integer unidadesVendidas) {
+    public Transaccion(LocalDateTime fecha, Double total, Usuario usuarioCompra, Usuario usuarioVenta, MetodoDePago metodoDePago, Producto producto, Integer unidadesCompradas) {
         this.fecha = fecha;
         this.total = total;
-        this.usuario = usuario;
+        this.usuarioCompra = usuarioCompra;
+        this.usuarioVenta = usuarioVenta;
         this.metodoDePago = metodoDePago;
         this.producto = producto;
-        this.unidadesVendidas = unidadesVendidas;
+        this.unidadesCompradas = unidadesCompradas;
     }
 }

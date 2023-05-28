@@ -12,7 +12,7 @@ import java.util.Objects;
 @Repository
 public interface ProductoRepo  extends  JpaRepository <Producto, Integer>{
 
-    List <Producto> findAllByNombreContainsIgnoreCase(String nombre);
+ List <Producto> findAllByNombreContainsIgnoreCase(String nombre);
 
     List<Producto> findAllByDescripcionContainsIgnoreCase(String descripcion);
 
@@ -36,16 +36,17 @@ public interface ProductoRepo  extends  JpaRepository <Producto, Integer>{
     Page<Producto> findAll(Pageable paginador);
 
     @Query ("select p from Usuario u, IN (u.productosFavoritos) p where u.cedula = :cedula")
+
     List<Producto> obtenerProductosDeUsuarioFavoritos(String cedula);
-@Query ("Select p from Producto p where p.isActivo = true ")
-List<Producto> listarProductosActivos(); //lista los productos que estan o no activos
+    @Query ("Select p from Producto p where p.isActivo = true ")
+    List<Producto> listarProductosActivos(); //lista los productos que estan o no activos
     @Query ("Select p from Producto p where p.isDisponible = true ")
     List<Producto> listarProductosDisponibles(); //lista los productos que estan o no activos
-@Query ("select p.nombre from Producto p where p.nombre like :inicial")
+    @Query ("select p.nombre from Producto p where p.nombre like :inicial")
     List<String> listarProductosPorInicial (String inicial );
 
-@Query ("select p from Producto p order by p.precio desc ")
-List<Producto> obtenerProductosDeMayorPrecio();
+    @Query ("select p from Producto p order by p.precio desc ")
+    List<Producto> obtenerProductosDeMayorPrecio();
     @Query ("select p from Producto p order by p.precio asc ")
     List<Producto> obtenerProductosDeMenorPrecio();
 

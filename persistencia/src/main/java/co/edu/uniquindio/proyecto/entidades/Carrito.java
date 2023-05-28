@@ -22,7 +22,7 @@ public class Carrito implements  Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
-    @OneToMany(mappedBy = "carrito")
+    @OneToMany(mappedBy = "carrito",cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List <CarritoProductos> productos = new ArrayList<>();;
 

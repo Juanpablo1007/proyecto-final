@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.*;
@@ -15,23 +14,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Usuario implements Serializable   {
-
-    @Id
-    @EqualsAndHashCode.Include
-    @Column(length = 10)
-    private String cedula;
-
-    @Column ( nullable = false, length = 100)
-    @NotEmpty(message = "El usuario debe tener una contraseña")
-
-    private String contraseña;
-    @Column ( nullable = false, length = 100)
-    @NotEmpty(message = "El usuario debe tener un nombre")
-    private String nombre;
-    @Column ( nullable = false, unique = true, length = 100)
-    @Email
-    private String email;
+public class Usuario extends Persona implements Serializable   {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     @ToString.Exclude
@@ -40,23 +23,23 @@ public class Usuario implements Serializable   {
     @ToString.Exclude
     private List<Producto> productosFavoritos = new ArrayList<>();
 
-    @OneToOne (mappedBy = "usuario")
+    @OneToOne (mappedBy = "usuario",cascade = CascadeType.REMOVE)
     private Carrito carrito;
 
     @Column ( nullable = false)
     private Boolean isCuentaActiva;
 
-    @OneToMany (mappedBy = "usuario")
+    @OneToMany (mappedBy = "usuario",cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<Comentario> comentarios = new ArrayList<>();
 
-    @OneToMany (mappedBy = "usuario")
+    @OneToMany (mappedBy = "usuarioCompra",cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    private List<Compra> compras = new ArrayList<>();
+    private List<Transaccion> compras = new ArrayList<>();
 
-    @OneToMany (mappedBy = "usuario")
+    @OneToMany (mappedBy = "usuarioVenta",cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    private List<Venta> ventas = new ArrayList<>();
+    private List<Transaccion> ventas = new ArrayList<>();
 
 
     @Column ( nullable = false, length = 100)
@@ -66,11 +49,9 @@ public class Usuario implements Serializable   {
     private String direccion;
 
 
+
     public Usuario(String cedula, String contraseña, String nombre, String email,  Boolean isCuentaActiva, String telefono, String direccion) {
-        this.cedula = cedula;
-        this.contraseña = contraseña;
-        this.nombre = nombre;
-        this.email = email;
+        super(cedula, contraseña, nombre, email);
         this.isCuentaActiva = isCuentaActiva;
         this.telefono = telefono;
         this.direccion = direccion;

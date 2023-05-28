@@ -1,8 +1,6 @@
 package co.edu.uniquindio.proyecto.dto;
 
 import co.edu.uniquindio.proyecto.entidades.MetodoDePago;
-import co.edu.uniquindio.proyecto.entidades.Producto;
-import co.edu.uniquindio.proyecto.entidades.Usuario;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,12 +10,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class VentaGetDTO {
+public class TransaccionGetDTO {
 
     private LocalDateTime fecha;
     private Double total;
-    private String usuarioCedula;
+    private String usuarioCompradorCedula;
+    private String usuarioVendedorCedula;
     private MetodoDePago metodoDePago;
     private ProductoGetDTO producto;
-    private Integer unidadesVendidas;
+    private Integer unidadesCompradas;
+
+
 }

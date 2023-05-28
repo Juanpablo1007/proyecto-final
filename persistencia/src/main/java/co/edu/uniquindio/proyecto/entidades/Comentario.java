@@ -3,6 +3,8 @@ package co.edu.uniquindio.proyecto.entidades;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -27,6 +29,10 @@ public class Comentario implements Serializable {
     private String texto;
     @Column( nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime fecha;
+    @Min(value = 1, message = "La minima calificacion es 1")
+    @Max(value = 5,message = "La maxima calificacion es 5")
+    @Column(nullable = false)
+    private Double calificacion;
 
     @ManyToOne
     @NotNull
@@ -36,11 +42,12 @@ public class Comentario implements Serializable {
     @NotNull
     private Producto producto;
 
-    public Comentario(String texto, LocalDateTime fecha, Usuario usuario, Producto producto) {
+    public Comentario(String texto, LocalDateTime fecha, Usuario usuario, Producto producto, Double calificacion) {
         this.texto = texto;
         this.fecha = fecha;
         this.usuario = usuario;
         this.producto = producto;
+        this.calificacion=calificacion;
     }
 }
 

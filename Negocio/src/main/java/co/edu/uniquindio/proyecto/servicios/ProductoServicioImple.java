@@ -1,19 +1,19 @@
 package co.edu.uniquindio.proyecto.servicios;
 
-import co.edu.uniquindio.proyecto.dto.ComentarioGetDTO;
-import co.edu.uniquindio.proyecto.dto.ProductoGetDTO;
-import co.edu.uniquindio.proyecto.dto.ProductoPostDTO;
-import co.edu.uniquindio.proyecto.dto.UsuarioGetDTO;
-import co.edu.uniquindio.proyecto.entidades.Comentario;
-import co.edu.uniquindio.proyecto.entidades.Estado_Producto;
-import co.edu.uniquindio.proyecto.entidades.Producto;
-import co.edu.uniquindio.proyecto.entidades.Usuario;
+import co.edu.uniquindio.proyecto.dto.*;
+import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import javax.validation.constraints.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class ProductoServicioImple implements ProductoServicio {
@@ -22,20 +22,20 @@ public class ProductoServicioImple implements ProductoServicio {
     private final ProductoRepo productoRepo;
     private final CarritoRepo carritoRepo;
     private final ComentarioRepo comentarioRepo;
-    private final CompraRepo compraRepo;
-    private final VentaRepo ventaRepo;
+    private final TransaccionRepo transaccionRepo;
+    private final Mapeador mapeador;
 
-    public ProductoServicioImple(UsuarioRepo usuarioRepo, ProductoRepo productoRepo, CarritoRepo carritoRepo, ComentarioRepo comentarioRepo, CompraRepo compraRepo, VentaRepo ventaRepo) {
+    public ProductoServicioImple(UsuarioRepo usuarioRepo, ProductoRepo productoRepo, CarritoRepo carritoRepo, ComentarioRepo comentarioRepo, TransaccionRepo transaccionRepo, Mapeador mapeador) {
         this.usuarioRepo = usuarioRepo;
         this.productoRepo = productoRepo;
         this.carritoRepo = carritoRepo;
         this.comentarioRepo = comentarioRepo;
-        this.compraRepo = compraRepo;
-        this.ventaRepo = ventaRepo;
+        this.transaccionRepo = transaccionRepo;
+        this.mapeador=mapeador;
     }
 
     @Override
-    public Integer publicarProducto(ProductoPostDTO productoPostDTO) throws Exception {
+    public void publicarProducto(ProductoPostDTO productoPostDTO) throws Exception {
 
         Optional<Usuario> usuarioOptional = usuarioRepo.findById(productoPostDTO.getUsuarioCedula());
         if (usuarioOptional.isEmpty()) {
@@ -45,126 +45,213 @@ public class ProductoServicioImple implements ProductoServicio {
         if (!usuario.getIsCuentaActiva()) {
             throw new Exception("El usuario no tiene la cuenta activa");
         }
-        Producto producto = new Producto(usuario, productoPostDTO.getIsActivo(), productoPostDTO.getImagen(), productoPostDTO.getNombre(), productoPostDTO.getDescripcion(), productoPostDTO.getPrecio(), productoPostDTO.getIsDisponible(), Estado_Producto.SIN_REVISAR, productoPostDTO.getFechaLimite(), productoPostDTO.getCategorias(), productoPostDTO.getUnidades());
+
+        Producto producto = new Producto(usuario, productoPostDTO.getIsActivo(), productoPostDTO.getImagen(), productoPostDTO.getNombre(), productoPostDTO.getDescripcion(), productoPostDTO.getPrecio(), productoPostDTO.getIsDisponible(), Estado_Producto.SIN_REVISAR, LocalDateTime.now().plusMonths(5), productoPostDTO.getCategorias(), productoPostDTO.getUnidades());
         Producto productoGuardado = productoRepo.save(producto);
         List<Producto> productos = productoRepo.findAllByUsuario_Cedula(usuario.getCedula());
         usuario.setProductos(productos);
         Usuario usuarioActualizado = usuarioRepo.save(usuario);
-
-        //ProductoGetDTO productoGetDTO = new ProductoGetDTO(usuarioActualizado.getCedula(), usuarioActualizado.getNombre(), 0, productoGuardado.getIsActivo(), productoGuardado.getImagen(), productoGuardado.getNombre(), productoGuardado.getDescripcion(), productoGuardado.getPrecio(), productoGuardado.getUnidades(), productoGuardado.getEstado(), productoGuardado.getCategorias(), null, productoGuardado.getIsDisponible(), productoGuardado.getFechaLimite());
-        return 1;
+    }
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex >= 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex + 1);
+        }
+        return "";
     }
 
-    @Override
-
-    public Producto comentarProducto(Producto producto, Comentario co, Usuario u) throws Exception {
-        Comentario comentario = comentarioRepo.save(co);
-        Optional<Producto> p = productoRepo.findById(producto.getCodigo());
-        Optional<Usuario> us = usuarioRepo.findById(u.getCedula());
-        if (p.isPresent() && us.isPresent()) {
-            if (us.get().getIsCuentaActiva()) {
-                List<Comentario> c = productoRepo.buscarComentarios(producto.getCodigo());
-                c.add(comentario);
-                producto.setComentario(c);
-                u.setComentarios(c);
-                usuarioRepo.save(u);
-                return productoRepo.save(producto);
-            } else {
-                throw new Exception("El usuario no esta activo");
-            }
+    private String generateUniqueFileName(String fileExtension) {
+        String uniqueFileName = UUID.randomUUID().toString();
+        if (!fileExtension.isEmpty()) {
+            uniqueFileName += "." + fileExtension;
         }
-
-        throw new Exception("el producto o usuario no estan registrado");
-
+        return uniqueFileName;
     }
 
-    @Override
-    public void guardarProductoFavorito(Producto p, Usuario usuario) throws Exception {
-        Optional<Producto> producto = productoRepo.findById(p.getCodigo());
-        Optional<Usuario> u = usuarioRepo.findById(usuario.getCedula());
 
-        if (!producto.isPresent()) {
-            throw new Exception("el producto no se encuentra registrado");
+
+    @Override
+    public void comentarProducto(ComentarioPostDTO comentarioPostDTO) throws Exception {
+
+        Optional<Producto> producto = productoRepo.findById(comentarioPostDTO.getProductoCodigo());
+        Optional<Usuario> usuario = usuarioRepo.findById(comentarioPostDTO.getUsuarioCedula());
+
+        if(usuario.isEmpty()){
+            throw new Exception("No existe un usuario con esa cedula");
         }
-        if (!u.isPresent()) {
-            throw new Exception("el usuario no esta registrado");
+        if(producto.isEmpty()){
+            throw new Exception("No existe un producto con ese codigo");
         }
-        if (!u.get().getIsCuentaActiva()) {
+        if (!usuario.get().getIsCuentaActiva()) {
             throw new Exception("El usuario no esta activo");
         }
-        List<Producto> fav = usuarioRepo.buscarFavoritos(usuario.getCedula());
-        System.out.println(fav.size());
-        fav.add(p);
-        usuario.setProductosFavoritos(fav);
-        usuarioRepo.save(usuario);
-    }
+        Comentario comentario = new Comentario(comentarioPostDTO.getTexto(), LocalDateTime.now(),usuario.get(),producto.get(), comentarioPostDTO.getCalificacion());
+        Comentario comentarioGuardado = comentarioRepo.save(comentario);
 
-    @Override
-    public List<Producto> listarProductoPrecio(Double precioAlto, Double preciobajo) throws Exception {
-        List<Producto> productos = productoRepo.listarPorRangoDePrecio(preciobajo, precioAlto);
-        if (productos.isEmpty()) {
-            throw new Exception("no hay productos de estos precios");
+        List<Comentario> comentariosProducto = comentarioRepo.findAllByProducto_Codigo(producto.get().getCodigo());
+        producto.get().setComentario(comentariosProducto);
+        productoRepo.save(producto.get());
+
+        List<Comentario> comentariosUsuario = comentarioRepo.findAllByUsuario_Cedula(usuario.get().getCedula());
+        usuario.get().setComentarios(comentariosUsuario);
+        usuarioRepo.save(usuario.get());
         }
-        return productos;
+
+    @Override
+    public void guardarProductoFavorito(GestionFavoritosDTO gestionFavoritosDTO) throws Exception {
+        Optional<Producto> producto = productoRepo.findById(gestionFavoritosDTO.getProductoCodigo());
+        Optional<Usuario> usuario = usuarioRepo.findById(gestionFavoritosDTO.getUsuarioCedula());
+
+        if (producto.isEmpty()) {
+            throw new Exception("El producto no se encuentra registrado");
+        }
+        if (usuario.isEmpty()) {
+            throw new Exception("El usuario no esta registrado");
+        }
+        if (!usuario.get().getIsCuentaActiva()) {
+            throw new Exception("El usuario no esta activo");
+        }
+        List<Producto> favoritosUsuario = usuarioRepo.buscarFavoritos(usuario.get().getCedula());
+        favoritosUsuario.add(producto.get());
+        usuario.get().setProductosFavoritos(favoritosUsuario);
+        usuarioRepo.save(usuario.get());
+
     }
 
     @Override
-    public List<Producto> buscarProductoNombre(String nombre) throws Exception {
+    public void quitarProductoFavorito(GestionFavoritosDTO gestionFavoritosDTO) throws Exception {
+        Optional<Producto> producto = productoRepo.findById(gestionFavoritosDTO.getProductoCodigo());
+        Optional<Usuario> usuario = usuarioRepo.findById(gestionFavoritosDTO.getUsuarioCedula());
+
+        if (producto.isEmpty()) {
+            throw new Exception("El producto no se encuentra registrado");
+        }
+        if (usuario.isEmpty()) {
+            throw new Exception("El usuario no esta registrado");
+        }
+        List<Producto> favoritosUsuario = usuarioRepo.buscarFavoritos(usuario.get().getCedula());
+        favoritosUsuario.remove(producto.get());
+        usuario.get().setProductosFavoritos(favoritosUsuario);
+        usuarioRepo.save(usuario.get());
+    }
+
+    @Override
+    public List<ProductoGetDTO> listarProductoPrecio(RangoPreciosDTO rangoPreciosDTO) throws Exception {
+        List<Producto> productos = productoRepo.listarPorRangoDePrecio(rangoPreciosDTO.getPrecioMinimo(), rangoPreciosDTO.getPrecioMaximo());
+        if (productos.isEmpty()) {
+            throw new Exception("No hay productos de estos precios");
+        }
+        List<ProductoGetDTO> productoGetDTOS = new ArrayList<>();
+        for (Producto producto: productos
+             ) {
+            ProductoGetDTO productoGetDTO = mapeador.productoAProductoGetDTO(producto);
+            productoGetDTOS.add(productoGetDTO);
+        }
+        return productoGetDTOS;
+    }
+
+    @Override
+    public List<ProductoGetDTO> buscarProductoNombre(String nombre) throws Exception {
         List<Producto> productos = productoRepo.findAllByNombreContainsIgnoreCase(nombre);
         if (productos.isEmpty()) {
-            throw new Exception("no hay productos con estos nombres");
+            throw new Exception("No hay productos con estos nombres");
         }
-        return productos;
+        List<ProductoGetDTO> productoGetDTOS = new ArrayList<>();
+        for (Producto producto: productos
+        ) {
+            ProductoGetDTO productoGetDTO = mapeador.productoAProductoGetDTO(producto);
+            productoGetDTOS.add(productoGetDTO);
+        }
+        return productoGetDTOS;
     }
 
     @Override
-    public List<Producto> listarProductosPublicados(String cedula) throws Exception {
+    public List<ProductoGetDTO> listarProductosPublicados(String cedula) throws Exception {
         List<Producto> productos = productoRepo.findAllByUsuario_Cedula(cedula);
-        if (productos.isEmpty() || productos == null) {
-            throw new Exception("No hay productos aun");
+        if (productos.isEmpty()) {
+            throw new Exception("El usuario con esa cedula no ha publicado productos");
         }
-        return productos;
+        List<ProductoGetDTO> productoGetDTOS = new ArrayList<>();
+        for (Producto producto: productos
+        ) {
+            ProductoGetDTO productoGetDTO = mapeador.productoAProductoGetDTO(producto);
+            productoGetDTOS.add(productoGetDTO);
+        }
+        return productoGetDTOS;
 
     }
 
     @Override
-    public List<Producto> listarProductosFavoritos(Usuario u) throws Exception {
-        Optional<Usuario> buscado = usuarioRepo.findById(u.getCedula());
+    public List<ProductoGetDTO> listarProductosFavoritos(String cedula) throws Exception {
+        List<Producto> productos = productoRepo.obtenerProductosDeUsuarioFavoritos(cedula);
+        if (productos.isEmpty()) {
+            throw new Exception("El usuario con esa cedula no tiene productos favoritos");
+        }
+        List<ProductoGetDTO> productoGetDTOS = new ArrayList<>();
+        for (Producto producto: productos
+        ) {
+            ProductoGetDTO productoGetDTO = mapeador.productoAProductoGetDTO(producto);
+            productoGetDTOS.add(productoGetDTO);
+        }
+        return productoGetDTOS;
+    }
+
+    @Override
+    public void actualizarProducto(Integer codigoProducto,ProductoPostDTO productoPostDTO) throws Exception {
+        Optional<Producto> buscado = productoRepo.findById(codigoProducto);
         if (buscado.isEmpty()) {
-
-            throw new Exception("el codigo del usuario no esta registrado");
+            throw new Exception("No existe un producto con ese codigo");
         }
+        Producto producto = buscado.get();
+        producto.setIsActivo(productoPostDTO.getIsActivo());
+        producto.setImagen(productoPostDTO.getImagen());
+        producto.setNombre(productoPostDTO.getNombre());
+        producto.setDescripcion(productoPostDTO.getDescripcion());
+        producto.setPrecio(productoPostDTO.getPrecio());
+        producto.setIsDisponible(producto.getIsDisponible());
+        producto.setCategorias(productoPostDTO.getCategorias());
+        producto.setUnidades(productoPostDTO.getUnidades());
 
-        if (u.getProductosFavoritos() == null || u.getProductosFavoritos().isEmpty()) {
-            throw new Exception("la lista de favoritos esta vacia");
-
-        }
-
-        return productoRepo.obtenerProductosDeUsuarioFavoritos(u.getCedula());
-    }
-
-    @Override
-    public Producto ActualizarProducto(Producto producto) throws Exception {
-        Optional<Producto> buscado = productoRepo.findById(producto.getCodigo());
-        if (buscado.isPresent()) {
-            return productoRepo.save(producto);
-
-        } else {
-            throw new Exception("el codigo del producto no esta registrado");
-        }
-
+        productoRepo.save(producto);
 
     }
 
     @Override
-    public void EliminarProducto(Producto producto) throws Exception {
-        Optional<Producto> buscado = productoRepo.findById(producto.getCodigo());
+    public void eliminarProducto(Integer productoCodigo) throws Exception {
+        Optional<Producto> buscado = productoRepo.findById(productoCodigo);
         if (buscado.isPresent()) {
-            productoRepo.deleteById(producto.getCodigo());
+            for (Usuario usuario: usuarioRepo.listaUsuariosFavoritosProductoCodigo(productoCodigo)
+                 ) {
+                 usuario.getProductosFavoritos().remove(buscado.get());
+                 usuarioRepo.save(usuario);
+            }
+            productoRepo.deleteById(productoCodigo);
 
         } else {
-            throw new Exception("el codigo del producto no esta registrado");
+            throw new Exception("No existe un producto con ese codigo");
         }
+    }
+
+    @Override
+    public ProductoGetDTO obtenerProducto(Integer codigoProducto) throws Exception {
+        Optional<Producto> producto = productoRepo.findById(codigoProducto);
+        if(producto.isEmpty()){
+            throw new Exception("No existe un producto con ese codigo");
+        }
+        return mapeador.productoAProductoGetDTO(producto.get());
+    }
+
+    @Override
+    public List<ProductoGetDTO> listarProductos() {
+        List<Producto> productos = productoRepo.findAll();
+        List<ProductoGetDTO> productoGetDTOS = new ArrayList<>();
+        for (Producto producto: productos
+             ) {
+            ProductoGetDTO productoGetDTO = mapeador.productoAProductoGetDTO(producto);
+            productoGetDTOS.add(productoGetDTO);
+        }
+
+        return productoGetDTOS;
     }
 
 }

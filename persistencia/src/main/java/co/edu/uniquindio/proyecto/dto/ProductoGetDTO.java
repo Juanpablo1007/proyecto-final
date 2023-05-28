@@ -36,27 +36,4 @@ public class ProductoGetDTO {
     private Boolean isDisponible;
     private LocalDateTime fechaLimite;
 
-    public ProductoGetDTO(Integer codigo, String usuarioCedula, String usuarioNombre, Integer numeroFavoritos, Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Integer unidades, Estado_Producto estado, Set<Categoria_Producto> categorias, Boolean isDisponible, LocalDateTime fechaLimite, List<Comentario> comentarios) {
-        this.codigo = codigo;
-        this.usuarioCedula = usuarioCedula;
-        this.usuarioNombre = usuarioNombre;
-        this.numeroFavoritos = numeroFavoritos;
-        this.isActivo = isActivo;
-        this.imagen = imagen;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        this.unidades = unidades;
-        this.estado = estado;
-        this.categorias = categorias;
-        this.isDisponible = isDisponible;
-        this.fechaLimite = fechaLimite;
-        List<ComentarioGetDTO> comentarioGetDTOS = new ArrayList<>();
-        for (Comentario comentario: comentarios
-        ) {
-            ComentarioGetDTO comentarioGetDTO = new ComentarioGetDTO(comentario.getTexto(),comentario.getFecha(),comentario.getUsuario().getCedula(),comentario.getProducto().getCodigo());
-            comentarioGetDTOS.add(comentarioGetDTO);
-        }
-        this.comentarios=comentarioGetDTOS;
-    }
 }

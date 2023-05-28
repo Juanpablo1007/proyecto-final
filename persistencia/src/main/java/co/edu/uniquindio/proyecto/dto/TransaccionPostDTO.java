@@ -12,16 +12,15 @@ import javax.validation.constraints.PositiveOrZero;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CompraPostDTO {
+public class TransaccionPostDTO {
 
-    private String usuarioCedula;
+    private String usuarioCompradorCedula;
+    private String usuarioVendedorCedula;
     private Integer productoCodigo;
 
-    @NotNull(message = "La compra debe tener un metodo de pago")
+    @NotNull(message = "La transaccion debe tener un metodo de pago")
     private MetodoDePago metodoDePago;
-    @Min(value = 1, message = "Se debe comprar al menos una unidad del producto")
+    @Min(value = 1, message = "La transaccion debe tener al menos una unidad del producto")
     private Integer unidadesCompradas;
-    @PositiveOrZero
-    private Double total;
 
 }

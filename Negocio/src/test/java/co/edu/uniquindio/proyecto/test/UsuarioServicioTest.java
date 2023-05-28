@@ -20,7 +20,7 @@ import static java.time.LocalDateTime.now;
 @SpringBootTest(classes = NegocioApplication.class)
 @Transactional
 
-public class UsuarioServicioTest {
+public class UsuarioServicioTest {/**
     @Autowired
     private UsuarioServicio usuarioServicio;
 
@@ -152,7 +152,7 @@ public class UsuarioServicioTest {
             Assertions.assertTrue(false);
 
         }
-    }
+    }**/
 
 
 

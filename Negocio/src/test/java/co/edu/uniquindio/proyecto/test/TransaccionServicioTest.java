@@ -2,7 +2,7 @@ package co.edu.uniquindio.proyecto.test;
 
 import co.edu.uniquindio.proyecto.NegocioApplication;
 import co.edu.uniquindio.proyecto.servicios.CarritoServicio;
-import co.edu.uniquindio.proyecto.servicios.CompraServicio;
+import co.edu.uniquindio.proyecto.servicios.TransaccionServicio;
 import co.edu.uniquindio.proyecto.servicios.ProductoServicio;
 import co.edu.uniquindio.proyecto.servicios.UsuarioServicio;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static java.time.LocalDateTime.now;
 
 @SpringBootTest(classes = NegocioApplication.class)
 @Transactional
-public class CompraServicioTest {
+public class TransaccionServicioTest {
 
     @Autowired
     private UsuarioServicio usuarioServicio;
@@ -23,7 +23,7 @@ public class CompraServicioTest {
     private ProductoServicio productoServicio;
 
     @Autowired
-    private CompraServicio compraServicio;
+    private TransaccionServicio transaccionServicio;
 
     @Autowired
     private CarritoServicio carritoServicio;

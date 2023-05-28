@@ -19,7 +19,7 @@ import java.util.Optional;
 @Repository
 
 public interface UsuarioRepo extends JpaRepository <Usuario, String> {
-    List <Usuario> findAllByNombreContainsIgnoreCase(String nombre);
+ List <Usuario> findAllByNombreContainsIgnoreCase(String nombre);
 
     Optional <Usuario> findByEmailIgnoreCase(String email);
 
@@ -31,4 +31,6 @@ public interface UsuarioRepo extends JpaRepository <Usuario, String> {
     @Query ("select u.productosFavoritos from Usuario u where u.cedula =  :cedula")
     List<Producto> buscarFavoritos (String cedula);
 
+   @Query ("select p.usuariosFavoritos from Producto p where p.codigo =  :codigo")
+    List<Usuario> listaUsuariosFavoritosProductoCodigo (Integer codigo);
 }

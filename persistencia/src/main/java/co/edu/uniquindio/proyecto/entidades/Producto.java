@@ -65,21 +65,21 @@ public class Producto implements Serializable {
     @ElementCollection
     @ToString.Exclude
     private Set<Categoria_Producto> categorias;
-    @OneToMany (mappedBy = "producto")
+    @OneToMany (mappedBy = "producto",cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<Comentario> comentario = new ArrayList<>();
 
-    @OneToMany(mappedBy = "producto")
+    @OneToMany(mappedBy = "producto",cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<CarritoProductos> carritos = new ArrayList<>();
 
-    @OneToMany (mappedBy = "producto")
+    @OneToMany (mappedBy = "producto",cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    private List<Compra> compras = new ArrayList<>();
+    private List<Transaccion> compras = new ArrayList<>();
 
-    @OneToMany (mappedBy = "producto")
+    @OneToMany (mappedBy = "producto",cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    private List<Venta> ventas = new ArrayList<>();
+    private List<Transaccion> ventas = new ArrayList<>();
 
   public Producto( Usuario usuario,  Boolean isActivo, String imagen, String nombre, String descripcion, Double precio, Boolean isDisponible, Estado_Producto estado, LocalDateTime fechaLimite, Set<Categoria_Producto> categorias, Integer unidades) {this.usuario = usuario;
 

@@ -1,27 +1,34 @@
 package co.edu.uniquindio.proyecto.servicios;
 
-import co.edu.uniquindio.proyecto.dto.ProductoPostDTO;
+import co.edu.uniquindio.proyecto.dto.*;
 import co.edu.uniquindio.proyecto.entidades.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface ProductoServicio {
 
-    Integer publicarProducto  (ProductoPostDTO productoPostDTO) throws Exception;
+    void publicarProducto  (ProductoPostDTO productoPostDTO) throws Exception;
 
-    Producto comentarProducto (Producto p, Comentario co,Usuario u)  throws Exception;
+    void comentarProducto (ComentarioPostDTO comentarioPostDTO)  throws Exception;
 
-    void guardarProductoFavorito (Producto producto, Usuario usuario) throws Exception;
+    void guardarProductoFavorito (GestionFavoritosDTO gestionFavoritosDTO) throws Exception;
 
-    List<Producto> listarProductoPrecio(Double precioBajo, Double precioAlto) throws Exception;
+    void quitarProductoFavorito (GestionFavoritosDTO gestionFavoritosDTO) throws Exception;
 
-    List<Producto> buscarProductoNombre (String nombre)  throws Exception;
+    List<ProductoGetDTO> listarProductoPrecio(RangoPreciosDTO rangoPreciosDTO) throws Exception;
 
-    List<Producto> listarProductosPublicados (String cedula)  throws Exception;
-    List<Producto> listarProductosFavoritos (Usuario u)  throws Exception;
+    List<ProductoGetDTO> buscarProductoNombre (String nombre)  throws Exception;
 
-    Producto ActualizarProducto  (Producto producto) throws Exception;
+    List<ProductoGetDTO> listarProductosPublicados (String cedula)  throws Exception;
+    List<ProductoGetDTO> listarProductosFavoritos (String cedula)  throws Exception;
 
-    void EliminarProducto  (Producto producto) throws Exception;
+    void actualizarProducto  (Integer codigoProducto,ProductoPostDTO productoPostDTO) throws Exception;
+
+    void eliminarProducto  (Integer productoCodigo) throws Exception;
+
+    ProductoGetDTO obtenerProducto(Integer codigoProducto) throws Exception;
+
+    List<ProductoGetDTO> listarProductos();
 
 }
