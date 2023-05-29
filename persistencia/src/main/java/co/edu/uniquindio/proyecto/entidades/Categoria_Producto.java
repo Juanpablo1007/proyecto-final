@@ -14,8 +14,6 @@ public enum Categoria_Producto {
     INMUEBLES,
     MODA,
     JUEGOS_Y_JUEGUETES,
-    BEBES,
-    SALUD,
-    INDUSTRIA_Y_OFICINAS,
-    SERVICIOS
+    BEBES
+
 }

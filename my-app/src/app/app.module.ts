@@ -14,10 +14,14 @@ import { ProductsComponent } from './pagina/products/products.component';
 import { TrolleyComponent } from './pagina/trolley/trolley.component';
 import { UploadUserComponent } from './pagina/upload-user/upload-user.component';
 import { ListProductsComponent } from './pagina/list-products/list-products.component';
+import { BuscarRangoPreciosComponent } from './pagina/buscar-rango-precios/buscar-rango-precios.component';
+import { BuscarCategoriaComponent } from './pagina/buscar-categoria/buscar-categoria.component';
+import { RecuperarCuentaComponent } from './pagina/recuperar-cuenta/recuperar-cuenta.component';
+import { ProductoVisualizacionComponent } from './pagina/producto-visualizacion/producto-visualizacion.component';
 
 @NgModule({
   declarations: [
-   AppComponent,InicioComponent,LoginComponent,RegistroComponent, UploadProductComponent, ProductManagementListComponent, UserProductsComponent, ProductsComponent, TrolleyComponent, UploadUserComponent, ListProductsComponent,
+   AppComponent,InicioComponent,LoginComponent,RegistroComponent, UploadProductComponent, ProductManagementListComponent, UserProductsComponent, ProductsComponent, TrolleyComponent, UploadUserComponent, ListProductsComponent, BuscarRangoPreciosComponent, BuscarCategoriaComponent, RecuperarCuentaComponent, ProductoVisualizacionComponent,
 
     
   ],

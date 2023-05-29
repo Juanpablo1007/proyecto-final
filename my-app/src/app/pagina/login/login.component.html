@@ -1,1 +1,17 @@
-<p>login works!</p>
+<form #f="ngForm" (ngSubmit)="ingresar()">
+    
+   
+    <div>
+      <label>Email: </label>
+      <input type="text" [(ngModel)]="usuario.correo" name="correo" required="true" />
+    </div>
+    
+    <div>
+      <label>Contraseña: </label>
+      <input type="text" [(ngModel)]="usuario.password" name="Contraseña" required="true" />
+    </div>
+    
+    
+    <button type="submit" [disabled]="f.invalid" >Ingresar</button>
+  </form>
+  <button>olvide mi contraseña</button>
