@@ -14,7 +14,7 @@ import { UserProductsComponent } from './pagina/user-products/user-products.comp
 const routes: Routes = [
   { path: "", component: InicioComponent },
   { path: "login", component: LoginComponent },
-  { path: "registro", component: RegistroComponent },
+  { path: "record", component: RegistroComponent },
   { path: "ListProduct", component: ListProductsComponent },
   { path: "product-management-list", component: ProductManagementListComponent },
   { path: "products", component: ProductsComponent },

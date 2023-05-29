@@ -1,1 +1,30 @@
-<p>registro works!</p>
+
+
+<form #f="ngForm" (ngSubmit)="registrar()">
+  <div>
+    <label>Nombre: </label>
+    <input type="text" [(ngModel)]="usuario.nombre" name="nombre" required="true" />
+  </div>
+ 
+  <div>
+    <label>Email: </label>
+    <input type="text" [(ngModel)]="usuario.correo" name="correo" required="true" />
+  </div>
+  <div>
+    <label>Direccion: </label>
+    <input type="text" [(ngModel)]="usuario.direccion" name="dirreccion" required="true" />
+  </div>
+  <div>
+    <label>Contraseña: </label>
+    <input type="text" [(ngModel)]="usuario.password" name="Contraseña" required="true" />
+  </div>
+  <div>
+    <label>Telefono: </label>
+    <input type="text" [(ngModel)]="usuario.telefono" name="telefono" required="true" />
+  </div>
+  <div>
+    <label>Cedula: </label>
+    <input type="text" [(ngModel)]="usuario.cedula" name="cedula" required="true" />
+  </div>
+  <button type="submit" [disabled]="f.invalid" >Registrarse</button>
+</form>
