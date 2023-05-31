@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UsuarioPost } from 'src/app/modelo/usuario-post';
+import { UsuarioPost} from 'src/app/modelo/usuario-post';
 
 @Component({
   selector: 'app-login',

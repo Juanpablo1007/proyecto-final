@@ -1,5 +1,5 @@
 import { ProductoPost } from './producto-post';
-import { UsuarioPost } from './usuario-post';
+import { UsuarioPost } from './usuario-post.ts';
 
 export class ComentarioPost {
   codigo: number = 0;

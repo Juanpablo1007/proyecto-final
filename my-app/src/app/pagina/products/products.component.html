@@ -1,37 +1,62 @@
-<form #f="ngForm" (ngSubmit)="subir()" >
-    <div>
-    <label >Nombre: </label>
-    <input type="text" [(ngModel)]="producto.nombre" name="nombre" required="true" />
-    </div>
-    
-    <div>
-    <label >precio: </label>
-    <input type="number" [(ngModel)]="producto.precio" name="precio" required="true"/>
-    </div>
-    <div>
-    <label >Imagen de producto: </label>
+<form #f="ngForm" (ngSubmit)="subir()">
+  <div>
+    <label>Nombre: </label>
+    <input
+      type="text"
+      [(ngModel)]="producto.nombre"
+      name="nombre"
+      required="true"
+    />
+  </div>
+
+  <div>
+    <label>precio: </label>
+    <input
+      type="number"
+      [(ngModel)]="producto.precio"
+      name="precio"
+      required="true"
+    />
+  </div>
+  <div>
+    <label>Imagen de producto: </label>
     <input type="file" name="imagen" (change)="onFileChange($event)" />
-    </div>
-    <div>
-    <label >descripcion: </label>
-    <input type="string" [(ngModel)]="producto.UrlImagen" name="descripcion" required="true"/>
-</div>
-<div>
-    <label >unidades: </label>
-    <input type="number" [(ngModel)]="producto.unidades" name="unidades" required="true"/>
-</div>
-    <div>
-        <label >fecha: </label>
-        <input type="datetime-local" [(ngModel)]="producto.UrlImagen" name="fecha" required="true"
-        />
-    </div>
-    <div>
-        <label >categoria: </label>
-        <select [(ngModel)]="producto.categoria" required="true" name="categoria" >
-            <option  selected >Seleccine una categoria</option>
-            <option [value]="i+1" *ngFor="let item of categoria; index as i" >{{item}}</option>
-            </select>
-            </div>
-    <button type="submit" [disabled]="f.invalid" >subir</button>
-    
+  </div>
+  <div>
+    <label>descripcion: </label>
+    <input
+      type="string"
+      [(ngModel)]="producto.descripcion"
+      name="descripcion"
+      required="true"
+    />
+  </div>
+  <div>
+    <label>unidades: </label>
+    <input
+      type="number"
+      [(ngModel)]="producto.unidades"
+      name="unidades"
+      required="true"
+    />
+  </div>
+  <div>
+    <label>fecha: </label>
+    <input
+      type="datetime-local"
+      [(ngModel)]="producto.UrlImagen"
+      name="fecha"
+      required="true"
+    />
+  </div>
+  <div>
+    <label>categoria: </label>
+    <select [(ngModel)]="producto.categoria" required="true" name="categoria">
+      <option selected>Seleccine una categoria</option>
+      <option [value]="i + 1" *ngFor="let item of categoria; index as i">
+        {{ item }}
+      </option>
+    </select>
+  </div>
+  <button type="submit" [disabled]="f.invalid">subir</button>
 </form>

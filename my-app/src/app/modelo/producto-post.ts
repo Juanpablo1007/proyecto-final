@@ -1,7 +1,7 @@
 import { CarritoPost } from "./carrito-post";
 import { ComentarioPost } from "./comentario-post";
 import { TransaccionPost } from "./transaccion-post";
-import { UsuarioPost } from "./usuario-post";
+import { UsuarioPost } from "./usuario-post.ts";
 
 export class ProductoPost {
 codigo:number = 0;

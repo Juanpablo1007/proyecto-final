@@ -1,16 +1,23 @@
 <form #f="ngForm" (ngSubmit)="comentar()">
-    <div *ngFor="let comentario of producto.comentarios; let i = index;">
-      <div>
-        <label>Contenido:</label>
-        <input type="text" [(ngModel)]="comentario.texto" name="texto{{i}}" required />
-      </div>
-      <div>
-        <label>Calificación:</label>
-        <input type="number" [(ngModel)]="comentario.calificacion" name="calificacion{{i}}" required />
-      </div>
+  
+    <div>
+      <label>Contenido:</label>
+      <input
+        type="text"
+        [(ngModel)]="comentario.texto"
+        name="Contenido"
+        required="true"
+      />
     </div>
-    <button type="submit" [disabled]="f.invalid">Subir</button>
-  </form>
-  
-  
-    
+    <div>
+      <label>Calificación:</label>
+      <input
+        type="number"
+        [(ngModel)]="comentario.calificacion"
+        name="calificacion"
+        required="true"
+      />
+    </div>
+ 
+  <button type="submit" [disabled]="f.invalid">Subir</button>
+</form>
