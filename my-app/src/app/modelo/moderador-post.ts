@@ -1,6 +1,6 @@
 export class ModeradorPost {
   
-        nombre:string = "";
+ nombre:string = "";
     correo:string = "";
     cedula:string = "";
     password:string = "";

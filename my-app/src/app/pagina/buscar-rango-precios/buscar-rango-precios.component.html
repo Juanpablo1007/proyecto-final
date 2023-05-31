@@ -3,12 +3,12 @@
     
     <div>
     <label >precioMenor: </label>
-    <input type="number" [(ngModel)]="producto.precioMenor" name="precio" required="true"/>
+    <input type="number" [(ngModel)]="rango.precioMenor" name="precioMenor" required="true"/>
     </div>
 
     <div>
         <label >precioMayor: </label>
-        <input type="number" [(ngModel)]="producto.precioMayor" name="precio" required="true"/>
+        <input type="number" [(ngModel)]=rango.precioMayor" name="precioMayor" required="true"/>
         </div>
     
     <button type="submit" [disabled]="f.invalid" >buscar</button>
