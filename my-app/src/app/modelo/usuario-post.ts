@@ -1,8 +1,7 @@
 export class UsuarioPost {
  nombre:string = "";
 correo:string = "";
-cedula:string = "";
-password:string = "";
+contrasenia:string = "";
 direccion:string = "";
 telefono:string = "";
 isCuentaActiva:boolean = true;

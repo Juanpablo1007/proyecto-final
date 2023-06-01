@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Alerta } from 'src/app/modelo/alerta';
 
 @Component({
   selector: 'app-alerta',
@@ -6,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./alerta.component.css']
 })
 export class AlertaComponent {
-
+  @Input() alerta!:Alerta | null;
+  public ocultar(){
+  this.alerta = null;
+  }
 }
