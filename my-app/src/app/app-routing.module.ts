@@ -1,41 +1,71 @@
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { InicioComponent } from './pagina/Home/home.component';
-import { LoginComponent } from './pagina/login/login.component';
-import { RegistroComponent } from './pagina/record/record.component';
-import { ListProductsComponent } from './pagina/list-products/list-products.component';
-import { ProductManagementListComponent } from './pagina/product-management-list/product-management-list.component';
-import { ProductsComponent } from './pagina/products/products.component';
-import { TrolleyComponent } from './pagina/trolley/trolley.component';
-import { UploadProductComponent } from './pagina/upload-product/upload-product.component';
-import { UploadUserComponent } from './pagina/upload-user/upload-user.component';
-import { UserProductsComponent } from './pagina/user-products/user-products.component';
-import { BuscarRangoPreciosComponent } from './pagina/buscar-rango-precios/buscar-rango-precios.component'; 
-import { BuscarCategoriaComponent } from './pagina/buscar-categoria/buscar-categoria.component'; 
-import { RecuperarCuentaComponent } from './pagina/recuperar-cuenta/recuperar-cuenta.component';
-import { ProductoVisualizacionComponent } from './pagina/producto-visualizacion/producto-visualizacion.component';
 
+
+import { AppComponent } from './app.component';
+import { AlertaComponent } from './pagina/alerta/alerta.component';
+import { BusquedaComponent } from './pagina/busqueda/busqueda.component';
+import { CambiarContraseniaComponent } from './pagina/cambiar-contrasenia/cambiar-contrasenia.component';
+import { CarritoComponent } from './pagina/carrito/carrito.component';
+import { ContactoComponent } from './pagina/contacto/contacto.component';
+import { ProductoComponent } from './pagina/producto/producto.component';
+import { ProductoFavoritosComponent } from './pagina/producto-favoritos/producto-favoritos.component';
+import { ProductoSubirComponent } from './pagina/producto-subir/producto-subir.component';
+import { HistorialComprasComponent } from './pagina/historial-compras/historial-compras.component';
+import { HistorialVentasComponent } from './pagina/historial-ventas/historial-ventas.component';
+import { InicioComponent } from './pagina/inicio/inicio.component';
+import { LoginComponent } from './pagina/login/login.component';
+import { TransaccionesComponent } from './pagina/transacciones/transacciones.component';
+import { RegistroComponent } from './pagina/registro/registro.component';
+import { ResultadoBusquedaComponent } from './pagina/resultado-busqueda/resultado-busqueda.component';
+import { RevisarPublicacionComponent } from './pagina/revisar-publicacion/revisar-publicacion.component';
+import { BuscarPorPrecioComponent } from './pagina/buscar-por-precio/buscar-por-precio.component';
+import { ResultadoBusquedaPorPrecioComponent } from './pagina/resultado-busqueda-por-precio/resultado-busqueda-por-precio.component';
+import { ProductoActualizarComponent } from './pagina/producto-actualizar/producto-actualizar.component';
+import { UsuarioActualizarComponent } from './pagina/usuario-actualizar/usuario-actualizar.component';
+import { ProductoListarEstadoComponent } from './pagina/producto-listar-estado/producto-listar-estado.component';
+import { ProductoListarVendedorComponent } from './pagina/producto-listar-vendedor/producto-listar-vendedor.component';
 
 const routes: Routes = [
-  { path: "", component: InicioComponent },
+  { path: "alerta", component: AlertaComponent },
+  { path: "busqueda", component: BusquedaComponent },
+  { path: "cambiarContrasenia", component: CambiarContraseniaComponent },
+  { path: "carrito", component: CarritoComponent },
+  { path: "contacto", component: ContactoComponent },
+  { path: "producto", component: ProductoComponent },
+  { path: "productoFavoritos", component: ProductoFavoritosComponent },
+  { path: "productoSubir", component: ProductoSubirComponent },
+  { path: "historialCompras", component: HistorialComprasComponent },
+  { path: "historialVentas", component: HistorialVentasComponent },
+  { path: "inicio", component: InicioComponent },
   { path: "login", component: LoginComponent },
-  { path: "record", component: RegistroComponent },
-  { path: "ListProduct", component: ListProductsComponent },
-  { path: "product-management-list", component: ProductManagementListComponent },
-  { path: "products", component: ProductsComponent },
-  { path: "trolley", component: TrolleyComponent },
-  { path: "upload-product", component: UploadProductComponent },
-  { path: "upload-user", component: UploadUserComponent },
-  { path: "user-products", component: UserProductsComponent },
-  {path: "BuscarCategoria", component: BuscarCategoriaComponent},
-  {path: "BuscarRangoPrecios", component: BuscarRangoPreciosComponent},
-  {path: "RecuperarCuenta", component: RecuperarCuentaComponent},
-  {path: "ProductoVisualizacionComponent", component: ProductoVisualizacionComponent},
+  { path: "transacciones", component: TransaccionesComponent },
+  { path: "registro", component: RegistroComponent },
+  { path: "resultadoBusqueda", component: ResultadoBusquedaComponent },
+  { path: "revisarPublicacion", component: RevisarPublicacionComponent },
+  { path: "buscarPorPrecio", component: BuscarPorPrecioComponent },
+  { path: "resultadoBusquedaPorPrecio", component: ResultadoBusquedaPorPrecioComponent },
+  { path: "productoActualizar", component: ProductoActualizarComponent },
+  { path: "usuarioActualizar", component: UsuarioActualizarComponent },
+  { path: "productoListarEstado", component: ProductoListarEstadoComponent },
+  { path: "productoListarVendedor", component: ProductoListarVendedorComponent },
   { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  
+  imports: [
+    BrowserModule,
+    FormsModule,
+
+    RouterModule.forRoot(routes)
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
 })
 export class AppRoutingModule { }
+
+
+
