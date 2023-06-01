@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UsuarioPost } from '../modelo/usuario-post'; 
 import { MensajeDTO } from '../modelo/mensaje-dto';
 
 @Injectable({
@@ -26,6 +25,10 @@ export class UsuarioService {
 
   public listarUsuarios(): Observable<MensajeDTO> {
     return this.http.get<MensajeDTO>(`${this.userUrl}/listar`);
+  }
+
+  public obtenerUsuariosEmail(correo: string): Observable<MensajeDTO> {
+    return this.http.get<MensajeDTO>(`${this.userUrl}/obtener/${correo}`);
   }
 }
 

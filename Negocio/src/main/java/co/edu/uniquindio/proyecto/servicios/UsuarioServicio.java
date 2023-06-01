@@ -20,5 +20,7 @@ public interface UsuarioServicio {
     UsuarioGetDTO buscarUsuario(String cedula) throws Exception;
     List<UsuarioGetDTO> listarUsuarios();
 
+    UsuarioGetDTO ObtenerUsuario(String correo) throws Exception;
+
 
 }

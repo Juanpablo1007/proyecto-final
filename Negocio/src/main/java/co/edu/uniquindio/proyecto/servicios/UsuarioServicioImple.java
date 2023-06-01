@@ -127,13 +127,16 @@ public class UsuarioServicioImple implements UsuarioServicio {
         return usuarioGetDTOS;
     }
 
+    @Override
+    public UsuarioGetDTO ObtenerUsuario(String correo) throws Exception {
+        Optional<Usuario> usuario = usuarioRepo.findByEmailIgnoreCase(correo);
+        if(usuario.isEmpty()){
+            throw new Exception("No existe un usuario registrado con esa cedula");
+        }
+        return mapeador.usuarioADTO(usuario.get());
+    }
+    }
 
 
 
-
-
-
-
-
-}
 

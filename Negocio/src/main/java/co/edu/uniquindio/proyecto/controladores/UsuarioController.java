@@ -47,6 +47,11 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(new MensajeDTO(HttpStatus.OK, false,
                 servicio.listarUsuarios()));
     }
+    @GetMapping("/obtener/{cedula}")
+    public ResponseEntity<MensajeDTO> obtenerUsuariosEmail(@PathVariable String correo) throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(new MensajeDTO(HttpStatus.OK, false,
+                servicio.ObtenerUsuario(correo));
+    }
 
 
 

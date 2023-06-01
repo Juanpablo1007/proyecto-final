@@ -28,7 +28,8 @@ import { UsuarioActualizarComponent } from './pagina/usuario-actualizar/usuario-
 import { ProductoListarEstadoComponent } from './pagina/producto-listar-estado/producto-listar-estado.component';
 import { ProductoListarVendedorComponent } from './pagina/producto-listar-vendedor/producto-listar-vendedor.component';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { UsuarioInterceptor } from './interceptor/usuario.interceptor';
 
 
 
@@ -67,7 +68,7 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule
     ,FormsModule,RouterModule,HttpClientModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: UsuarioInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

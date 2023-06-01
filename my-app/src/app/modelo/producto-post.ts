@@ -20,7 +20,7 @@ precio: number=0;
 
 isDisponible: boolean = true;
 
-categoria: string[] = [];
+categoria: string = "";
 
 unidades: number=0;
 
