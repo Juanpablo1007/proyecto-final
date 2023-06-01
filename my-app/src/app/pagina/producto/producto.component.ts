@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { Alerta } from 'src/app/modelo/alerta';
 import { CarritoProductosDTO } from 'src/app/modelo/carrito-productos-dto';
 import { ComentarioPost } from 'src/app/modelo/comentario-post';
 import { GestionFavoritosDTO } from 'src/app/modelo/gestion-favoritos-dto';
 import { MensajeDTO } from 'src/app/modelo/mensaje-dto';
+import { CarritoService } from 'src/app/servicios/carrito.service';
 import { ProductoService } from 'src/app/servicios/producto.service';
 
 @Component({
@@ -13,14 +15,15 @@ import { ProductoService } from 'src/app/servicios/producto.service';
   styleUrls: ['./producto.component.css']
 })
 export class ProductoComponent {
-  comentario: ComentarioPost;
+  
   gestionFavoritos: GestionFavoritosDTO;
   comentarioForm!: FormGroup;
   gestionFavoritosForm!: FormGroup;
   alerta!: Alerta;
 
-  constructor(private formBuilder: FormBuilder, private productoService: ProductoService, private carritoProductosPostDTO: CarritoProductosDTO) {
-    this.comentario = new ComentarioPost();
+
+  constructor(private comentario: ComentarioPost,  private formBuilder: FormBuilder, private productoService: ProductoService, private carritoProductosPostDTO: CarritoProductosDTO, private   carritoService:  CarritoService) {
+    
     this.gestionFavoritos = new GestionFavoritosDTO();
   }
 

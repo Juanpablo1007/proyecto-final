@@ -13,7 +13,7 @@ import { UsuarioService } from 'src/app/servicios/usuario.service';
 })
 export class ContactoComponent {
   usuarioForm!: FormGroup;
-  alerta: Alerta;
+  alerta: Alerta | undefined;
  
   constructor(private formBuilder: FormBuilder,private usuarioService : UsuarioService,private productoService: ProductoService) {this.crearUsuarioFormulario();}
 
